@@ -82,7 +82,7 @@ services:
       - influxv2.env
 
   grafana:
-    image: grafana/grafana:9.1.0
+    image: grafana/grafana:9.2.3
     depends_on:
       - influxdb
     ports:
