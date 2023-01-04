@@ -100,4 +100,4 @@ volumes:
   postgresqldata:
   redisdata:
   influxdbv2:
-  grafnadata:
+  grafanadata:
