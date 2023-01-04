@@ -82,22 +82,17 @@ services:
       - influxv2.env
 
   grafana:
-    image: grafana/grafana:latest
-    env_file:
-      - grafana.env
-    ports:
-      - '3000:3000'
-    volumes:
-      - grafanadata:/var/lib/grafana
-      - ./configuration/grafana/provisioning/:/etc/grafana/provisioning
+    image: grafana/grafana:9.1.0
     depends_on:
       - influxdb
-    environment:
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    ports:
+      - '3010:3000'
+    volumes:
+      - ./configuration/grafana/:/etc/grafana
+      - ./configuration/grafana/plugins/:/var/lib/grafana/plugins
+    
 
 volumes:
   postgresqldata:
   redisdata:
   influxdbv2:
-  grafanadata:
