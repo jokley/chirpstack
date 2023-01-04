@@ -61,6 +61,43 @@ services:
     volumes: 
       - ./configuration/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
 
+  influxdb:
+    image: influxdb:2.6-alpine
+    env_file:
+      - influxv2.env
+    volumes:
+      # Mount for influxdb data directory and configuration
+      - influxdbv2:/var/lib/influxdb2:rw
+    ports:
+      - "8086:8086"
+
+  telegraf:
+    image: telegraf:1.25-alpine
+    depends_on:
+      - influxdb
+    volumes:
+      # Mount for telegraf config
+      - ./configuration/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    env_file:
+      - influxv2.env
+
+  grafana:
+    image: grafana/grafana:latest
+    env_file:
+      - grafana.env
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafanadata:/var/lib/grafana
+      - ./configuration/grafana/provisioning/:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+
 volumes:
   postgresqldata:
   redisdata:
+  influxdbv2:
+  grafnadata:
