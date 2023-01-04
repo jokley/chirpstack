@@ -11,7 +11,7 @@ datasources:
     defaultBucket: jokley_bucket
     tlsSkipVerify: true
   secureJsonData:
-    token: jokley
+    token: Jr5krSrSA6UlKD7vQifU8XJ1U9UZzpKYCNx7vs6kizYc3Bp51XYNlrpsoJXYRdLh2w_c7XNnFgplvnr0ebouDQ==
 # - name: "JSON_API"
 #   type: marcusolsson-json-datasource
 #   #url: http://flask-api:5000/WK_Dashboard
