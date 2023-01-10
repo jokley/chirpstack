@@ -93,6 +93,15 @@ services:
     volumes:
       - ./configuration/grafana/:/etc/grafana
       - ./configuration/grafana/plugins/:/var/lib/grafana/plugins
+   
+  nginx:
+    image: arm64v8/nginx
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+       - ./configuration/nginx/nginx.conf:/etc/nginx/nginx.conf
     
 
 volumes:
