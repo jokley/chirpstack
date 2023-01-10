@@ -18,6 +18,9 @@ services:
       - POSTGRESQL_HOST=postgres
     ports:
       - 8080:8080
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.10
 
   chirpstack-gateway-bridge-eu868:
     image: chirpstack/chirpstack-gateway-bridge:4.0.3
@@ -28,6 +31,9 @@ services:
       - ./configuration/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
     depends_on: 
       - mosquitto
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.11
 
   chirpstack-rest-api:
     image: chirpstack/chirpstack-rest-api:4.1
@@ -37,6 +43,9 @@ services:
       - 8090:8090
     depends_on:
       - chirpstack
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.12 
 
   postgres:
     image: postgres:14-alpine
@@ -46,12 +55,18 @@ services:
       - postgresqldata:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=root
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.13
 
   redis:
     image: redis:7-alpine
     restart: unless-stopped
     volumes:
       - redisdata:/data
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.14
 
   mosquitto:
     image: eclipse-mosquitto:2
@@ -60,6 +75,9 @@ services:
       - 1883:1883
     volumes: 
       - ./configuration/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.15
 
   influxdb:
     image: influxdb:2.6-alpine
@@ -71,6 +89,9 @@ services:
       - influxdbv2:/var/lib/influxdb2:rw
     ports:
       - "8086:8086"
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.16
 
   telegraf:
     image: arm64v8/telegraf:1.25
@@ -82,6 +103,9 @@ services:
       - ./configuration/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     env_file:
       - influxv2.env
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.17
 
   grafana:
     image: grafana/grafana:9.2.3
@@ -93,6 +117,9 @@ services:
     volumes:
       - ./configuration/grafana/:/etc/grafana
       - ./configuration/grafana/plugins/:/var/lib/grafana/plugins
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.18
    
   nginx:
     image: arm64v8/nginx
@@ -102,6 +129,18 @@ services:
       - "80:80"
     volumes:
        - ./configuration/nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.19
+      
+networks:
+  example-network:
+    name: example-network
+    driver: bridge
+    ipam:
+      driver: default
+      config: 
+        - subnet: 172.16.238.0/24
     
 
 volumes:
