@@ -25,8 +25,8 @@ def get_timestamp_now_epoche():
 app = Flask(__name__)
 CORS(app)
 
-# app.config['MQTT_BROKER_URL'] = "172.16.238.15"
-app.config['MQTT_BROKER_URL'] = "10.1.10.235"
+app.config['MQTT_BROKER_URL'] = "172.16.238.15"
+#app.config['MQTT_BROKER_URL'] = "10.1.10.235"
 app.config['MQTT_BROKER_PORT'] = 1883
 app.config['MQTT_KEEPALIVE'] =20
 
