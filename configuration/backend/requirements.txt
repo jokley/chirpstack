@@ -1,0 +1,6 @@
+Flask
+Flask-Cors
+gunicorn
+flask_mqtt
+datetime
+pytz

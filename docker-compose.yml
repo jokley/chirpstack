@@ -132,6 +132,18 @@ services:
     networks:
       example-network:
         ipv4_address: 172.16.238.19
+
+  backend:
+    image: flask
+    container_name: flask-backend
+    build:
+      context: ./configuration/backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.20
       
 networks:
   example-network:
