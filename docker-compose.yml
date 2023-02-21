@@ -121,17 +121,17 @@ services:
       example-network:
         ipv4_address: 172.16.238.18
    
-  nginx:
-    image: arm64v8/nginx
-    container_name: nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    volumes:
-       - ./configuration/nginx/nginx.conf:/etc/nginx/nginx.conf
-    networks:
-      example-network:
-        ipv4_address: 172.16.238.19
+  # nginx:
+  #   image: arm64v8/nginx
+  #   container_name: nginx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #      - ./configuration/nginx/nginx.conf:/etc/nginx/nginx.conf
+  #   networks:
+  #     example-network:
+  #       ipv4_address: 172.16.238.19
 
   backend:
     image: flask

@@ -25,16 +25,16 @@ def get_timestamp_now_epoche():
 app = Flask(__name__)
 CORS(app)
 
-app.config['MQTT_BROKER_URL'] = "172.16.238.15"
-#app.config['MQTT_BROKER_URL'] = "10.1.10.235"
+# app.config['MQTT_BROKER_URL'] = "172.16.238.15"
+app.config['MQTT_BROKER_URL'] = "10.1.10.235"
 app.config['MQTT_BROKER_PORT'] = 1883
 app.config['MQTT_KEEPALIVE'] =20
 
 
 app.secret_key = 'hi'
 mqtt = Mqtt(app)
-       
-@mqtt.on_connect()
+    
+# @mqtt.on_connect()
 
 
 @app.route('/')
@@ -49,10 +49,10 @@ def time():
 @app.route('/venti/<cmd>')
 def switch(cmd):
         if cmd == 'on':
-            mqtt.publish("application/080b884a-d40c-45b6-8a01-9c39ad86d8cc/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": false, \"fPort\": 10, \"data\": \"AwEA\" }")
+            mqtt.publish("application/080b884a-d40c-45b6-8a01-9c39ad86d8cc/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
             return jsonify('Venti on')
         elif cmd == 'off':
-            mqtt.publish("application/080b884a-d40c-45b6-8a01-9c39ad86d8cc/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": false, \"fPort\": 10, \"data\": \"AwAA\" }")
+            mqtt.publish("application/080b884a-d40c-45b6-8a01-9c39ad86d8cc/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
             return jsonify('Venti off')
         else:
             return jsonify('No command send!')
