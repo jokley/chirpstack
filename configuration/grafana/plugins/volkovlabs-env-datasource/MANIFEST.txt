@@ -1,0 +1,47 @@
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  "manifestVersion": "2.0.0",
+  "signatureType": "private",
+  "signedByOrg": "volkovlabs",
+  "signedByOrgName": "Volkov Labs",
+  "rootUrls": [
+    "http://localhost:3000/"
+  ],
+  "plugin": "volkovlabs-env-datasource",
+  "version": "2.2.0",
+  "time": 1667755554338,
+  "keyId": "7e4d0c6a708866e7",
+  "files": {
+    "module.js.LICENSE.txt": "cdf963ced7d25a0f98901a547647b4d6e2dbe0197fd78c87a059a87b0e542fe2",
+    "module.js.map": "61aa0d3dc174d8656dd9fd014f717d817efe888b94615d65924e194a707194d9",
+    "env_datasource_backend_darwin_arm64": "2cddfe49f6526bd9052f1bcc36176f7e64ae0602829bcc6dc47c771437b8da5e",
+    "LICENSE": "72636fbb67b33b015082ce8962eb371a930c33292d8cd35e0df3f586ff02a12f",
+    "README.md": "4fe648aa3f71000bac433e2834eade2cb178e8d6a023f965e933e54c8e778a46",
+    "plugin.json": "e05066792ff1e0c32316776fa96e0ffad9cea7dfa155f3755adec3dcdd6fc5fe",
+    "env_datasource_backend_darwin_amd64": "74aca8a34a0722243e9068146796a90bc3b455ac203e203f9119af5233ded6ae",
+    "env_datasource_backend_linux_amd64": "1d176e2e1758ed96abdb9f9e14dd093f794d9659de47ff9a96fecda751a99105",
+    "env_datasource_backend_linux_arm64": "5d88483ce2b170abc5524d2c84eb7be25f3733aca522d18a857f9c7c1c2383a1",
+    "env_datasource_backend_linux_arm": "5614300393b1e20b3e7a5faf6598288607ad988e0cad025d15c2cd6cf407ffd1",
+    "env_datasource_backend_windows_amd64.exe": "3be25824fe0d3d16c029931f0f2df521b25170d89903576ca9b3fed69b2f9f4b",
+    "module.js": "92c35d57647a4972c10224e96f1d1aeed81d2a226032ba0824bad42cd1c03f91",
+    "CHANGELOG.md": "74965d5a801d9d62bb9b00b0a093acf7f472f6674beadae3a4e1b9d67f27528e",
+    "img/dashboard.png": "e3eccff052e712d6adc02016407a8314221b41c1d32857ec1eea26d5c314e894",
+    "img/variables.png": "7defdd690a715c19d1b94f8acfbc6dfc587db98d30f49bea3b66f4c660408922",
+    "img/logo.svg": "c7a8fd4b618d4c6814a5f1f01afa5f6f71c4ee242c218518ce8ce516286033a4",
+    "img/config.png": "8b4342951728c519d65fd137f28ca07ebae870c6b945b22cfe96052f8f2d8c36"
+  }
+}
+-----BEGIN PGP SIGNATURE-----
+Version: OpenPGP.js v4.10.10
+Comment: https://openpgpjs.org
+
+wrgEARMKAAYFAmNn7iIAIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
+cIhm5wm9AgiyK8pGxAjymufrYd0Xix1jYjYl3SDKkYm8XYqgHBtV7Cbfsr7O
+5kwqvR2P1ADreNDKgcTh8JPmYg/lld9N8EoZaAIJAQSF99ab2F1L/PdF3IXv
++bOH0EETufufkPQviRjGK9q88G2TSQMqDyNFNPPr54X8sGs2BXojBfT+7gqj
+3KChYu/J
+=1Otc
+-----END PGP SIGNATURE-----

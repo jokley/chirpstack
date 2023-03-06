@@ -1,0 +1,56 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "dependencies": {
+    "grafanaDependency": ">=8.5.0",
+    "plugins": []
+  },
+  "id": "volkovlabs-form-panel",
+  "info": {
+    "author": {
+      "name": "Volkov Labs",
+      "url": "https://volkovlabs.io"
+    },
+    "description": "Data Manipulation Panel",
+    "keywords": ["form"],
+    "links": [
+      {
+        "name": "GitHub",
+        "url": "https://github.com/VolkovLabs/volkovlabs-form-panel"
+      },
+      {
+        "name": "YouTube Playlist",
+        "url": "https://www.youtube.com/playlist?list=PLPow72ygztmRXSNBxyw0sFnnvNRY_CsSA"
+      },
+      {
+        "name": "Website",
+        "url": "https://volkovlabs.io"
+      }
+    ],
+    "logos": {
+      "large": "img/logo.svg",
+      "small": "img/logo.svg"
+    },
+    "screenshots": [
+      {
+        "name": "Panel",
+        "path": "img/panel.png"
+      },
+      {
+        "name": "Form Elements",
+        "path": "img/elements.png"
+      },
+      {
+        "name": "Request",
+        "path": "img/request.png"
+      },
+      {
+        "name": "Visual",
+        "path": "img/visual.png"
+      }
+    ],
+    "updated": "2022-11-10",
+    "version": "2.7.0"
+  },
+  "name": "Data Manipulation",
+  "type": "panel"
+}
