@@ -61,18 +61,10 @@ def time():
     return jsonify(get_timestamp_now_epoche(),get_timestamp_now(),get_timestamp_now_offset())
 
 
-@app.route('/venti/<cmd>',methods = ['POST', 'GET'])
-def switch(cmd):
-        if request.method == 'GET':
-            if cmd == 'on':
-                mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
-                return jsonify('Venti on')
-            elif cmd == 'off':
-                mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
-                return jsonify('Venti off')
-            else:
-                    return jsonify('No command send!')
-        if request.method == 'POST':
+@app.route('/venti',methods = ['POST', 'GET'])
+def switch():
+        if request.method == 'GET' || request.method == 'POST':
+            cmd = request.args.get('cmd', default = 'auto', type = str)
             if cmd == 'on':
                 mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
                 return jsonify('Venti on')
@@ -81,6 +73,7 @@ def switch(cmd):
                 return jsonify('Venti off')
             else:
                 return jsonify('No command send!')
+
 
 
     
