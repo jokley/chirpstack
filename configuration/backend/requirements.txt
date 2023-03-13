@@ -4,3 +4,4 @@ gunicorn
 flask_mqtt
 datetime
 pytz
+APScheduler

@@ -1,8 +1,11 @@
 from flask import Flask, json, render_template, request,jsonify
 from datetime import datetime
-import pytz
 from flask_cors import CORS
 from flask_mqtt import Mqtt
+import pytz
+from apscheduler.schedulers.background import BackgroundScheduler
+import sys
+
 
 
 #TIMESTAMP_NOW = datetime.now().astimezone(pytz.timezone("Europe/Berlin")).isoformat()
@@ -21,9 +24,19 @@ def get_timestamp_now_epoche():
     TIMESTAMP_NOW_EPOCHE = int(datetime.now().timestamp()+get_timestamp_now_offset())
     return TIMESTAMP_NOW_EPOCHE 
 
+def test():
+    print('Hello')
+    sys.stdout.flush()
+
 
 app = Flask(__name__)
 CORS(app)
+
+with app.app_context():
+    scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
+    scheduler.add_job(test, 'interval', minutes=1)
+    scheduler.start()
+
 
 app.config['MQTT_BROKER_URL'] = "172.16.238.15"
 # app.config['MQTT_BROKER_URL'] = "10.1.10.235"
@@ -32,9 +45,11 @@ app.config['MQTT_KEEPALIVE'] =20
 
 
 app.secret_key = 'hi'
-mqtt = Mqtt(app)
+# mqtt = Mqtt(app)
     
 # @mqtt.on_connect()
+
+
 
 
 @app.route('/')
