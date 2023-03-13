@@ -45,7 +45,7 @@ app.config['MQTT_KEEPALIVE'] =20
 
 
 app.secret_key = 'hi'
-# mqtt = Mqtt(app)
+mqtt = Mqtt(app)
     
 # @mqtt.on_connect()
 
