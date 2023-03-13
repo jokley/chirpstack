@@ -63,14 +63,24 @@ def time():
 
 @app.route('/venti/<cmd>',methods = ['POST', 'GET'])
 def switch(cmd):
-        if cmd == 'on':
-            mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
-            return jsonify('Venti on')
-        elif cmd == 'off':
-            mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
-            return jsonify('Venti off')
-        else:
-            return jsonify('No command send!')
+        if request.method == 'GET':
+            if cmd == 'on':
+                mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
+                return jsonify('Venti on')
+            elif cmd == 'off':
+                mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
+                return jsonify('Venti off')
+            else:
+                    return jsonify('No command send!')
+        if request.method == 'POST':
+            if cmd == 'on':
+                mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
+                return jsonify('Venti on')
+            elif cmd == 'off':
+                mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
+                return jsonify('Venti off')
+            else:
+                return jsonify('No command send!')
 
 
     
