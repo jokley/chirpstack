@@ -77,7 +77,6 @@ def switch():
             return jsonify('No command send!')
             
      if request.method == 'GET':
-
         CMD = request.args.get('cmd', default = 'auto', type = str)
 
         if CMD == 'on':
