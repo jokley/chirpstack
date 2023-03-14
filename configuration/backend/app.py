@@ -24,8 +24,10 @@ def get_timestamp_now_epoche():
     TIMESTAMP_NOW_EPOCHE = int(datetime.now().timestamp()+get_timestamp_now_offset())
     return TIMESTAMP_NOW_EPOCHE 
 
-def test():
-    print('Hello')
+def venti_control(trockenMasse,stockAufbau):
+    print('Auto on')
+    print(trockenMasse)
+    print(stockAufbau)
     sys.stdout.flush()
 
 
@@ -34,7 +36,7 @@ CORS(app)
 
 with app.app_context():
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
-    scheduler.add_job(test, 'interval', minutes=1)
+    # scheduler.add_job(test, 'interval', minutes=1)
     scheduler.start()
 
 
@@ -66,13 +68,20 @@ def switch():
     if request.method == 'POST':
         data = request.get_json()
         CMD = data['cmd']
+        TM = data['tm']
+        STOCK = data['stock']
 
         if CMD == 'on':
+            scheduler.remove_job('venti_control')
             mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
             return jsonify('Venti on')
         elif CMD == 'off':
+            scheduler.remove_job('venti_control')
             mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
             return jsonify('Venti off')
+        elif CMD == 'auto':
+            scheduler.add_job(venti_control(TM,STOCK), 'interval', minutes=10, replace_existing=True, id='venti_control')
+            return jsonify('Venti auto')
         else:
             return jsonify('No command send!')
             
