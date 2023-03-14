@@ -80,7 +80,7 @@ def switch():
             mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
             return jsonify('Venti off')
         elif CMD == 'auto':
-            scheduler.add_job(venti_control(TM,STOCK), 'interval', minutes=10, replace_existing=True, id='venti_control')
+            scheduler.add_job(venti_control, 'interval', minutes=10, args=[TM,STOCK], replace_existing=True, id='venti_control')
             return jsonify('Venti auto')
         else:
             return jsonify('No command send!')
