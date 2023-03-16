@@ -5,12 +5,14 @@ from flask_mqtt import Mqtt
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 import sys
+import os
+from influxdb_client import InfluxDBClient, Point, Dialect
+from influxdb_client.client.write_api import SYNCHRONOUS
 
 
+load_dotenv()
 
-#TIMESTAMP_NOW = datetime.now().astimezone(pytz.timezone("Europe/Berlin")).isoformat()
-#TIMESTAMP_NOW_OFFSET = pytz.timezone("Europe/Berlin").utcoffset(datetime.now()).total_seconds()
-#TIMESTAMP_NOW_EPOCHE = int(datetime.now().timestamp()+TIMESTAMP_NOW_OFFSET)  
+
 
 def get_timestamp_now():
     TIMESTAMP_NOW = datetime.now().astimezone(pytz.timezone("Europe/Berlin")).isoformat()
@@ -31,8 +33,11 @@ def venti_control(trockenMasse,stockAufbau):
     sys.stdout.flush()
 
 
+
+
 app = Flask(__name__)
 CORS(app)
+
 
 with app.app_context():
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
@@ -61,6 +66,26 @@ def home():
 @app.route('/time')
 def time():
     return jsonify(get_timestamp_now_epoche(),get_timestamp_now(),get_timestamp_now_offset())
+
+@app.route('/influx')
+def influx():
+    client = InfluxDBClient(url="http://172.16.238.16:8086", token=os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"), org=os.getenv("DOCKER_INFLUXDB_INIT_ORG"))
+
+    #write_api = client.write_api(write_options=SYNCHRONOUS)
+    query_api = client.query_api()
+
+    query = """from(bucket: "jokley_bucket")
+                |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                |> filter(fn: (r) => r["device_name"] == "probe01")
+                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity" or r["_measurement"] == "device_frmpayload_data_trockenmasse")
+                |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                |> yield(name: "mean")"""
+
+    result = client.query_api().query(query=query)
+
+    client.close()
+
+    return jsonify(result)
 
 
 @app.route('/venti',methods = ['POST', 'GET'])
