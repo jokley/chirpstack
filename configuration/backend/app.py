@@ -36,7 +36,7 @@ CORS(app)
 
 with app.app_context():
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
-    scheduler._job(venti_control, 'interval', minutes=1, args=['87','1'], replace_existing=True, id='venti_control')
+    scheduler.add_job(venti_control, 'interval', minutes=1, args=['87','1'], replace_existing=True, id='venti_control')
     scheduler.start()
 
 
