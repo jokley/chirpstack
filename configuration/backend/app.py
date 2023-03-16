@@ -70,10 +70,10 @@ def time():
 
 @app.route('/influx')
 def influx():
-    client = InfluxDBClient(url="http://172.16.238.16:8086", token=os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"), org=os.getenv("DOCKER_INFLUXDB_INIT_ORG"))
+    client = InfluxDBClient(url="http://172.16.238.16:8086", token="Jr5krSrSA6UlKD7vQifU8XJ1U9UZzpKYCNx7vs6kizYc3Bp51XYNlrpsoJXYRdLh2w_c7XNnFgplvnr0ebouDQ==", org="jokley")
 
     #write_api = client.write_api(write_options=SYNCHRONOUS)
-    query_api = client.query_api()
+    #query_api = client.query_api()
 
     query = """from(bucket: "jokley_bucket")
                 |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
