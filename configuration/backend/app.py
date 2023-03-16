@@ -9,7 +9,7 @@ import os
 from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point, Dialect
 from influxdb_client.client.write_api import SYNCHRONOUS
-import pandas as pd
+
 
 
 load_dotenv()
