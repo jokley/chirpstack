@@ -9,6 +9,7 @@ import os
 from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point, Dialect
 from influxdb_client.client.write_api import SYNCHRONOUS
+import pandas as pd
 
 
 load_dotenv()
@@ -82,14 +83,8 @@ def influx():
                 |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)
                 |> yield(name: "mean")'''
 
-    result = client.query_api().query(query=query)
-
-    if result.returns_rows == False:
-        response = []
-
-    # Convert the response to a plain list of dicts
-    else:
-        response = [dict(row.items()) for row in result]
+    df = client.query_api().query(query=query)
+    response = df.to_json(orient='records')
 
     client.close()
 
