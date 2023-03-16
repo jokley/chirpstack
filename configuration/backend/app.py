@@ -36,7 +36,7 @@ CORS(app)
 
 with app.app_context():
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
-    # scheduler.add_job(test, 'interval', minutes=1)
+    scheduler._job(venti_control, 'interval', minutes=1, args=['87','1'], replace_existing=True, id='venti_control')
     scheduler.start()
 
 
@@ -72,15 +72,13 @@ def switch():
         STOCK = data['stock']
 
         if CMD == 'on':
-            scheduler.remove_job('venti_control')
             mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
             return jsonify('Venti on')
         elif CMD == 'off':
-            scheduler.remove_job('venti_control')
             mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
             return jsonify('Venti off')
         elif CMD == 'auto':
-            scheduler.add_job(venti_control, 'interval', minutes=10, args=[TM,STOCK], replace_existing=True, id='venti_control')
+            scheduler.modify_job(venti_control, 'interval', minutes=1, args=[TM,STOCK], replace_existing=True, id='venti_control')
             return jsonify('Venti auto')
         else:
             return jsonify('No command send!')
