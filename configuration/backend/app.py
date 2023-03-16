@@ -79,7 +79,7 @@ def influx():
                 |> range(start: -10m, stop: 20m)
                 |> filter(fn: (r) => r["device_name"] == "probe01")
                 |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity" or r["_measurement"] == "device_frmpayload_data_trockenmasse")
-                |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+                |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)
                 |> yield(name: "mean")'''
 
     result = client.query_api().query(query=query)
