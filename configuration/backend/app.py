@@ -83,8 +83,8 @@ def influx():
                 |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)
                 |> yield(name: "mean")'''
 
-    df = client.query_api().query(query=query)
-    response = df.to_json(orient='records')
+    result = client.query_api().query(query=query)
+    response = result[0]
 
     client.close()
 
