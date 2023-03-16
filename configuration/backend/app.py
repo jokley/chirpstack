@@ -6,6 +6,7 @@ import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 import sys
 import os
+from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point, Dialect
 from influxdb_client.client.write_api import SYNCHRONOUS
 
