@@ -88,7 +88,7 @@ def influx():
 
     client.close()
 
-    return jsonify(response)
+    return (response)
 
 
 @app.route('/venti',methods = ['POST', 'GET'])
