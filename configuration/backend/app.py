@@ -84,9 +84,16 @@ def influx():
 
     result = client.query_api().query(query=query)
 
+    if result.returns_rows == False:
+        response = []
+
+    # Convert the response to a plain list of dicts
+    else:
+        response = [dict(row.items()) for row in result]
+
     client.close()
 
-    return (result)
+    return jsonify(response)
 
 
 @app.route('/venti',methods = ['POST', 'GET'])
