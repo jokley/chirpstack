@@ -85,10 +85,10 @@ def influx():
     client = get_influxdb_client()
 
     query = '''from(bucket: "jokley_bucket")
-                |> range(start: -10m, stop: 20m)
+                |> range(start: -10m)
                 |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
                 |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_trockenmasse")
-                |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)
+                |> aggregateWindow(every: 1m, fn: min, createEmpty: false)
                 |> yield(name: "min")'''
 
     result = client.query_api().query(query=query)
