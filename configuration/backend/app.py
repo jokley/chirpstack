@@ -120,7 +120,7 @@ def switch():
             if value is None:
                 STOCK = '0'
         except KeyError:
-            value = None
+             STOCK = '0'
     
         if CMD == 'on':
             mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
