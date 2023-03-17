@@ -84,11 +84,16 @@ def influx():
                 |> yield(name: "mean")'''
 
     result = client.query_api().query(query=query)
+
+    results = []
+    for table in result:
+        for record in table.records:
+            results.append((record.get_field(), record.get_value()))
     
 
     client.close()
 
-    return jsonify(result)
+    return jsonify(results)
 
 
 @app.route('/venti',methods = ['POST', 'GET'])
