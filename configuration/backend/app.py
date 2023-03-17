@@ -15,7 +15,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 load_dotenv()
 
 def get_influxdb_client():
-    URL = os.getenv("http://172.16.238.16:8086")
+    URL = "http://172.16.238.16:8086"
     TOKEN = os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN")
     ORG = os.getenv("DOCKER_INFLUXDB_INIT_ORG")
     client = InfluxDBClient(url=URL, token=TOKEN, org=ORG)
