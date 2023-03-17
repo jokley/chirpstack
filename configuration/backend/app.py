@@ -91,7 +91,7 @@ def influx():
                 |> aggregateWindow(every: 10m, fn: mean, createEmpty: false)
                 |> group()
                 |> min(column: "_value")
-                |> yield(name: "mean")
+                |> yield(name: "mean")'''
 
     result = client.query_api().query(query=query)
 
