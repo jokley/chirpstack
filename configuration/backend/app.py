@@ -88,7 +88,7 @@ def influx():
                 |> range(start: -10m)
                 |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
                 |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_trockenmasse")
-                |> aggregateWindow(every: 1m, fn: min, createEmpty: false)
+                |> aggregateWindow(every: 10m, fn: min, createEmpty: false)
                 |> yield(name: "min")'''
 
     result = client.query_api().query(query=query)
