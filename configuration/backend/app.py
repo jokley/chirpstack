@@ -117,8 +117,6 @@ def switch():
         TM = data['tm']
         try:
             STOCK = data['stock']
-            if value is None:
-                STOCK = '0'
         except KeyError:
              STOCK = '0'
     
