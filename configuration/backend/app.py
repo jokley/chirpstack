@@ -43,6 +43,9 @@ def venti_control(trockenMasse,stockAufbau):
     print(trockenMasse)
     print(stockAufbau)
     sys.stdout.flush()
+    
+
+
 
 
 
@@ -112,8 +115,13 @@ def switch():
         data = request.get_json()
         CMD = data['cmd']
         TM = data['tm']
-        STOCK = data['stock']
-
+        try:
+            STOCK = data['stock']
+            if value is None:
+                STOCK = '0'
+        except KeyError:
+            value = None
+    
         if CMD == 'on':
             mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
             return jsonify('Venti on')
