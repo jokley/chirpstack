@@ -81,16 +81,12 @@ def time():
 
 @app.route('/influx')
 def influx():
-    #client = InfluxDBClient(url="http://172.16.238.16:8086", token="Jr5krSrSA6UlKD7vQifU8XJ1U9UZzpKYCNx7vs6kizYc3Bp51XYNlrpsoJXYRdLh2w_c7XNnFgplvnr0ebouDQ==", org="jokley")
-
-    #write_api = client.write_api(write_options=SYNCHRONOUS)
-    #query_api = client.query_api()
 
     client = get_influxdb_client()
 
     query = '''from(bucket: "jokley_bucket")
                 |> range(start: -10m, stop: 20m)
-                |> filter(fn: (r) => r["device_name"] == "probe01")
+                |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
                 |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_trockenmasse")
                 |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)
                 |> yield(name: "min")'''
