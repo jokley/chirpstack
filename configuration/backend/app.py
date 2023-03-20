@@ -127,7 +127,7 @@ def influx():
     trockenMasseMax = results[5]
 
 
-    return jsonify(humidityMin)
+    return jsonify('humidityMin: {}, humidityMax: {},temperatureMin: {},  temperatureMax: {},trockenMasseMin: {}, trockenMasseMax: {}'.format(humidityMin, humidityMax,temperatureMin,temperatureMax,trockenMasseMin,trockenMasseMax))
 
 
 @app.route('/venti',methods = ['POST', 'GET'])
