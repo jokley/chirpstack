@@ -127,7 +127,7 @@ def influx():
     trockenMasseMax = results[5]
 
 
-    return (humidityMin)
+    return jsonify(humidityMin)
 
 
 @app.route('/venti',methods = ['POST', 'GET'])
