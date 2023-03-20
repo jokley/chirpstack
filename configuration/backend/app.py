@@ -87,24 +87,26 @@ def influx():
 
     client = get_influxdb_client()
 
-    query = ''' data = from(bucket: "jokley_bucket")
-                    |> range(start: -10m)
-                    |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
-                    |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" )
-                    |> last()
-                    |> group(columns: ["_measurement"])
+    query = '''data = from(bucket: "jokley_bucket")
+                |> range(start: -10m)
+                |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
+                |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" )
+                |> last()
+                |> group(columns: ["_measurement"])
+                |> sort(columns: ["_measurement"])
  
-                data_min = data
-                    |> min()
-                    |> yield(name: "min") 
+            data_min = data
+                |> min()
+                |> set(key:"_measurement", value:"min")
+                |> sort(columns: ["_measurement"])
+                |> yield(name: "min") 
 
-                data_max = data
-                    |> max()
-                    |> yield(name: "max") 
+            data_max = data
+                |> max()
+                |> set(key:"_measurement", value:"max")
+                |> sort(columns: ["_measurement"])
+                |> yield(name: "max") 
 
-                data_mean = data
-                    |> mean()
-                    |> yield(name: "mean")
             '''
 
     result = client.query_api().query(query=query)
@@ -112,7 +114,7 @@ def influx():
     results = []
     for table in result:
         for record in table.records:
-            results.append(( record.get_value()))
+            results.append(( record.get_measurement(), record.get_value()))
     
 
     client.close()
