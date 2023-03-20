@@ -56,7 +56,7 @@ CORS(app)
 
 with app.app_context():
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
-    scheduler.add_job(venti_control, 'interval', minutes=1, args=['87','1'], replace_existing=True, id='venti_control')
+    scheduler.add_job(venti_control, 'interval', minutes=5, args=['87','1'], replace_existing=True, id='venti_control')
     scheduler.start()
 
 
@@ -127,7 +127,7 @@ def influx():
     trockenMasseMax = results[5]
 
 
-    return jsonify('humidityMin: {}, humidityMax: {},temperatureMin: {},  temperatureMax: {},trockenMasseMin: {}, trockenMasseMax: {}'.format(humidityMin, humidityMax,temperatureMin,temperatureMax,trockenMasseMin,trockenMasseMax))
+    return jsonify('humidityMin: {}, humidityMax: {}, temperatureMin: {},  temperatureMax: {}, trockenMasseMin: {}, trockenMasseMax: {}'.format(humidityMin, humidityMax,temperatureMin,temperatureMax,trockenMasseMin,trockenMasseMax))
 
 
 @app.route('/venti',methods = ['POST', 'GET'])
