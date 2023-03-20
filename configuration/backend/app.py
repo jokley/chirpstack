@@ -114,12 +114,20 @@ def influx():
     results = []
     for table in result:
         for record in table.records:
-            results.append(( record.get_measurement(), record.get_value()))
+            results.append((  record.get_value()))
     
 
     client.close()
 
-    return jsonify(results)
+    humidityMin = results[0]
+    temperatureMin = results[1]
+    trockenMasseMin = results[2]
+    humidityMax = results[3]
+    temperatureMax = results[4]
+    trockenMasseMax = results[5]
+
+
+    return (humidityMin)
 
 
 @app.route('/venti',methods = ['POST', 'GET'])
