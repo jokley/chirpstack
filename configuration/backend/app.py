@@ -112,7 +112,7 @@ def influx():
     results = []
     for table in result:
         for record in table.records:
-            results.append((get_measurement(), record.get_value()))
+            results.append(( record.get_value()))
     
 
     client.close()
