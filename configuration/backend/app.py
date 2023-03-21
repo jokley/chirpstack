@@ -127,9 +127,9 @@ def time():
 def influx():
 
     data = get_min_max_values()
-    tempMin = data['temperatureMin']
+    #tempMin = data['temperatureMin']
     
-    return jsonify(tempMin)
+    return (data)
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
