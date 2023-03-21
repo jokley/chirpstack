@@ -126,8 +126,8 @@ def influx():
     humMax = data[0].get('humidityMax')
     tempMin = data[0].get('temperatureMin')
     tempMax = data[0].get('temperatureMax')
-    tsMin = data[0].get('TrockenmasseMin')
-    tsMax = data[0].get('TrockenmasseMax')
+    tsMin = data[0].get('trockenMasseMin')
+    tsMax = data[0].get('trockenMasseMax')
     
     return jsonify('{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax))
 
