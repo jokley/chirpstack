@@ -119,7 +119,8 @@ def influx():
     results2 = []
     names = ['humidityMin','temperatureMin','trockenMasseMin','humidityMax','temperatureMax','trockenMasseMax']
     results2.append(dict(zip(names,results)))
-    dicti={results2}
+    dicti={}
+    dicti = results2
 
     client.close()
 
