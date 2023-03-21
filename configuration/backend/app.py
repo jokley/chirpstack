@@ -45,6 +45,47 @@ def venti_control(trockenMasse,stockAufbau):
     sys.stdout.flush()
     
 
+def get_min_max_values():
+    client = get_influxdb_client()
+
+    query = '''data = from(bucket: "jokley_bucket")
+                |> range(start: -10m)
+                |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
+                |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" )
+                |> last()
+                |> group(columns: ["_measurement"])
+                |> sort(columns: ["_measurement"])
+ 
+            data_min = data
+                |> min()
+                |> set(key:"_measurement", value:"min")
+                |> sort(columns: ["_measurement"])
+                |> yield(name: "min") 
+
+            data_max = data
+                |> max()
+                |> set(key:"_measurement", value:"max")
+                |> sort(columns: ["_measurement"])
+                |> yield(name: "max") 
+
+            '''
+
+    result = client.query_api().query(query=query)
+   
+    results = []
+    for table in result:
+        for record in table.records:
+            results.append((  record.get_value()))
+    
+    results2 = []
+    names = ['humidityMin','temperatureMin','trockenMasseMin','humidityMax','temperatureMax','trockenMasseMax']
+    results2.append(dict(zip(names,results)))
+    dicti={}
+    dicti = results2
+
+    client.close()
+
+    return (dicti)
 
 
 
@@ -85,55 +126,10 @@ def time():
 @app.route('/influx')
 def influx():
 
-    client = get_influxdb_client()
+    data = get_min_max_values()
+    tempMin = data('temperatureMin')
 
-    query = '''data = from(bucket: "jokley_bucket")
-                |> range(start: -10m)
-                |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
-                |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" )
-                |> last()
-                |> group(columns: ["_measurement"])
-                |> sort(columns: ["_measurement"])
- 
-            data_min = data
-                |> min()
-                |> set(key:"_measurement", value:"min")
-                |> sort(columns: ["_measurement"])
-                |> yield(name: "min") 
-
-            data_max = data
-                |> max()
-                |> set(key:"_measurement", value:"max")
-                |> sort(columns: ["_measurement"])
-                |> yield(name: "max") 
-
-            '''
-
-    result = client.query_api().query(query=query)
-   
-    results = []
-    for table in result:
-        for record in table.records:
-            results.append((  record.get_value()))
-    
-    results2 = []
-    names = ['humidityMin','temperatureMin','trockenMasseMin','humidityMax','temperatureMax','trockenMasseMax']
-    results2.append(dict(zip(names,results)))
-    dicti={}
-    dicti = results2
-
-    client.close()
-
-    # humidityMin = results[0]
-    # temperatureMin = results[1]
-    # trockenMasseMin = results[2]
-    # humidityMax = results[3]
-    # temperatureMax = results[4]
-    # trockenMasseMax = results[5]
-
-
-    # return jsonify('humidityMin: {}, humidityMax: {}, temperatureMin: {},  temperatureMax: {}, trockenMasseMin: {}, trockenMasseMax: {}'.format(humidityMin, humidityMax,temperatureMin,temperatureMax,trockenMasseMin,trockenMasseMax))
-    return (dicti)
+    return jsonify(tempMin)
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
