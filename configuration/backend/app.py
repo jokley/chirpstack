@@ -127,7 +127,7 @@ def time():
 def influx():
 
     data = get_min_max_values()
-    tempMin = data.get('temperatureMin')
+    tempMin = data[0].get('temperatureMin')
     
     return (tempMin)
 
