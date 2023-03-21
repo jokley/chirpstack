@@ -110,25 +110,29 @@ def influx():
             '''
 
     result = client.query_api().query(query=query)
-
+   
     results = []
     for table in result:
         for record in table.records:
             results.append((  record.get_value()))
     
+    results2 = []
+    names = ['humidityMin','temperatureMin','trockenMasseMin','humidityMax','temperatureMax','trockenMasseMax']
+    results2.append(dict(zip(names,results)))
+    dicti={results2}
 
     client.close()
 
-    humidityMin = results[0]
-    temperatureMin = results[1]
-    trockenMasseMin = results[2]
-    humidityMax = results[3]
-    temperatureMax = results[4]
-    trockenMasseMax = results[5]
+    # humidityMin = results[0]
+    # temperatureMin = results[1]
+    # trockenMasseMin = results[2]
+    # humidityMax = results[3]
+    # temperatureMax = results[4]
+    # trockenMasseMax = results[5]
 
 
-    return jsonify('humidityMin: {}, humidityMax: {}, temperatureMin: {},  temperatureMax: {}, trockenMasseMin: {}, trockenMasseMax: {}'.format(humidityMin, humidityMax,temperatureMin,temperatureMax,trockenMasseMin,trockenMasseMax))
-
+    # return jsonify('humidityMin: {}, humidityMax: {}, temperatureMin: {},  temperatureMax: {}, trockenMasseMin: {}, trockenMasseMax: {}'.format(humidityMin, humidityMax,temperatureMin,temperatureMax,trockenMasseMin,trockenMasseMax))
+    return (dicti)
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
