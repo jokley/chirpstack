@@ -88,7 +88,7 @@ def get_venti_control_values():
             results.append(( record.get_value()))
     
     results2 = []
-    names = ['mode','trockenMasseSoll','stockaufbau']
+    names = ['mode','stockaufbau','trockenMasseSoll']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
