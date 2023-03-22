@@ -69,7 +69,7 @@ def get_outdoor_values():
     results = []
     for table in result:
         for record in table.records:
-            results.append(( record.get_value()))
+            results.append(( record.get_measurement()))
     
     results2 = []
     names = ['humidityOut','temperatureOut','trockenMasseOut']
