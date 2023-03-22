@@ -37,6 +37,14 @@ def get_timestamp_now_epoche():
     TIMESTAMP_NOW_EPOCHE = int(datetime.now().timestamp()+get_timestamp_now_offset())
     return TIMESTAMP_NOW_EPOCHE 
 
+def venti_cmd(cmd):
+    if cmd == 'on':
+        mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
+    elif cmd == 'off':
+        mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
+
+
+
 def venti_control(trockenMasse,stockAufbau):
     print('Auto on')
     print(trockenMasse)
@@ -143,10 +151,12 @@ def switch():
              STOCK = '0'
     
         if CMD == 'on':
-            mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
+            #mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
+            venti_cmd(CMD)
             return jsonify('Venti on')
         elif CMD == 'off':
-            mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
+            #mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
+            venti_cmd(CMD)
             return jsonify('Venti off')
         elif CMD == 'auto':
             scheduler.modify_job('venti_control',  args=[TM,STOCK])
