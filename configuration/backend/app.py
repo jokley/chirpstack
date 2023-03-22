@@ -55,6 +55,35 @@ def venti_control(trockenMasse,stockAufbau):
 def get_min_max_values():
     client = get_influxdb_client()
 
+    query = '''from(bucket: "jokley_bucket")
+                |> range(start: -10h)
+                |> filter(fn: (r) => r["device_name"] == "outdoor")
+                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_TempC_SHT" or r["_measurement"] == "device_frmpayload_data_Hum_SHT")
+                |> last()
+                |> pivot(rowKey: ["_time"], columnKey: ["_measurement"], valueColumn: "_value")
+                |> map(fn: (r) => ({ r with _value: r.device_frmpayload_data_TempC_SHT * r.device_frmpayload_data_Hum_SHT }))
+
+            '''
+    result = client.query_api().query(query=query)
+   
+    results = []
+    for table in result:
+        for record in table.records:
+            results.append(( record.get_value()))
+    
+    results2 = []
+    names = ['humidityOut','temperatureOut','trockenMasseOut']
+    results2.append(dict(zip(names,results)))
+    dicti={}
+    dicti = results2
+
+    client.close()
+
+    return (dicti)
+
+def get_outdoor_values():
+    client = get_influxdb_client()
+
     query = '''data = from(bucket: "jokley_bucket")
                 |> range(start: -10m)
                 |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
@@ -136,8 +165,14 @@ def influx():
     tempMax = data[0].get('temperatureMax')
     tsMin = data[0].get('trockenMasseMin')
     tsMax = data[0].get('trockenMasseMax')
+
+    dataOut = get_outdoor_values()
+    humOut = dataOut[0].get('humidityOut')
+    tempOut = dataOut[0].get('temperatureOut')
+    tsOut = dataOut[0].get('trockenMasseOut')
+
     
-    return jsonify('{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax))
+    return jsonify('{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut))
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
@@ -151,11 +186,9 @@ def switch():
              STOCK = '0'
     
         if CMD == 'on':
-            #mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
             venti_cmd(CMD)
             return jsonify('Venti on')
         elif CMD == 'off':
-            #mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
             venti_cmd(CMD)
             return jsonify('Venti off')
         elif CMD == 'auto':
@@ -168,10 +201,10 @@ def switch():
         CMD = request.args.get('cmd', default = 'auto', type = str)
 
         if CMD == 'on':
-            mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
+            venti_cmd(CMD)
             return jsonify('Venti on')
         elif CMD == 'off':
-            mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
+            venti_cmd(CMD)
             return jsonify('Venti off')
         else:
             return jsonify('No command send!')
