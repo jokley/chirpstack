@@ -50,6 +50,26 @@ def venti_control(trockenMasse,stockAufbau):
     print(trockenMasse)
     print(stockAufbau)
     sys.stdout.flush()
+
+
+def venti_auto(cmd, trockenMasse,stockAufbau):
+    
+    ORG = os.getenv("DOCKER_INFLUXDB_INIT_ORG")
+
+    client = get_influxdb_client()
+
+    write_api = client.write_api(write_options=SYNCHRONOUS)
+    #record =  client.Point("my_measurement").tag("location", "Prague").field("temperature", 25.3)
+    
+    records = [
+	client.Point("venti").field("mode", cmd),
+	client.Point("venti").field("trockenmasse", trockenMasse),
+	client.Point("venit").field("stockaufbau", stockAufbau)
+    ]    
+
+    write_api.write(bucket="jokley_bucket", org=ORG, record=records)
+
+    client.close()
     
 
 def get_outdoor_values():
@@ -189,6 +209,9 @@ def switch():
             venti_cmd(CMD)
             return jsonify('Venti off')
         elif CMD == 'auto':
+            
+
+            venti_auto(CMD,TM,STOCK)
             scheduler.modify_job('venti_control',  args=[TM,STOCK])
             return jsonify('Venti auto')
         else:
