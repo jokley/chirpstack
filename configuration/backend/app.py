@@ -52,7 +52,7 @@ def venti_control(trockenMasse,stockAufbau):
     sys.stdout.flush()
     
 
-def get_min_max_values():
+def get_outdoor_values():
     client = get_influxdb_client()
 
     query = '''from(bucket: "jokley_bucket")
@@ -81,7 +81,7 @@ def get_min_max_values():
 
     return (dicti)
 
-def get_outdoor_values():
+def get_min_max_values():
     client = get_influxdb_client()
 
     query = '''data = from(bucket: "jokley_bucket")
@@ -166,10 +166,10 @@ def influx():
     tsMin = data[0].get('trockenMasseMin')
     tsMax = data[0].get('trockenMasseMax')
 
-    dataOut = get_outdoor_values()
-    humOut = dataOut[0].get('humidityOut')
-    tempOut = dataOut[0].get('temperatureOut')
-    tsOut = dataOut[0].get('trockenMasseOut')
+    # dataOut = get_outdoor_values()
+    # humOut = dataOut[0].get('humidityOut')
+    # tempOut = dataOut[0].get('temperatureOut')
+    # tsOut = dataOut[0].get('trockenMasseOut')
 
     
     return jsonify('{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut))
