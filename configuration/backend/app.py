@@ -62,9 +62,9 @@ def venti_auto(cmd, trockenMasse,stockAufbau):
     #record =  client.Point("my_measurement").tag("location", "Prague").field("temperature", 25.3)
     
     records = [
-	InfluxDBClient.Point("venti").field("mode", cmd),
-	InfluxDBClient.Point("venti").field("trockenmasse", trockenMasse),
-	InfluxDBClient.Point("venit").field("stockaufbau", stockAufbau)
+	Point("venti").field("mode", cmd),
+	Point("venti").field("trockenmasse", trockenMasse),
+	Point("venit").field("stockaufbau", stockAufbau)
     ]    
 
     write_api.write(bucket="jokley_bucket", org=ORG, record=records)
