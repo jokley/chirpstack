@@ -64,7 +64,7 @@ def venti_auto(cmd, trockenMasse,stockAufbau):
     records = [
 	Point("venti").field("mode", cmd),
 	Point("venti").field("trockenmasse", trockenMasse),
-	Point("venit").field("stockaufbau", stockAufbau)
+	Point("venti").field("stockaufbau", stockAufbau)
     ]    
 
     write_api.write(bucket="jokley_bucket", org=ORG, record=records)
