@@ -77,6 +77,7 @@ def get_venti_control_values():
     query = ''' from(bucket: "jokley_bucket")
                     |> range(start: -10h)
                     |> filter(fn: (r) => r["_measurement"] == "venti")
+		    |> last()
                 '''
 
     result = client.query_api().query(query=query)
