@@ -70,6 +70,31 @@ def venti_auto(cmd, trockenMasse,stockAufbau):
     write_api.write(bucket="jokley_bucket", org=ORG, record=records)
 
     client.close()
+
+def get_venti_control_values():
+    client = get_influxdb_client()
+
+    query = ''' from(bucket: "jokley_bucket")
+                    |> range(start: -10h)
+                    |> filter(fn: (r) => r["_measurement"] == "venti")
+                '''
+
+    result = client.query_api().query(query=query)
+
+    results = []
+    for table in result:
+        for record in table.records:
+            results.append(( record.get_value()))
+    
+    results2 = []
+    names = ['mode','trockenMasseSoll','stockaufbau']
+    results2.append(dict(zip(names,results)))
+    dicti={}
+    dicti = results2
+
+    client.close()
+
+    return (dicti)
     
 
 def get_outdoor_values():
@@ -188,8 +213,13 @@ def influx():
     tempOut = dataOut[0].get('temperatureOut')
     tsOut = dataOut[0].get('trockenMasseOut')
 
+    dataVenti = get_venti_control_values()
+    mode = dataVenti[0].get('mode')
+    tsSoll =dataVenti[0].get('trockenMasseSoll')
+    stock = dataVenti[0].get('stockaufbau')
 
-    return jsonify('{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut))
+
+    return jsonify('{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,mode,tsSoll,stock))
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
@@ -204,13 +234,13 @@ def switch():
     
         if CMD == 'on':
             venti_cmd(CMD)
+            venti_auto(CMD,TM,STOCK)
             return jsonify('Venti on')
         elif CMD == 'off':
             venti_cmd(CMD)
+            venti_auto(CMD,TM,STOCK)
             return jsonify('Venti off')
         elif CMD == 'auto':
-            
-
             venti_auto(CMD,TM,STOCK)
             scheduler.modify_job('venti_control',  args=[TM,STOCK])
             return jsonify('Venti auto')
