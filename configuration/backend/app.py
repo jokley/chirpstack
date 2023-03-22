@@ -56,20 +56,17 @@ def get_outdoor_values():
     client = get_influxdb_client()
 
     query = '''from(bucket: "jokley_bucket")
-                |> range(start: -10h)
+                |> range(start: -1h)
                 |> filter(fn: (r) => r["device_name"] == "outdoor")
-                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_TempC_SHT" or r["_measurement"] == "device_frmpayload_data_Hum_SHT")
+                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_TempC_SHT" or r["_measurement"] == "device_frmpayload_data_Hum_SHT" or r["_measurement"] == "device_frmpayload_data_TS_SHT")
                 |> last()
-                |> pivot(rowKey: ["_time"], columnKey: ["_measurement"], valueColumn: "_value")
-                |> map(fn: (r) => ({ r with _value: r.device_frmpayload_data_TempC_SHT * r.device_frmpayload_data_Hum_SHT }))
-
             '''
     result = client.query_api().query(query=query)
    
     results = []
     for table in result:
         for record in table.records:
-            results.append(( record.get_measurement()))
+            results.append(( record.get_value()))
     
     results2 = []
     names = ['humidityOut','temperatureOut','trockenMasseOut']
@@ -171,8 +168,8 @@ def influx():
     tempOut = dataOut[0].get('temperatureOut')
     tsOut = dataOut[0].get('trockenMasseOut')
 
-    return jsonify(dataOut)
-    # return jsonify('{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut))
+
+    return jsonify('{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut))
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
