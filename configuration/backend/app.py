@@ -234,7 +234,7 @@ def influx():
     remainingTimeStock = 0
 
 
-    return jsonify('{},{},{}'.format(startTimeStock,timeNow, remainingTimeStock))
+    return jsonify('{},{},{}'.format(startTimeStock,timeNow, startTime))
     #return jsonify(dataVenti[0]['mode'][0])
     #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
