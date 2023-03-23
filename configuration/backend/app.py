@@ -228,7 +228,7 @@ def influx():
     DST =  get_timestamp_now_offset()
     #startTimeStock = datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f') + datetime.timedelta(seconds=DST)
     # startTimeStock = int(datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f').date())
-    startTimeStock = datetime(startTime).replace(tzinfo=timezone.utc).timestamp() + timedelta(seconds=DST)
+    startTimeStock = startTime.replace(tzinfo=timezone.utc).timestamp() + timedelta(seconds=DST)
     timeNow = get_timestamp_now_epoche()
     #remainingTimeStock =     timeNow - startTimeStock
     remainingTimeStock = 0
