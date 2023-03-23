@@ -81,7 +81,7 @@ def get_venti_control_values():
     query = ''' from(bucket: "jokley_bucket")
                     |> range(start: -30d)
                     |> filter(fn: (r) => r["_measurement"] == "venti")
-		            |> last()
+		    |> last()
                 '''
 
     result = client.query_api().query(query=query)
@@ -223,8 +223,8 @@ def influx():
     tsSoll =dataVenti[0].get('trockenMasseSoll')
     stock = dataVenti[0].get('stockaufbau')
 
-
-    return jsonify('{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,mode,tsSoll,stock))
+     return jsonify(dataVenti)
+   # return jsonify('{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,mode,tsSoll,stock))
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
