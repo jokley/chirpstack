@@ -74,8 +74,8 @@ def venti_control():
 
     startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     lastTimeOn = (lastOn + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
-    remainingTimeStock =  timeNow - startTimeStock
-    remainingTimeInterval = timeNow - lastTimeOn
+    remainingTimeStock =     int(timeNow - startTimeStock)
+    remainingTimeInterval =  int(timeNow - lastTimeOn)
 
     # Überhitzungsschutz
     if tempMax >= 35:
@@ -306,8 +306,8 @@ def influx():
 
     startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     lastTimeOn = (lastOn + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
-    remainingTimeStock =     timeNow - startTimeStock
-    remainingTimeInterval =     timeNow - lastTimeOn
+    remainingTimeStock =     int(timeNow - startTimeStock)
+    remainingTimeInterval =  int(timeNow - lastTimeOn)
 
    
 
