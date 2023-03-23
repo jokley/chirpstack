@@ -29,7 +29,8 @@ function decodeUplink(input) {
   var hum = parseFloat(((input.bytes[9]<<8 | input.bytes[10])/10).toFixed(1));
   data.TempC_SHT= tmp;
   data.Hum_SHT=hum;
-  data.TS_SHT =-0.0028*((hum)/100)*((hum)/100)+0.004*((hum)/100)+(87+(((tmp)/100)*0.2677));
+  data.TS_SHT =-0.0028*hum*hum+0.004*hum+(87+(tmp*0.2677));
+  data.SDef_SHT = ((hum*-0.05)-(-5))* Math.exp(0.0625*tmp);
   
   }
 }

@@ -49,6 +49,8 @@ def venti_control():
     data = get_min_max_values()
     humMin = data[0]['humidityMin']
     humMax = data[0]['humidityMax']
+    sDefMin = data[0]['sDefMin']
+    sDefMax = data[0]['sDefMax']
     tempMin = data[0]['temperatureMin']
     tempMax = data[0]['temperatureMax']
     tsMin = data[0]['trockenMasseMin']
@@ -56,6 +58,7 @@ def venti_control():
 
     dataOut = get_outdoor_values()
     humOut = dataOut[0]['humidityOut']
+    sdefOut = dataOut[0]['sdefOut']
     tempOut = dataOut[0]['temperatureOut']
     tsOut = dataOut[0]['trockenMasseOut']
 
@@ -182,7 +185,7 @@ def get_outdoor_values():
     query = '''from(bucket: "jokley_bucket")
                 |> range(start: -1h)
                 |> filter(fn: (r) => r["device_name"] == "outdoor")
-                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_TempC_SHT" or r["_measurement"] == "device_frmpayload_data_Hum_SHT" or r["_measurement"] == "device_frmpayload_data_TS_SHT")
+                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_TempC_SHT" or r["_measurement"] == "device_frmpayload_data_Hum_SHT" or r["_measurement"] == "device_frmpayload_data_TS_SHT" or r["_measurement"] == "device_frmpayload_data_SDef_SHT")
                 |> last()
             '''
     result = client.query_api().query(query=query)
@@ -193,7 +196,7 @@ def get_outdoor_values():
             results.append(( record.get_value()))
     
     results2 = []
-    names = ['humidityOut','trockenMasseOut','temperatureOut']
+    names = ['humidityOut','sDefOut','trockenMasseOut','temperatureOut']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
@@ -208,7 +211,7 @@ def get_min_max_values():
     query = '''data = from(bucket: "jokley_bucket")
                 |> range(start: -1h)
                 |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
-                |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" )
+                |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
                 |> last()
                 |> group(columns: ["_measurement"])
                 |> sort(columns: ["_measurement"])
@@ -235,7 +238,7 @@ def get_min_max_values():
             results.append((  record.get_value()))
     
     results2 = []
-    names = ['humidityMin','temperatureMin','trockenMasseMin','humidityMax','temperatureMax','trockenMasseMax']
+    names = ['humidityMin','sDefMin','temperatureMin','trockenMasseMin','humidityMax','sDefMax','temperatureMax','trockenMasseMax']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
@@ -282,6 +285,8 @@ def influx():
     data = get_min_max_values()
     humMin = data[0]['humidityMin']
     humMax = data[0]['humidityMax']
+    sDefMin = data[0]['sDefMin']
+    sDefMax = data[0]['sDefMax']
     tempMin = data[0]['temperatureMin']
     tempMax = data[0]['temperatureMax']
     tsMin = data[0]['trockenMasseMin']
@@ -289,6 +294,7 @@ def influx():
 
     dataOut = get_outdoor_values()
     humOut = dataOut[0]['humidityOut']
+    sdefOut = dataOut[0]['sdefOut']
     tempOut = dataOut[0]['temperatureOut']
     tsOut = dataOut[0]['trockenMasseOut']
 
@@ -314,7 +320,7 @@ def influx():
    
 
 
-    return jsonify('{},{},{}'.format(tsMin,tsOut,tsSoll))
+    return jsonify('{},{},{}'.format(sDefMin,sDefMax,sdefOut))
     #return jsonify(dataVenti[0]['mode'][0])
     #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
