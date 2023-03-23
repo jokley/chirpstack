@@ -89,7 +89,7 @@ def get_venti_control_values():
     results = []
     for table in result:
         for record in table.records:
-            results.append(( record.get_value()))
+            results.append((record.get_time(), record.get_value()))
     
     results2 = []
     names = ['mode','stockaufbau','trockenMasseSoll']
