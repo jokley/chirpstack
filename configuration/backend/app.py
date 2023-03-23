@@ -230,11 +230,11 @@ def influx():
     # startTimeStock = int(datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f').date())
     startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     timeNow = get_timestamp_now_epoche()
-    #remainingTimeStock =     timeNow - startTimeStock
-    remainingTimeStock = 0
+    remainingTimeStock =     timeNow - startTimeStock
+   
 
 
-    return jsonify('{},{},{}'.format(startTimeStock,timeNow, startTime))
+    return jsonify('{},{},{}'.format(startTimeStock,timeNow, remainingTimeStock))
     #return jsonify(dataVenti[0]['mode'][0])
     #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
