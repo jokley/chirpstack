@@ -58,7 +58,7 @@ def venti_control():
     humOut = dataOut[0]['humidityOut']
     tempOut = dataOut[0]['temperatureOut']
     #tsOut = dataOut[0]['trockenMasseOut']
-    tsOut = 80
+    tsOut = 80.0
 
     dataVenti = get_venti_control_values()
     startTime = dataVenti[0]['mode'][0]
@@ -296,7 +296,7 @@ def influx():
     startTime = dataVenti[0]['mode'][0]
     mode = dataVenti[0]['mode'][1]
     tsSoll =dataVenti[0]['trockenMasseSoll'][1]
-    stock = int(dataVenti[0]['stockaufbau'][1]*3600)
+    stock = int((dataVenti[0]['stockaufbau'][1])*3600)
 
     dataLastTime = get_venti_lastTimeOn()
     lastOn = dataLastTime[0]['lastTimeOn']
