@@ -206,23 +206,23 @@ def time():
 def influx():
 
     data = get_min_max_values()
-    humMin = data[0].get('humidityMin')
-    humMax = data[0].get('humidityMax')
-    tempMin = data[0].get('temperatureMin')
-    tempMax = data[0].get('temperatureMax')
-    tsMin = data[0].get('trockenMasseMin')
-    tsMax = data[0].get('trockenMasseMax')
+    humMin = data[0]['humidityMin']
+    humMax = data[0]['humidityMax']
+    tempMin = data[0]['temperatureMin']
+    tempMax = data[0]['temperatureMax']
+    tsMin = data[0]['trockenMasseMin']
+    tsMax = data[0]['trockenMasseMax']
 
     dataOut = get_outdoor_values()
-    humOut = dataOut[0].get('humidityOut')
-    tempOut = dataOut[0].get('temperatureOut')
-    tsOut = dataOut[0].get('trockenMasseOut')
+    humOut = dataOut[0]['humidityOut']
+    tempOut = dataOut[0]['temperatureOut']
+    tsOut = dataOut[0]['trockenMasseOut']
 
     dataVenti = get_venti_control_values()
     startTime = dataVenti[0]['mode'][0]
     mode = dataVenti[0]['mode'][1]
-    tsSoll =dataVenti[0]['trockenMasseSoll']
-    stock = dataVenti[0]['stockaufbau']
+    tsSoll =dataVenti[0]['trockenMasseSoll'][1]
+    stock = dataVenti[0]['stockaufbau'][1]
     
     
     
