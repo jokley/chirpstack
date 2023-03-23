@@ -229,13 +229,14 @@ def influx():
     #startTimeStock = datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f') + datetime.timedelta(seconds=DST)
     # startTimeStock = int(datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f').date())
     startTimeStock = startTime + timedelta(seconds=DST)
-  
-    remainingTimeStock = get_timestamp_now_epoche()
+    timeNow = datetime.now() + timedelta(seconds=DST)
+    remainingTimeStock =     timeNow - startTimeStock
 
 
 
-    # return jsonify(dataVenti[0]['mode'][0])
-    return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
+    return jsonify('{},{},{}'.format(startTimeStock,timeNow, remainingTimeStock))
+    #return jsonify(dataVenti[0]['mode'][0])
+    #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
