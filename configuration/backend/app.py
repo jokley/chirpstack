@@ -251,11 +251,14 @@ def influx():
     timeNow = get_timestamp_now_epoche()
 
     startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
+    lastTimeOn = (lastOn + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     remainingTimeStock =     timeNow - startTimeStock
+    remainingTimeInterval =     timeNow - lastTimeOn
+
    
 
-    return jsonify(lastOn)
-    #return jsonify('{},{},{}'.format(startTimeStock,timeNow, remainingTimeStock))
+
+    return jsonify('{},{}'.format(lastTimeOn,remainingTimeInterval))
     #return jsonify(dataVenti[0]['mode'][0])
     #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
