@@ -193,7 +193,7 @@ def get_outdoor_values():
             results.append(( record.get_value()))
     
     results2 = []
-    names = ['humidityOut','temperatureOut','trockenMasseOut']
+    names = ['humidityOut','trockenMasseOut','temperatureOut']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
