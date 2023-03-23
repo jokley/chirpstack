@@ -68,7 +68,7 @@ def venti_auto(cmd, trockenMasse,stockAufbau):
     # ]
 
     record = [
-	Point("venti").field("mode", cmd).field("trockenmasse", trockenMasse).field("stockaufbau", stockAufbau)
+	Point("venti").field("mode", cmd).field("trockenmasse", trockenMasse).field("stockaufbau", stockAufbau),
     ]      
 
     write_api.write(bucket="jokley_bucket", org=ORG, record=record)
@@ -79,9 +79,9 @@ def get_venti_control_values():
     client = get_influxdb_client()
 
     query = ''' from(bucket: "jokley_bucket")
-                    |> range(start: -10h)
+                    |> range(start: -30d)
                     |> filter(fn: (r) => r["_measurement"] == "venti")
-		    |> last()
+		            |> last()
                 '''
 
     result = client.query_api().query(query=query)
