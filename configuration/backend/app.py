@@ -93,7 +93,7 @@ def venti_control():
         print(mode)
         print('Trockenmasse Automatik')
     # Intervall Belüftung
-    elif mode == 'auto' and humMax > 95 and remainingTimeInterval <= 43200:
+    elif mode == 'auto' and humMax > 95 and remainingTimeInterval <= 43200.0:
         venti_cmd('on')
         print(mode)
         print('Intervall Belüftung')
@@ -250,7 +250,7 @@ CORS(app)
 
 with app.app_context():
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
-    scheduler.add_job(venti_control, 'interval', minutes=5,  replace_existing=True, id='venti_control')
+    scheduler.add_job(venti_control, 'interval', minutes=1,  replace_existing=True, id='venti_control')
     scheduler.start()
 
 
