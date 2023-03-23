@@ -58,7 +58,7 @@ def venti_control():
 
     dataOut = get_outdoor_values()
     humOut = dataOut[0]['humidityOut']
-    sdefOut = dataOut[0]['sdefOut']
+    sDefOut = dataOut[0]['sDefOut']
     tempOut = dataOut[0]['temperatureOut']
     tsOut = dataOut[0]['trockenMasseOut']
 
@@ -294,7 +294,7 @@ def influx():
 
     dataOut = get_outdoor_values()
     humOut = dataOut[0]['humidityOut']
-    sdefOut = dataOut[0]['sdefOut']
+    sDefOut = dataOut[0]['sDefOut']
     tempOut = dataOut[0]['temperatureOut']
     tsOut = dataOut[0]['trockenMasseOut']
 
@@ -320,7 +320,7 @@ def influx():
    
 
 
-    return jsonify('{},{},{}'.format(sDefMin,sDefMax,sdefOut))
+    return jsonify('{},{},{}'.format(sDefMin,sDefMax,sDefOut))
     #return jsonify(dataVenti[0]['mode'][0])
     #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
