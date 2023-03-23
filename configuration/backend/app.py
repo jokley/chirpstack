@@ -230,8 +230,8 @@ def influx():
     # startTimeStock = int(datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f').date())
     startTimeStock = startTime + timedelta(seconds=DST)
     timeNow = get_timestamp_now()
-    remainingTimeStock =     timeNow - startTimeStock
-
+    #remainingTimeStock =     timeNow - startTimeStock
+    remainingTimeStock = 0
 
 
     return jsonify('{},{},{}'.format(startTimeStock,timeNow, remainingTimeStock))
