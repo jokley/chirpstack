@@ -84,7 +84,7 @@ def venti_control():
         print(mode)
         print('Überhitzungsschutz')
     # Stockaufbau
-    elif mode == 'auto' and remainingTimeStock <= (stock*3600):
+    elif mode == 'auto' and remainingTimeStock <= stock:
         venti_cmd('on')
         print(mode)
         print('Stockaufbau')
