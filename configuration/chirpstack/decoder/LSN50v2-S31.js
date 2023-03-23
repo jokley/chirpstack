@@ -24,8 +24,13 @@ function decodeUplink(input) {
   }
   else
   {
-  data.TempC_SHT=parseFloat(((input.bytes[7]<<24>>16 | input.bytes[8])/10).toFixed(2));
-  data.Hum_SHT=parseFloat(((input.bytes[9]<<8 | input.bytes[10])/10).toFixed(1));
+
+  var tmp = parseFloat(((input.bytes[7]<<24>>16 | input.bytes[8])/10).toFixed(2));
+  var hum = parseFloat(((input.bytes[9]<<8 | input.bytes[10])/10).toFixed(1));
+  data.TempC_SHT= tmp;
+  data.Hum_SHT=hum;
+  data.TS_SHT =-0.0028*((hum)/100)*((hum)/100)+0.004*((hum)/100)+(87+(((tmp)/100)*0.2677));
+  
   }
 }
 else if(mode=='1')
