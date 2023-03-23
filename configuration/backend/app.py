@@ -81,7 +81,7 @@ def get_venti_control_values():
     query = ''' from(bucket: "jokley_bucket")
                     |> range(start: -30d)
                     |> filter(fn: (r) => r["_measurement"] == "venti")
-		    |> last()
+		            |> last()
                 '''
 
     result = client.query_api().query(query=query)
@@ -132,7 +132,7 @@ def get_min_max_values():
     client = get_influxdb_client()
 
     query = '''data = from(bucket: "jokley_bucket")
-                |> range(start: -10m)
+                |> range(start: -1h)
                 |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
                 |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" )
                 |> last()
@@ -223,8 +223,8 @@ def influx():
     tsSoll =dataVenti[0].get('trockenMasseSoll')
     stock = dataVenti[0].get('stockaufbau')
 
-     return jsonify(dataVenti)
-   # return jsonify('{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,mode,tsSoll,stock))
+    return jsonify(dataVenti)
+    #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,mode,tsSoll,stock))
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
