@@ -59,22 +59,41 @@ def venti_auto(cmd, trockenMasse,stockAufbau):
     client = get_influxdb_client()
 
     write_api = client.write_api(write_options=SYNCHRONOUS)
-    #record =  client.Point("my_measurement").tag("location", "Prague").field("temperature", 25.3)
-    
-    # records = [
-	# Point("venti").field("mode", cmd),
-	# Point("venti").field("trockenmasse", trockenMasse),
-	# Point("venti").field("stockaufbau", stockAufbau)
-    # ]
 
     record = [
 	Point("venti").field("mode", cmd).field("trockenmasse", trockenMasse).field("stockaufbau", stockAufbau),
     ]      
 
     write_api.write(bucket="jokley_bucket", org=ORG, record=record)
+    client.close()
+
+def get_venti_lastTimeOn():
+    client = get_influxdb_client()
+
+    query = '''from(bucket: "jokley_bucket")
+                |> range(start: -2d)
+                |> filter(fn: (r) => r["device_name"] == "fan")
+                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_RO1_status")
+                |> filter(fn: (r) => r["_value"] == "ON")
+                |> last()
+            '''
+
+    result = client.query_api().query(query=query)
+
+    results = []
+    for table in result:
+        for record in table.records:
+            results.append((record.get_time()))
+    
+    results2 = []
+    names = ['lastTimeOn']
+    results2.append(dict(zip(names,results)))
+    dicti={}
+    dicti = results2
 
     client.close()
 
+    return (dicti)
 def get_venti_control_values():
     client = get_influxdb_client()
 
@@ -224,17 +243,19 @@ def influx():
     mode = dataVenti[0]['mode'][1]
     tsSoll =dataVenti[0]['trockenMasseSoll'][1]
     stock = dataVenti[0]['stockaufbau'][1]
+
+    dataLastTime = get_venti_lastTimeOn()
+    lastOn = data[0]['lastTimeOn']
     
     DST =  get_timestamp_now_offset()
-    #startTimeStock = datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f') + datetime.timedelta(seconds=DST)
-    # startTimeStock = int(datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f').date())
-    startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     timeNow = get_timestamp_now_epoche()
+
+    startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     remainingTimeStock =     timeNow - startTimeStock
    
 
-
-    return jsonify('{},{},{}'.format(startTimeStock,timeNow, remainingTimeStock))
+    return jsonify(lastOn)
+    #return jsonify('{},{},{}'.format(startTimeStock,timeNow, remainingTimeStock))
     #return jsonify(dataVenti[0]['mode'][0])
     #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
