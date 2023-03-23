@@ -245,7 +245,7 @@ def influx():
     stock = dataVenti[0]['stockaufbau'][1]
 
     dataLastTime = get_venti_lastTimeOn()
-    lastOn = data[0]['lastTimeOn']
+    lastOn = dataLastTime[0]['lastTimeOn']
     
     DST =  get_timestamp_now_offset()
     timeNow = get_timestamp_now_epoche()
