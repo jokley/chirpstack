@@ -226,8 +226,8 @@ def influx():
     stock = dataVenti[0]['stockaufbau'][1]
     
     DST =  get_timestamp_now_offset()
-    # startTime = datetime.strptime(startTime, '%Y%m%d%H%M') + datetime.timedelta(seconds=DST)
-    startTimeStock = datetime(startTime).timestamp()
+    startTimeStock = datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f') + datetime.timedelta(seconds=DST)
+    # startTimeStock = int(datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f').date())
   
     remainingTimeStock = get_timestamp_now_epoche()
 
