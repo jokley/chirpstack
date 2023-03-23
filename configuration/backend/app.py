@@ -64,7 +64,7 @@ def venti_control():
     startTime = dataVenti[0]['mode'][0]
     mode = dataVenti[0]['mode'][1]
     tsSoll =dataVenti[0]['trockenMasseSoll'][1]
-    stock = (dataVenti[0]['stockaufbau'][1])*3600
+    stock = int((dataVenti[0]['stockaufbau'][1])*3600)
 
     dataLastTime = get_venti_lastTimeOn()
     lastOn = dataLastTime[0]['lastTimeOn']
@@ -296,7 +296,7 @@ def influx():
     startTime = dataVenti[0]['mode'][0]
     mode = dataVenti[0]['mode'][1]
     tsSoll =dataVenti[0]['trockenMasseSoll'][1]
-    stock = dataVenti[0]['stockaufbau'][1]
+    stock = int(dataVenti[0]['stockaufbau'][1]*3600)
 
     dataLastTime = get_venti_lastTimeOn()
     lastOn = dataLastTime[0]['lastTimeOn']
@@ -312,9 +312,9 @@ def influx():
    
 
 
-    #return jsonify('{},{}'.format(lastTimeOn,remainingTimeInterval))
+    return jsonify('{},{},{}'.format(stock,remainingTimeStock,remainingTimeInterval))
     #return jsonify(dataVenti[0]['mode'][0])
-    return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
+    #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
