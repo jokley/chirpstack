@@ -222,8 +222,10 @@ def influx():
     mode = dataVenti[0].get('mode')
     tsSoll =dataVenti[0].get('trockenMasseSoll')
     stock = dataVenti[0].get('stockaufbau')
-
-    return jsonify(dataVenti)
+    
+    
+    
+    return jsonify(dataVenti[0]['mode'][0])
     #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,mode,tsSoll,stock))
 
 @app.route('/venti',methods = ['POST', 'GET'])
