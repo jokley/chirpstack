@@ -92,7 +92,7 @@ def venti_control():
         print(mode)
         print('Stockaufbau')
     # Trockenmasse Automatik
-    elif mode == 'auto' and tsOut+2 >= tsMin and tsMin <= tsSoll:
+    elif mode == 'auto' and sDefOut+2 >= sDefMin and tsMin <= tsSoll:
         venti_cmd('on')
         print(mode)
         print('Trockenmasse Automatik')
