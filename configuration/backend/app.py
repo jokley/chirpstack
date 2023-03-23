@@ -219,14 +219,15 @@ def influx():
     tsOut = dataOut[0].get('trockenMasseOut')
 
     dataVenti = get_venti_control_values()
-    mode = dataVenti[0].get('mode')
-    tsSoll =dataVenti[0].get('trockenMasseSoll')
-    stock = dataVenti[0].get('stockaufbau')
+    startTime = dataVenti[0]['mode'][0]
+    mode = dataVenti[0]['mode'][1]
+    tsSoll =dataVenti[0]['trockenMasseSoll']
+    stock = dataVenti[0]['stockaufbau']
     
     
     
-    return jsonify(dataVenti[0]['mode'][0])
-    #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,mode,tsSoll,stock))
+    # return jsonify(dataVenti[0]['mode'][0])
+    return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTime,mode,tsSoll,stock))
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
