@@ -61,13 +61,17 @@ def venti_auto(cmd, trockenMasse,stockAufbau):
     write_api = client.write_api(write_options=SYNCHRONOUS)
     #record =  client.Point("my_measurement").tag("location", "Prague").field("temperature", 25.3)
     
-    records = [
-	Point("venti").field("mode", cmd),
-	Point("venti").field("trockenmasse", trockenMasse),
-	Point("venti").field("stockaufbau", stockAufbau)
-    ]    
+    # records = [
+	# Point("venti").field("mode", cmd),
+	# Point("venti").field("trockenmasse", trockenMasse),
+	# Point("venti").field("stockaufbau", stockAufbau)
+    # ]
 
-    write_api.write(bucket="jokley_bucket", org=ORG, record=records)
+    record = [
+	Point("venti").field("mode", cmd).field("trockenmasse", trockenMasse).field("stockaufbau", stockAufbau)
+    ]      
+
+    write_api.write(bucket="jokley_bucket", org=ORG, record=record)
 
     client.close()
 
@@ -266,4 +270,3 @@ def switch():
     
 #if __name__ == "__main__":
     #app.run(host="0.0.0.0",port=5001, debug=True)
-  
