@@ -1,5 +1,5 @@
 from flask import Flask, json, render_template, request,jsonify
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,timezone
 from flask_cors import CORS
 from flask_mqtt import Mqtt
 import pytz
@@ -228,7 +228,7 @@ def influx():
     DST =  get_timestamp_now_offset()
     #startTimeStock = datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f') + datetime.timedelta(seconds=DST)
     # startTimeStock = int(datetime.strptime(startTime, '%Y-%m-%d %H:%M:%S.%f').date())
-    startTimeStock = int(startTime + timedelta(seconds=DST))
+    startTimeStock = datetime(startTime).replace(tzinfo=timezone.utc).timestamp() + timedelta(seconds=DST)
     timeNow = get_timestamp_now_epoche()
     #remainingTimeStock =     timeNow - startTimeStock
     remainingTimeStock = 0
