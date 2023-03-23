@@ -290,8 +290,8 @@ def influx():
     dataOut = get_outdoor_values()
     humOut = dataOut[0]['humidityOut']
     tempOut = dataOut[0]['temperatureOut']
-    #tsOut = dataOut[0]['trockenMasseOut']
-    tsOut = 80
+    tsOut = dataOut[0]['trockenMasseOut']
+
 
     dataVenti = get_venti_control_values()
     startTime = dataVenti[0]['mode'][0]
