@@ -94,7 +94,7 @@ def venti_control():
         print(mode)
         print('Trockenmasse Automatik')
     # Intervall Belüftung
-    elif mode == 'auto' and humMax > 95 and remainingTimeInterval <= 43200.0:
+    elif mode == 'auto' and humMax > 95 and remainingTimeInterval >= 86400:
         venti_cmd('on')
         print(mode)
         print('Intervall Belüftung')
