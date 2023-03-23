@@ -45,10 +45,64 @@ def venti_cmd(cmd):
 
 
 
-def venti_control(trockenMasse,stockAufbau):
-    print('Auto on')
-    print(trockenMasse)
-    print(stockAufbau)
+def venti_control():
+    data = get_min_max_values()
+    humMin = data[0]['humidityMin']
+    humMax = data[0]['humidityMax']
+    tempMin = data[0]['temperatureMin']
+    tempMax = data[0]['temperatureMax']
+    tsMin = data[0]['trockenMasseMin']
+    tsMax = data[0]['trockenMasseMax']
+
+    dataOut = get_outdoor_values()
+    humOut = dataOut[0]['humidityOut']
+    tempOut = dataOut[0]['temperatureOut']
+    #tsOut = dataOut[0]['trockenMasseOut']
+    tsOut = 80
+
+    dataVenti = get_venti_control_values()
+    startTime = dataVenti[0]['mode'][0]
+    mode = dataVenti[0]['mode'][1]
+    tsSoll =dataVenti[0]['trockenMasseSoll'][1]
+    stock = (dataVenti[0]['stockaufbau'][1])*3600
+
+    dataLastTime = get_venti_lastTimeOn()
+    lastOn = dataLastTime[0]['lastTimeOn']
+    
+    DST =  get_timestamp_now_offset()
+    timeNow = get_timestamp_now_epoche()
+
+    startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
+    lastTimeOn = (lastOn + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
+    remainingTimeStock =  timeNow - startTimeStock
+    remainingTimeInterval = timeNow - lastTimeOn
+
+    # Überhitzungsschutz
+    if tempMax >= 35:
+        venti_cmd('on')
+        print(mode)
+        print('Überhitzungsschutz')
+    # Stockaufbau
+    elif mode == 'auto' and remainingTimeStock <= stock:
+        venti_cmd('on')
+        print(mode)
+        print('Stockaufbau')
+    # Trockenmasse Automatik
+    elif mode == 'auto' and tsOut+2 >= tsMin and tsMin <= tsSoll:
+        venti_cmd('on')
+        print(mode)
+        print('Trockenmasse Automatik')
+    # Intervall Belüftung
+    elif mode == 'auto' and humMax > 95 and remainingTimeInterval <= 43200:
+        venti_cmd('on')
+        print(mode)
+        print('Intervall Belüftung')
+    else:
+    # Belüftung aus
+        venti_cmd('off')
+        print(mode)
+        print('Blefüftung aus')
+           
     sys.stdout.flush()
 
 
@@ -196,7 +250,7 @@ CORS(app)
 
 with app.app_context():
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
-    scheduler.add_job(venti_control, 'interval', minutes=5, args=['87','1'], replace_existing=True, id='venti_control')
+    scheduler.add_job(venti_control, 'interval', minutes=5,  replace_existing=True, id='venti_control')
     scheduler.start()
 
 
@@ -258,9 +312,9 @@ def influx():
    
 
 
-    return jsonify('{},{}'.format(lastTimeOn,remainingTimeInterval))
+    #return jsonify('{},{}'.format(lastTimeOn,remainingTimeInterval))
     #return jsonify(dataVenti[0]['mode'][0])
-    #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
+    return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
@@ -283,7 +337,6 @@ def switch():
             return jsonify('Venti off')
         elif CMD == 'auto':
             venti_auto(CMD,TM,STOCK)
-            scheduler.modify_job('venti_control',  args=[TM,STOCK])
             return jsonify('Venti auto')
         else:
             return jsonify('No command send!')
