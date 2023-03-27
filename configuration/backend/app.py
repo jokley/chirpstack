@@ -90,30 +90,38 @@ def venti_control():
     # Überhitzungsschutz
     if tempMax >= 35:
         venti_cmd('on')
-        print(mode)
-        print('Überhitzungsschutz')
+        app.logger.info(mode)
+        app.logger.info('Überhitzungsschutz')
+        app.logger.info('Temperatur: ' + tempMax)
+       
     # Stockaufbau
     elif mode == 'auto' and remainingTimeStock <= stock:
         venti_cmd('on')
-        print(mode)
-        print('Stockaufbau')
+        app.logger.info(mode)
+        app.logger.info('Stockaufbau:')
+        app.logger.info('Restzeit: ' + remainingTimeStock)
     # Trockenmasse Automatik
-    elif mode == 'auto' and sDefOut+2 >= sDefMin and tsMin <= tsSoll:
+    elif mode == 'auto' and sDefOut >= sDefMin+2 and tsMin <= tsSoll:
         venti_cmd('on')
-        print(mode)
-        print('Trockenmasse Automatik')
+        app.logger.info(mode)
+        app.logger.info('Trockenmasse Automatik:')
+        app.logger.info('SDef diff: ' + (sDefOut-(sDefMin+2)))
+        app.logger.info('TS ist: ' + tsMin)
+   
     # Intervall Belüftung
     elif mode == 'auto' and humMax > 95 and remainingTimeInterval >= 86400:
         venti_cmd('on')
-        print(mode)
-        print('Intervall Belüftung')
+        app.logger.info(mode)
+        app.logger.info('Intervall Belüftung')
+        app.logger.info('Restzeit: ' + remainingTimeInterval)
+      
     else:
     # Belüftung aus
         venti_cmd('off')
-        print(mode)
-        print('Blefüftung aus')
-           
-    sys.stdout.flush()
+        app.logger.info(mode)
+        app.logger.info('Blefüftung aus')
+              
+   # sys.stdout.flush()
 
 
 def venti_auto(cmd, trockenMasse,stockAufbau):
@@ -353,11 +361,11 @@ def switch():
     
         if CMD == 'on':
             venti_cmd(CMD)
-            venti_auto(CMD,TM,STOCK)
+            venti_auto(CMD,TM,0)
             return jsonify('Venti on')
         elif CMD == 'off':
             venti_cmd(CMD)
-            venti_auto(CMD,TM,STOCK)
+            venti_auto(CMD,TM,0)
             return jsonify('Venti off')
         elif CMD == 'auto':
             venti_auto(CMD,TM,STOCK)
