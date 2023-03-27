@@ -14,6 +14,13 @@ import logging
 
 
 load_dotenv()
+logging.basicConfig(
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler("debug.log"),
+        logging.StreamHandler()
+    ]
+)
 
 def get_influxdb_client():
     URL = "http://172.16.238.16:8086"
@@ -22,8 +29,6 @@ def get_influxdb_client():
     client = InfluxDBClient(url=URL, token=TOKEN, org=ORG)
 
     return client
-
-
 
 
 def get_timestamp_now():
