@@ -15,9 +15,10 @@ import logging
 
 load_dotenv()
 logging.basicConfig(
+    format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
         logging.FileHandler("debug.log"),
-        logging.StreamHandler()
+      
     ]
 )
 
