@@ -326,6 +326,15 @@ def default_route():
     app.logger.error('this is an ERROR message')
     app.logger.critical('this is a CRITICAL message')
     return jsonify('hello world')
+    
+    
+    
+@app.route('/download')
+def download():
+    path = 'debug.log'
+    return send_file(path, as_attachment=True)
+
+
 
 @app.route('/time')
 def time():
