@@ -222,26 +222,48 @@ def get_outdoor_values():
 def get_min_max_values():
     client = get_influxdb_client()
 
-    query = '''data = from(bucket: "jokley_bucket")
-                |> range(start: -1h)
+    # query = '''data = from(bucket: "jokley_bucket")
+    #             |> range(start: -1h)
+    #             |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
+    #             |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
+    #             |> last()
+    #             |> group(columns: ["_measurement"])
+    #             |> sort(columns: ["_measurement"])
+ 
+    #         data_min = data
+    #             |> min()
+    #             |> set(key:"_measurement", value:"min")
+    #             |> sort(columns: ["_measurement"])
+    #             |> yield(name: "min") 
+
+    #         data_max = data
+    #             |> max()
+    #             |> set(key:"_measurement", value:"max")
+    #             |> sort(columns: ["_measurement"])
+    #             |> yield(name: "max") 
+
+    #         '''
+
+    query = '''
+            tmin = from(bucket: "jokley_bucket")
+                |> range(start: -10m)
                 |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
                 |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
                 |> last()
                 |> group(columns: ["_measurement"])
-                |> sort(columns: ["_measurement"])
- 
-            data_min = data
                 |> min()
-                |> set(key:"_measurement", value:"min")
-                |> sort(columns: ["_measurement"])
-                |> yield(name: "min") 
 
-            data_max = data
+            tmax = from(bucket: "jokley_bucket")
+                |> range(start: -10m)
+                |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
+                |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
+                |> last()
+                |> group(columns: ["_measurement"])
                 |> max()
-                |> set(key:"_measurement", value:"max")
-                |> sort(columns: ["_measurement"])
-                |> yield(name: "max") 
 
+            union(tables: [tmin, tmax])
+                |> sort(columns: ["_measurement", "_value"])
+    
             '''
 
     result = client.query_api().query(query=query)
@@ -252,7 +274,8 @@ def get_min_max_values():
             results.append((  record.get_value()))
     
     results2 = []
-    names = ['humidityMin','sDefMin','temperatureMin','trockenMasseMin','humidityMax','sDefMax','temperatureMax','trockenMasseMax']
+    #names = ['humidityMin','sDefMin','temperatureMin','trockenMasseMin','humidityMax','sDefMax','temperatureMax','trockenMasseMax']
+    names = ['humidityMin','humidityMax','sDefMin','sDefMax','temperatureMin','temperatureMax','trockenMasseMin','trockenMasseMax']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
