@@ -379,7 +379,7 @@ def influx():
     remainingTimeInterval =  int(timeNow - lastTimeOn)
 
 
-    iniDict = {'cmd':mode, 'stock': '0', 'tm':tsSoll} 
+    iniDict = {'cmd':mode, 'stock': stock, 'tm':tsSoll} 
   
 
     return (iniDict)
