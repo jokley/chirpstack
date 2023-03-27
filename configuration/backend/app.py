@@ -378,9 +378,12 @@ def influx():
     remainingTimeStock =     int(timeNow - startTimeStock)
     remainingTimeInterval =  int(timeNow - lastTimeOn)
 
-   
+
+    iniDict = {'cmd':mode, 'stock': '0', 'tm':tsSoll} 
   
-    return jsonify('cmd: {}, tm: {}, stock: {}'.format(mode, '0',tsSoll))
+
+    return (iniDict)
+    #return jsonify('cmd: {}, tm: {}, stock: {}'.format(mode, '0',tsSoll))
     #return jsonify('{},{},{}'.format(sDefMin,sDefMax,sDefOut))
     #return jsonify(dataVenti[0]['mode'][0])
     #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
