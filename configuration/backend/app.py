@@ -99,21 +99,21 @@ def venti_control():
         venti_cmd('on')
         app.logger.info(mode)
         app.logger.info('Stockaufbau:')
-        app.logger.info('Restzeit: {}'.format(remainingTimeStock/3600))
+        app.logger.info('Restzeit: {}'.format(stock-remainingTimeStock))
     # Trockenmasse Automatik
     elif mode == 'auto' and sDefOut >= sDefMin+2 and tsMin <= tsSoll:
         venti_cmd('on')
         app.logger.info(mode)
         app.logger.info('Trockenmasse Automatik:')
         app.logger.info('SDef diff: {}'.format(sDefOut-sDefMin))
-        app.logger.info('TS ist: {}'.format(tsMin))
+        app.logger.info('TS ist: {} -- TS soll: {}'.format(tsMin,tsSoll))
    
     # Intervall Belüftung
     elif mode == 'auto' and humMax > 95 and remainingTimeInterval >= 86400:
         venti_cmd('on')
         app.logger.info(mode)
         app.logger.info('Intervall Belüftung')
-        app.logger.info('Restzeit: {}'.format(remainingTimeInterval/3600))
+        app.logger.info('Restzeit: {}'.format(86400 -remainingTimeInterval))
       
     else:
     # Belüftung aus
@@ -366,8 +366,8 @@ def influx():
 
    
 
-
-    return jsonify('{},{},{}'.format(sDefMin,sDefMax,sDefOut))
+    return jsonify('{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax, sDefMin,sDefMax))
+    #return jsonify('{},{},{}'.format(sDefMin,sDefMax,sDefOut))
     #return jsonify(dataVenti[0]['mode'][0])
     #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
