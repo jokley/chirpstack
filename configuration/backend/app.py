@@ -361,11 +361,11 @@ def switch():
     
         if CMD == 'on':
             venti_cmd(CMD)
-            venti_auto(CMD,TM,0)
+            venti_auto(CMD,TM,'0')
             return jsonify('Venti on')
         elif CMD == 'off':
             venti_cmd(CMD)
-            venti_auto(CMD,TM,0)
+            venti_auto(CMD,TM,'0')
             return jsonify('Venti off')
         elif CMD == 'auto':
             venti_auto(CMD,TM,STOCK)
