@@ -92,28 +92,28 @@ def venti_control():
         venti_cmd('on')
         app.logger.info(mode)
         app.logger.info('Überhitzungsschutz')
-        app.logger.info('Temperatur: ' + tempMax)
+        app.logger.info('Temperatur: {}'.format(tempMax))
        
     # Stockaufbau
     elif mode == 'auto' and remainingTimeStock <= stock:
         venti_cmd('on')
         app.logger.info(mode)
         app.logger.info('Stockaufbau:')
-        app.logger.info('Restzeit: {}'.format(remainingTimeStock))
+        app.logger.info('Restzeit: {}'.format(remainingTimeStock/3600))
     # Trockenmasse Automatik
     elif mode == 'auto' and sDefOut >= sDefMin+2 and tsMin <= tsSoll:
         venti_cmd('on')
         app.logger.info(mode)
         app.logger.info('Trockenmasse Automatik:')
-        app.logger.info('SDef diff: ' + (sDefOut-(sDefMin+2)))
-        app.logger.info('TS ist: ' + tsMin)
+        app.logger.info('SDef diff: {}'.format(sDefOut-sDefMin))
+        app.logger.info('TS ist: {}'.format(tsMin))
    
     # Intervall Belüftung
     elif mode == 'auto' and humMax > 95 and remainingTimeInterval >= 86400:
         venti_cmd('on')
         app.logger.info(mode)
         app.logger.info('Intervall Belüftung')
-        app.logger.info('Restzeit: ' + remainingTimeInterval)
+        app.logger.info('Restzeit: {}'.format(remainingTimeInterval/3600))
       
     else:
     # Belüftung aus
