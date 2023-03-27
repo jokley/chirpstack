@@ -99,7 +99,7 @@ def venti_control():
         venti_cmd('on')
         app.logger.info(mode)
         app.logger.info('Stockaufbau:')
-        app.logger.info('Restzeit: ' + remainingTimeStock)
+        app.logger.info('Restzeit: {}'.format(remainingTimeStock))
     # Trockenmasse Automatik
     elif mode == 'auto' and sDefOut >= sDefMin+2 and tsMin <= tsSoll:
         venti_cmd('on')
