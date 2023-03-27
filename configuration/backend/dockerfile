@@ -5,6 +5,7 @@ FROM arm64v8/python:3.11.2-alpine3.17
 
 
 RUN apk update
+RUN apk add nano
 # RUN apk add postgresql-dev gcc python3-dev musl-dev build-base
 
 COPY requirements.txt /
