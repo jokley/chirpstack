@@ -9,6 +9,7 @@ import os
 from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point, Dialect
 from influxdb_client.client.write_api import SYNCHRONOUS
+import logging
 
 
 
@@ -274,6 +275,16 @@ mqtt = Mqtt(app)
 @app.route('/')
 def home():
     return jsonify('Welcome to venti')
+
+@app.route('/logging')
+def default_route():
+    """Default route"""
+    app.logger.debug('this is a DEBUG message')
+    app.logger.info('this is an INFO message')
+    app.logger.warning('this is a WARNING message')
+    app.logger.error('this is an ERROR message')
+    app.logger.critical('this is a CRITICAL message')
+    return jsonify('hello world')
 
 @app.route('/time')
 def time():
