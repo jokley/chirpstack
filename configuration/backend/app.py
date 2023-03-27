@@ -366,6 +366,7 @@ def influx():
     tsSoll =dataVenti[0]['trockenMasseSoll'][1]
     stock = int(dataVenti[0]['stockaufbau'][1])
     stock *= 3600
+    stockini = dataVenti[0]['stockaufbau'][1]
 
     dataLastTime = get_venti_lastTimeOn()
     lastOn = dataLastTime[0]['lastTimeOn']
@@ -379,7 +380,7 @@ def influx():
     remainingTimeInterval =  int(timeNow - lastTimeOn)
 
 
-    iniDict = {'cmd':mode, 'stock': (stock/3600), 'tm':tsSoll} 
+    iniDict = {'cmd':mode, 'stock':stockini , 'tm':tsSoll} 
   
 
     return (iniDict)
