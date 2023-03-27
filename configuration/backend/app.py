@@ -106,14 +106,14 @@ def venti_control():
         app.logger.info(mode)
         app.logger.info('Trockenmasse Automatik:')
         app.logger.info('SDef diff: {}'.format(sDefOut-sDefMin))
-        app.logger.info('TS ist: {} -- TS soll: {}'.format(tsMin,tsSoll))
+        app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
    
     # Intervall Belüftung
-    elif mode == 'auto' and humMax > 95 and remainingTimeInterval >= 86400:
+    elif mode == 'auto' and humMax > 95 and remainingTimeInterval >= 86400 and remainingTimeStock <= 720:
         venti_cmd('on')
         app.logger.info(mode)
         app.logger.info('Intervall Belüftung')
-        app.logger.info('Restzeit: {}'.format(86400 -remainingTimeInterval))
+        app.logger.info('Restzeit: {}'.format(720-remainingTimeStock))
       
     else:
     # Belüftung aus
