@@ -349,7 +349,9 @@ def download():
 
 @app.route('/time')
 def time():
-    HOUR  = get_timestamp_now().hour 
+    DTS = get_timestamp_now_offset
+    HOUR  = datetime.now().hour 
+    HOUR += DTS / 3600
     return jsonify(HOUR)
     #return jsonify(get_timestamp_now_epoche(),get_timestamp_now(),get_timestamp_now_offset())
 
