@@ -349,7 +349,7 @@ def download():
 
 @app.route('/time')
 def time():
-    now = get_timestamp_now()
+      now = datetime.datetime.now().time()
     hour = now.hour()
 
     return jsonify(hour)
