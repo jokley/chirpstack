@@ -122,7 +122,7 @@ def venti_control():
         elif sDefOut >= sDefMin+2 and tsMin <= tsSoll:
             venti_cmd('on')
             app.logger.info(mode)
-            app.logger.info('Trockenmasse Automatik:')
+            app.logger.info('Trockenmasse Automatik on:')
             app.logger.info('SDef diff: {}'.format(sDefOut-sDefMin))
             app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
     
@@ -141,6 +141,13 @@ def venti_control():
             app.logger.info(mode)
             app.logger.info('Blefüftung aus')
             # sys.stdout.flush()#
+        else:
+        # Automaik ein nur Loggoger Info
+            app.logger.info(mode)
+            app.logger.info('Trockenmasse Automatik off:')
+            app.logger.info('SDef diff: {}'.format(sDefOut-sDefMin))
+            app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
+
     
     elif tempMax+2 < 35 and mode == 'off':
         venti_cmd('off')
