@@ -350,9 +350,8 @@ def download():
 @app.route('/time')
 def time():
     DTS = get_timestamp_now_offset
-    HOUR  = datetime.now().hour 
-    HOUR += DTS / 3600
-    return jsonify(HOUR)
+    NOW  = datetime.now() + timedelta(seconds=DST)
+    return jsonify(NOW.HOUR)
     #return jsonify(get_timestamp_now_epoche(),get_timestamp_now(),get_timestamp_now_offset())
 
 @app.route('/influx')
