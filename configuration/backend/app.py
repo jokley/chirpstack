@@ -113,7 +113,7 @@ def venti_control():
     elif tempMax+2 < 35 and mode == 'auto':
        
         # Stockaufbau
-        if  remainingTimeStock <= stock:
+        if  remainingTimeStock <= stock and stock > 0:
             venti_cmd('on')
             app.logger.info(mode)
             app.logger.info('Stockaufbau:')
