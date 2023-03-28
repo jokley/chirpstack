@@ -123,13 +123,13 @@ def venti_control():
             app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
     
         # Intervall Belüftung
-        elif humMax > 95 and remainingTimeInterval >= 86400 and remainingTimeStock <= 720:
+        elif humMax > 95 and remainingTimeInterval >= 86400:
             venti_cmd('on')
             app.logger.info(mode)
             app.logger.info('Intervall Belüftung')
-            app.logger.info('Restzeit: {}'.format(720-remainingTimeStock))
+            app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
         
-        else:
+        elif remainingTimeStock > stock and (sDefOut < sDefMin or tsMin > tsSoll):
         # Belüftung aus
             venti_cmd('off')
             app.logger.info(mode)
@@ -349,7 +349,11 @@ def download():
 
 @app.route('/time')
 def time():
-    return jsonify(get_timestamp_now_epoche(),get_timestamp_now(),get_timestamp_now_offset())
+    now = get_timestamp_now()
+    hour = now.hour()
+
+    return jsonify(hour)
+    #return jsonify(get_timestamp_now_epoche(),get_timestamp_now(),get_timestamp_now_offset())
 
 @app.route('/influx')
 def influx():
