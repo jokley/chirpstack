@@ -41,6 +41,9 @@ def get_influxdb_client():
 
     return client
 
+def get_time_now():
+    TIMENOW = datetime.now().astimezone(pytz.timezone("Europe/Berlin")).strftime("%H:%M")
+    return TIMENOW
 
 def get_timestamp_now():
     TIMESTAMP_NOW = datetime.now().astimezone(pytz.timezone("Europe/Berlin")).isoformat()
@@ -92,6 +95,7 @@ def venti_control():
     
     DST =  get_timestamp_now_offset()
     timeNow = get_timestamp_now_epoche()
+    timeNowIso = get_time_now()
 
     startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     lastTimeOn = (lastOn + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
@@ -122,12 +126,14 @@ def venti_control():
             app.logger.info('SDef diff: {}'.format(sDefOut-sDefMin))
             app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
     
-        # Intervall Belüftung
-        elif humMax > 95 and remainingTimeInterval >= 86400:
-            venti_cmd('on')
-            app.logger.info(mode)
-            app.logger.info('Intervall Belüftung')
-            app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
+        # Intervall Belüftung zwischen 13:00 und 14:00
+        elif humMax > 95 and (timeNow >= '13:00' and timeNow <= '14:00'):
+             # 12h last on und Interval von 12min
+            if remainingTimeInterval >= 86400 or remainingTimeInterval <= 720:
+                venti_cmd('on')
+                app.logger.info(mode)
+                app.logger.info('Intervall Belüftung')
+                app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
         
         elif remainingTimeStock > stock and (sDefOut < sDefMin or tsMin > tsSoll):
         # Belüftung aus
@@ -350,7 +356,7 @@ def download():
 @app.route('/time')
 def time():
     DST = get_timestamp_now_offset
-    NOW  = datetime.now() + timedelta(seconds=DST)
+    NOW  = datetime.now()timedelta(seconds=DST)
     return jsonify(NOW.HOUR)
     #return jsonify(get_timestamp_now_epoche(),get_timestamp_now(),get_timestamp_now_offset())
 
@@ -424,6 +430,7 @@ def switch():
             return jsonify('Venti off')
         elif CMD == 'auto':
             venti_auto(CMD,TM,STOCK)
+            venti_control()
             return jsonify('Venti auto')
         else:
             return jsonify('No command send!')
