@@ -135,7 +135,7 @@ def venti_control():
                 app.logger.info('Intervall Belüftung')
                 app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
         
-        elif remainingTimeStock > stock and (sDefOut < sDefMin or tsMin > tsSoll):
+        elif remainingTimeStock > stock and (sDefOut < sDefMin+1 or tsMin > tsSoll):
         # Belüftung aus
             venti_cmd('off')
             app.logger.info(mode)
@@ -144,6 +144,14 @@ def venti_control():
     
     elif tempMax+2 < 35 and mode == 'off':
         venti_cmd('off')
+
+    if remainingTimeInterval >= 7200 and tsSoll-tsMin <= 0.5:
+         # Automaitk aus
+            venti_cmd('off')
+            venti_auto('off',tsSoll,'0')
+            app.logger.info(mode)
+            app.logger.info('Automatik aus')
+
 
 
 def venti_auto(cmd, trockenMasse,stockAufbau):
@@ -244,27 +252,6 @@ def get_outdoor_values():
 def get_min_max_values():
     client = get_influxdb_client()
 
-    # query = '''data = from(bucket: "jokley_bucket")
-    #             |> range(start: -1h)
-    #             |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
-    #             |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
-    #             |> last()
-    #             |> group(columns: ["_measurement"])
-    #             |> sort(columns: ["_measurement"])
- 
-    #         data_min = data
-    #             |> min()
-    #             |> set(key:"_measurement", value:"min")
-    #             |> sort(columns: ["_measurement"])
-    #             |> yield(name: "min") 
-
-    #         data_max = data
-    #             |> max()
-    #             |> set(key:"_measurement", value:"max")
-    #             |> sort(columns: ["_measurement"])
-    #             |> yield(name: "max") 
-
-    #         '''
 
     query = '''
             tmin = from(bucket: "jokley_bucket")
@@ -296,7 +283,6 @@ def get_min_max_values():
             results.append((  record.get_value()))
     
     results2 = []
-    #names = ['humidityMin','sDefMin','temperatureMin','trockenMasseMin','humidityMax','sDefMax','temperatureMax','trockenMasseMax']
     names = ['humidityMin','humidityMax','sDefMin','sDefMax','temperatureMin','temperatureMax','trockenMasseMin','trockenMasseMax']
     results2.append(dict(zip(names,results)))
     dicti={}
