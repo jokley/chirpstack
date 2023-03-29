@@ -147,7 +147,7 @@ def venti_control():
             venti_auto('off',tsSoll,'0')
             app.logger.info(mode)
             app.logger.info('Automatik aus')
-            
+
         else:
         # Automaik ein nur Loggoger Info
             app.logger.info(mode)
@@ -416,14 +416,17 @@ def switch():
         if CMD == 'on':
             venti_cmd(CMD)
             venti_auto(CMD,TM,'0')
+            app.logger.info('Lüfter Hand ein')
             return jsonify('Venti on')
         elif CMD == 'off':
             venti_cmd(CMD)
             venti_auto(CMD,TM,'0')
+            app.logger.info('Lüfter Hand aus')
             return jsonify('Venti off')
         elif CMD == 'auto':
             venti_auto(CMD,TM,STOCK)
             venti_control()
+            app.logger.info('Automatik ein')
             return jsonify('Venti auto')
         else:
             return jsonify('No command send!')
