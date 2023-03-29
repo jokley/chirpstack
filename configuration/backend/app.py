@@ -147,14 +147,13 @@ def venti_control():
             app.logger.info('SDef diff: {}'.format(sDefOut-sDefMin))
             app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
             app.logger.info('TS diff Min/Soll: {}'.format(tsSoll-tsMin))
+            app.logger.info('Dauer aus: {}'.format(remainingTimeInterval))
 
-            # sys.stdout.flush()#
-
-        elif remainingTimeInterval >= 7200 and tsSoll-tsMin <= 0.5:
-         # Automaitk aus
-            venti_auto('off',tsSoll,'0')
-            app.logger.info('off')
-            app.logger.info('Automatik aus')
+            if remainingTimeInterval >= 7200 and tsSoll-tsMin <= 0.5:
+            # Automaitk aus
+                venti_auto('off',tsSoll,'0')
+                app.logger.info('off')
+                app.logger.info('Automatik aus')
 
         # else:
         # # Automaik ein nur Loggoger Info
