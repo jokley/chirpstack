@@ -34,6 +34,7 @@ logging.basicConfig(
     ]
 )
 
+logging.getLogger('apscheduler.schedulers.background').setLevel(logging.DEBUG)
 
 
 def get_influxdb_client():
@@ -325,8 +326,6 @@ app.secret_key = 'hi'
 mqtt = Mqtt(app)
     
 # @mqtt.on_connect()
-
-logging.getLogger('apscheduler').setLevel(logging.DEBUG)
 
 
 @app.route('/')
