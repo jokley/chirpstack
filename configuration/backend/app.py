@@ -315,6 +315,7 @@ with app.app_context():
     scheduler.start()
 
 
+
 app.config['MQTT_BROKER_URL'] = "172.16.238.15"
 app.config['MQTT_BROKER_PORT'] = 1883
 app.config['MQTT_KEEPALIVE'] =20
@@ -325,7 +326,7 @@ mqtt = Mqtt(app)
     
 # @mqtt.on_connect()
 
-
+logging.getLogger('apscheduler').setLevel(logging.DEBUG)
 
 
 @app.route('/')
