@@ -34,7 +34,7 @@ logging.basicConfig(
     ]
 )
 
-logging.getLogger('apscheduler.schedulers.background').setLevel(logging.DEBUG)
+#logging.getLogger('apscheduler').setLevel(logging.DEBUG)
 
 
 def get_influxdb_client():
@@ -149,7 +149,7 @@ def venti_control():
         elif remainingTimeInterval >= 7200 and tsSoll-tsMin <= 0.5:
          # Automaitk aus
             venti_auto('off',tsSoll,'0')
-            app.logger.info(mode)
+            app.logger.info('off')
             app.logger.info('Automatik aus')
 
         else:
@@ -429,7 +429,6 @@ def switch():
         elif CMD == 'auto':
             venti_auto(CMD,TM,STOCK)
             venti_control()
-            app.logger.info('Automatik ein')
             return jsonify('Venti auto')
         else:
             return jsonify('No command send!')
