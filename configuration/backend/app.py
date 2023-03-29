@@ -141,6 +141,13 @@ def venti_control():
             app.logger.info(mode)
             app.logger.info('Blefüftung aus')
             # sys.stdout.flush()#
+
+        elif remainingTimeInterval >= 7200 and tsSoll-tsMin <= 0.5:
+         # Automaitk aus
+            venti_auto('off',tsSoll,'0')
+            app.logger.info(mode)
+            app.logger.info('Automatik aus')
+            
         else:
         # Automaik ein nur Loggoger Info
             app.logger.info(mode)
@@ -152,12 +159,7 @@ def venti_control():
     elif tempMax+2 < 35 and mode == 'off':
         venti_cmd('off')
 
-    if remainingTimeInterval >= 7200 and tsSoll-tsMin <= 0.5:
-         # Automaitk aus
-            venti_cmd('off')
-            venti_auto('off',tsSoll,'0')
-            app.logger.info(mode)
-            app.logger.info('Automatik aus')
+   
 
 
 
