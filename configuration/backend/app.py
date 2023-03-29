@@ -24,6 +24,7 @@ rfh = logging.handlers.RotatingFileHandler(
     delay=0
 )
 
+logging.Formatter.converter = lambda *args: datetime.now(pytz.timezone("Europe/Berlin")).timetuple()
 
 logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -32,6 +33,8 @@ logging.basicConfig(
         #logging.FileHandler("debug.log"), 
     ]
 )
+
+
 
 def get_influxdb_client():
     URL = "http://172.16.238.16:8086"
