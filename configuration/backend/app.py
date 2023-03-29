@@ -109,8 +109,8 @@ def venti_control():
     # Überhitzungsschutz
     if tempMax >= 35:
         venti_cmd('on')
-        app.logger.info(mode)
-        app.logger.info('Überhitzungsschutz')
+        app.logger.info('Mode: {}').format(mode)
+        app.logger.info('Überhitzungsschutz aktiv!')
         app.logger.info('Temperatur: {}'.format(tempMax))
 
     # Temp Ok und Automatik
@@ -119,23 +119,26 @@ def venti_control():
         # Stockaufbau
         if  remainingTimeStock <= stock and stock > 0:
             venti_cmd('on')
-            app.logger.info(mode)
-            app.logger.info('Stockaufbau:')
+            app.logger.info('Mode: {}').format(mode)
+            app.logger.info('Stockaufbau')
             app.logger.info('Restzeit: {}'.format(stock-remainingTimeStock))
         # Trockenmasse Automatik
         elif sDefOut >= sDefMin+2 and tsMin <= tsSoll:
             venti_cmd('on')
-            app.logger.info(mode)
-            app.logger.info('Trockenmasse Automatik on:')
+            app.logger.info('Mode: {}').format(mode)
+            app.logger.info('Lüfter ein')
+            app.logger.info('SDef min: {} | SDef out: {}'.format(sDefMin,sDefOut))
             app.logger.info('SDef diff: {}'.format(sDefOut-sDefMin))
             app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
+            app.logger.info('TS diff: {}'.format(tsSoll-tsMin))
+            app.logger.info('Dauer aus: {}'.format(remainingTimeInterval))
     
         # Intervall Belüftung zwischen 13:00 und 14:00
         elif humMax > 95 and (timeNow >= '13:00' and timeNow <= '14:00'):
              # 12h last on und Interval von 12min
             if remainingTimeInterval >= 86400 or remainingTimeInterval <= 720:
                 venti_cmd('on')
-                app.logger.info(mode)
+                app.logger.info('Mode: {}').format(mode)
                 app.logger.info('Intervall Belüftung')
                 app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
         
@@ -143,17 +146,18 @@ def venti_control():
         # Belüftung aus
             venti_cmd('off')
             app.logger.info(mode)
-            app.logger.info('Blefüftung aus')
+            app.logger.info('Lüfter aus')
+            app.logger.info('SDef min: {} | SDef out: {}'.format(sDefMin,sDefOut))
             app.logger.info('SDef diff: {}'.format(sDefOut-sDefMin))
             app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
-            app.logger.info('TS diff Min/Soll: {}'.format(tsSoll-tsMin))
+            app.logger.info('TS diff: {}'.format(tsSoll-tsMin))
             app.logger.info('Dauer aus: {}'.format(remainingTimeInterval))
 
             if remainingTimeInterval >= 7200 and tsSoll-tsMin <= 0.5:
             # Automaitk aus
                 venti_auto('off',tsSoll,'0')
-                app.logger.info('off')
                 app.logger.info('Automatik aus')
+                app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
 
         # else:
         # # Automaik ein nur Loggoger Info
