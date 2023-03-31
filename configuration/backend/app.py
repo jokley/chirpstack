@@ -436,7 +436,7 @@ def switch():
             return jsonify('Venti off')
         elif CMD == 'auto':
             venti_auto(CMD,TM,STOCK)
-            scheduler.modify_job('venti_control', 'interval', minutes=5)
+            scheduler.reschedule_job('venti_control', 'interval', minutes=5)
             venti_control()
             return jsonify('Venti auto')
         else:
