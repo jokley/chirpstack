@@ -436,8 +436,8 @@ def switch():
             return jsonify('Venti off')
         elif CMD == 'auto':
             venti_auto(CMD,TM,STOCK)
-            scheduler.reschedule_job('venti_control',  trigger='interval', minutes=5)
-            venti_control()
+            scheduler.reschedule_job('venti_control', next_run_time=datetime.now(pytz.timezone("Europe/Berlin")))
+            # venti_control()
             return jsonify('Venti auto')
         else:
             return jsonify('No command send!')
