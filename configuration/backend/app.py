@@ -160,7 +160,7 @@ def venti_control():
                 app.logger.info('Automatik aus')
                 app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
 
-         else:
+        else:
          # Automaik ein nur Loggoger Info
             app.logger.info('Mode: {}'.format(mode))
             app.logger.info('Lüfter aus')
