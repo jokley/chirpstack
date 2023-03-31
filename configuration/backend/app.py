@@ -320,9 +320,9 @@ CORS(app)
 
 with app.app_context():
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
-    scheduler.add_job(venti_control, 'interval', minutes=1,  replace_existing=True, id='venti_control')
+    scheduler.add_job(venti_control, 'interval', minutes=5,  replace_existing=True, id='venti_control')
     scheduler.start()
-
+    
 
 
 app.config['MQTT_BROKER_URL'] = "172.16.238.15"
@@ -436,6 +436,7 @@ def switch():
             return jsonify('Venti off')
         elif CMD == 'auto':
             venti_auto(CMD,TM,STOCK)
+	    scheduler.reschedule_job('venti_control', 'interval', minutes=5)
             venti_control()
             return jsonify('Venti auto')
         else:
