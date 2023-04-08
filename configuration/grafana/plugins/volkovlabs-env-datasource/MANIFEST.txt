@@ -11,37 +11,36 @@ Hash: SHA512
     "http://localhost:3000/"
   ],
   "plugin": "volkovlabs-env-datasource",
-  "version": "2.2.0",
-  "time": 1667755554338,
+  "version": "2.3.0",
+  "time": 1680712733064,
   "keyId": "7e4d0c6a708866e7",
   "files": {
+    "CHANGELOG.md": "9eab58d746fcb557d0027d4e109d0ec7e6cf43dab72a71c044f798e0f1a78b1e",
+    "LICENSE": "3be765f82965e1cfbc9dc352e6ed5c71db92a38f99a431170d7200db48678f86",
+    "go_plugin_build_manifest": "b2163df407abf6e3691c376c223325486fe3ed97696ed43599611b151ff39ada",
+    "module.js.map": "f26596ef9de683e74e356c2e61942c65eb8c1be93b03553c912276e65f35d961",
+    "README.md": "f256c79a39e52de2b3f2da8e37f4e7fb57ae92a38585acce662e60b6931553b6",
+    "module.js": "1067314c4f184f7dd713f7811d72acc50d315b09ca79f2d6e8785758184b741d",
     "module.js.LICENSE.txt": "cdf963ced7d25a0f98901a547647b4d6e2dbe0197fd78c87a059a87b0e542fe2",
-    "module.js.map": "61aa0d3dc174d8656dd9fd014f717d817efe888b94615d65924e194a707194d9",
-    "env_datasource_backend_darwin_arm64": "2cddfe49f6526bd9052f1bcc36176f7e64ae0602829bcc6dc47c771437b8da5e",
-    "LICENSE": "72636fbb67b33b015082ce8962eb371a930c33292d8cd35e0df3f586ff02a12f",
-    "README.md": "4fe648aa3f71000bac433e2834eade2cb178e8d6a023f965e933e54c8e778a46",
-    "plugin.json": "e05066792ff1e0c32316776fa96e0ffad9cea7dfa155f3755adec3dcdd6fc5fe",
-    "env_datasource_backend_darwin_amd64": "74aca8a34a0722243e9068146796a90bc3b455ac203e203f9119af5233ded6ae",
-    "env_datasource_backend_linux_amd64": "1d176e2e1758ed96abdb9f9e14dd093f794d9659de47ff9a96fecda751a99105",
-    "env_datasource_backend_linux_arm64": "5d88483ce2b170abc5524d2c84eb7be25f3733aca522d18a857f9c7c1c2383a1",
-    "env_datasource_backend_linux_arm": "5614300393b1e20b3e7a5faf6598288607ad988e0cad025d15c2cd6cf407ffd1",
-    "env_datasource_backend_windows_amd64.exe": "3be25824fe0d3d16c029931f0f2df521b25170d89903576ca9b3fed69b2f9f4b",
-    "module.js": "92c35d57647a4972c10224e96f1d1aeed81d2a226032ba0824bad42cd1c03f91",
-    "CHANGELOG.md": "74965d5a801d9d62bb9b00b0a093acf7f472f6674beadae3a4e1b9d67f27528e",
-    "img/dashboard.png": "e3eccff052e712d6adc02016407a8314221b41c1d32857ec1eea26d5c314e894",
-    "img/variables.png": "7defdd690a715c19d1b94f8acfbc6dfc587db98d30f49bea3b66f4c660408922",
-    "img/logo.svg": "c7a8fd4b618d4c6814a5f1f01afa5f6f71c4ee242c218518ce8ce516286033a4",
-    "img/config.png": "8b4342951728c519d65fd137f28ca07ebae870c6b945b22cfe96052f8f2d8c36"
+    "env_datasource_backend_windows_amd64.exe": "1dc85ecfecf9cd303d6e725d9a7b049331b265eb4fc6a61f706690f889a24135",
+    "env_datasource_backend_darwin_amd64": "64fdbbed029941233c8c7cb4e4bd7c590ccc2ec9a94253d9867ebb001223b4e0",
+    "env_datasource_backend_linux_arm64": "2639af759d043b5f93355729cd60c03f63a1097baed8fb09c84754395ec892bd",
+    "plugin.json": "a62586721331074b26a631afbdd1d44535ae42d707b8614e2b9f14a634280ff0",
+    "env_datasource_backend_linux_arm": "e9a2613fe5f00f485ce53272ece965cb4e475a071616da591a835907cb8c7ac9",
+    "env_datasource_backend_linux_amd64": "5102dc1a3c70fe385db7fb149bb2692f37674643a3d82734fcc7002df7eb6b0c",
+    "env_datasource_backend_darwin_arm64": "a2c6a16d86296e9669bbcc4d3578ebddf0ef3d25fea6fc671e6b17d1855af4d6",
+    "img/dashboard.png": "80d0b8aa83ae8bf2fa040de082511d8b4710ba660c7a04ebda89d3bd9b4a03d7",
+    "img/logo.svg": "c7a8fd4b618d4c6814a5f1f01afa5f6f71c4ee242c218518ce8ce516286033a4"
   }
 }
 -----BEGIN PGP SIGNATURE-----
 Version: OpenPGP.js v4.10.10
 Comment: https://openpgpjs.org
 
-wrgEARMKAAYFAmNn7iIAIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
-cIhm5wm9AgiyK8pGxAjymufrYd0Xix1jYjYl3SDKkYm8XYqgHBtV7Cbfsr7O
-5kwqvR2P1ADreNDKgcTh8JPmYg/lld9N8EoZaAIJAQSF99ab2F1L/PdF3IXv
-+bOH0EETufufkPQviRjGK9q88G2TSQMqDyNFNPPr54X8sGs2BXojBfT+7gqj
-3KChYu/J
-=1Otc
+wrkEARMKAAYFAmQtpB0AIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
+cIhm5z5dAgkBYG+3lT077MVqWyySrKjkMYoz6cfk8e02W+TeFXkKuyI36lWh
+AEEwi5TWHnnC50g5fbPDMMcciZ5AWdcQzctuouACCQEUrn0OBwt7A6b7AVt5
+3RC76f6AIAkp2+3Aq9/03z81C/MvOeu9lykMiRTCcROAU5PudUNXITyyYyEy
+k8c1i4nEdQ==
+=BjaU
 -----END PGP SIGNATURE-----
