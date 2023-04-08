@@ -114,6 +114,8 @@ services:
       - influxdb
     ports:
       - '3010:3000'
+    environment:
+      -GF_INSTALL_PLUGINS="volkovlabs-env-datasource"
     volumes:
       - ./configuration/grafana/:/etc/grafana
       - ./configuration/grafana/plugins/:/var/lib/grafana/plugins
