@@ -279,7 +279,7 @@ def get_min_max_values():
 
     query = '''
             tmin = from(bucket: "jokley_bucket")
-                |> range(start: -10m)
+                |> range(start: -1h)
                 |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
                 |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
                 |> last()
@@ -287,7 +287,7 @@ def get_min_max_values():
                 |> min()
 
             tmax = from(bucket: "jokley_bucket")
-                |> range(start: -10m)
+                |> range(start: -1h)
                 |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
                 |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
                 |> last()

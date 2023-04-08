@@ -139,6 +139,8 @@ services:
     build:
       context: ./configuration/backend
     restart: unless-stopped
+    env_file:
+      - influxv2.env
     ports:
       - "5000:5000"
     networks:
