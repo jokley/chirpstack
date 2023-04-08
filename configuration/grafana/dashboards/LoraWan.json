@@ -68,7 +68,7 @@
             "tooltip": "",
             "type": "radio",
             "unit": " ",
-            "value": "auto"
+            "value": "off"
           },
           {
             "id": "tm",
@@ -1182,6 +1182,6 @@
   "timezone": "",
   "title": "LoraWan",
   "uid": "TilQz124z",
-  "version": 155,
+  "version": 157,
   "weekStart": ""
 }
