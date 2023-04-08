@@ -20,12 +20,12 @@ datasources:
 #   isDefault: false
 #   version: 1
 #   readOnly: true
-# - name: Environment
-#   type: volkovlabs-env-datasource
-#   access: proxy
-#   isDefault: true
-#   orgId: 1
-#   version: 1
-#   editable: true
-#   jsonData:
-#     filter: FRONTEND_URL
+- name: Environment
+  type: volkovlabs-env-datasource
+  access: proxy
+  isDefault: true
+  orgId: 1
+  version: 1
+  editable: true
+  jsonData:
+    filter: FRONTEND_URL
