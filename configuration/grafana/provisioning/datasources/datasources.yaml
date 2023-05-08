@@ -7,28 +7,8 @@ datasources:
   url: http://influxdb:8086
   jsonData:
     version: Flux
-    organization: ${DOCKER_INFLUXDB_INIT_ORG_TEST}
+    organization: ${DOCKER_INFLUXDB_INIT_ORG}
     defaultBucket: ${DOCKER_INFLUXDB_INIT_BUCKET}
-    #organization: jokley
-    #defaultBucket: jokley_bucket
     tlsSkipVerify: true  
   secureJsonData:
     token: ${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
-   # token: Jr5krSrSA6UlKD7vQifU8XJ1U9UZzpKYCNx7vs6kizYc3Bp51XYNlrpsoJXYRdLh2w_c7XNnFgplvnr0ebouDQ==
-# - name: "JSON_API"
-#   type: marcusolsson-json-datasource
-#   #url: http://flask-api:5000/WK_Dashboard
-#   #url: http://wk-dashboard-backend-dev/WK_Dashboard
-#   url: $BACKEND_URL
-#   isDefault: false
-#   version: 1
-#   readOnly: true
-# - name: Environment
-#   type: volkovlabs-env-datasource
-#   access: proxy
-#   isDefault: true
-#   orgId: 1
-#   version: 1
-#   editable: true
-#   jsonData:
-#     filter: FRONTEND_URL
