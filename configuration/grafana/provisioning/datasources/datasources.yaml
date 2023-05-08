@@ -9,9 +9,10 @@ datasources:
     version: Flux
     organization: jokley
     defaultBucket: jokley_bucket
-    tlsSkipVerify: true
+    tlsSkipVerify: true  
   secureJsonData:
-    token: Jr5krSrSA6UlKD7vQifU8XJ1U9UZzpKYCNx7vs6kizYc3Bp51XYNlrpsoJXYRdLh2w_c7XNnFgplvnr0ebouDQ==
+    token: ${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
+   # token: Jr5krSrSA6UlKD7vQifU8XJ1U9UZzpKYCNx7vs6kizYc3Bp51XYNlrpsoJXYRdLh2w_c7XNnFgplvnr0ebouDQ==
 # - name: "JSON_API"
 #   type: marcusolsson-json-datasource
 #   #url: http://flask-api:5000/WK_Dashboard
