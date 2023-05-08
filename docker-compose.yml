@@ -110,6 +110,8 @@ services:
   grafana:
     image: grafana/grafana:9.2.3
     restart: unless-stopped
+    env_file:
+      - influxv2.env
     depends_on:
       - influxdb
     ports:
