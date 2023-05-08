@@ -7,7 +7,7 @@ datasources:
   url: http://influxdb:8086
   jsonData:
     version: Flux
-    organization: ${DOCKER_INFLUXDB_INIT_ORG}
+    organization: ${DOCKER_INFLUXDB_INIT_ORG_TEST}
     defaultBucket: ${DOCKER_INFLUXDB_INIT_BUCKET}
     #organization: jokley
     #defaultBucket: jokley_bucket
