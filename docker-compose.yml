@@ -118,8 +118,8 @@ services:
       - '3000:3000'
     volumes:
       - ./configuration/grafana/:/etc/grafana
-      #- ./configuration/grafana/plugins/:/var/lib/grafana/plugins
-      - ./configuration/grafana/plugins/:/etc/grafana/provisioning/plugins
+      - ./configuration/grafana/plugins/:/var/lib/grafana/plugins
+      #- ./configuration/grafana/plugins/:/etc/grafana/provisioning/plugins
     networks:
       example-network:
         ipv4_address: 172.16.238.18
