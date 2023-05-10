@@ -127,8 +127,6 @@ services:
     image: arm64v8/nginx
     container_name: nginx
     restart: unless-stopped
-    depends_on:
-      - grafana
     ports:
       - "80:80"
     volumes:
