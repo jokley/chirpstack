@@ -18,7 +18,7 @@ load_dotenv()
 rfh = logging.handlers.RotatingFileHandler(
     filename='debug.log', 
     mode='a',
-    maxBytes=1024*1024,
+    maxBytes=10000,
     backupCount=0,
     encoding=None,
     delay=0
@@ -370,21 +370,21 @@ def time():
 @app.route('/influx')
 def influx():
 
-    data = get_min_max_values()
-    humMin = data[0]['humidityMin']
-    humMax = data[0]['humidityMax']
-    sDefMin = data[0]['sDefMin']
-    sDefMax = data[0]['sDefMax']
-    tempMin = data[0]['temperatureMin']
-    tempMax = data[0]['temperatureMax']
-    tsMin = data[0]['trockenMasseMin']
-    tsMax = data[0]['trockenMasseMax']
+    # data = get_min_max_values()
+    # humMin = data[0]['humidityMin']
+    # humMax = data[0]['humidityMax']
+    # sDefMin = data[0]['sDefMin']
+    # sDefMax = data[0]['sDefMax']
+    # tempMin = data[0]['temperatureMin']
+    # tempMax = data[0]['temperatureMax']
+    # tsMin = data[0]['trockenMasseMin']
+    # tsMax = data[0]['trockenMasseMax']
 
-    dataOut = get_outdoor_values()
-    humOut = dataOut[0]['humidityOut']
-    sDefOut = dataOut[0]['sDefOut']
-    tempOut = dataOut[0]['temperatureOut']
-    tsOut = dataOut[0]['trockenMasseOut']
+    # dataOut = get_outdoor_values()
+    # humOut = dataOut[0]['humidityOut']
+    # sDefOut = dataOut[0]['sDefOut']
+    # tempOut = dataOut[0]['temperatureOut']
+    # tsOut = dataOut[0]['trockenMasseOut']
 
 
     dataVenti = get_venti_control_values()
@@ -395,16 +395,16 @@ def influx():
     stock *= 3600
     stockini = dataVenti[0]['stockaufbau'][1]
 
-    dataLastTime = get_venti_lastTimeOn()
-    lastOn = dataLastTime[0]['lastTimeOn']
+    # dataLastTime = get_venti_lastTimeOn()
+    # lastOn = dataLastTime[0]['lastTimeOn']
     
-    DST =  get_timestamp_now_offset()
-    timeNow = get_timestamp_now_epoche()
+    # DST =  get_timestamp_now_offset()
+    # timeNow = get_timestamp_now_epoche()
 
-    startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
-    lastTimeOn = (lastOn + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
-    remainingTimeStock =     int(timeNow - startTimeStock)
-    remainingTimeInterval =  int(timeNow - lastTimeOn)
+    # startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
+    # lastTimeOn = (lastOn + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
+    # remainingTimeStock =     int(timeNow - startTimeStock)
+    # remainingTimeInterval =  int(timeNow - lastTimeOn)
 
 
     iniDict = {'cmd':mode, 'stock':stockini , 'tm':tsSoll} 
