@@ -15,11 +15,11 @@ while True:
     for event in device.read_loop():
         buttonEvent = rt_btn.ButtonEvent(event)
         if str(buttonEvent.name) == "ButtonName.F1" and buttonEvent.value == 1:
-            requests.post('http://172.16.238.19/backend/venti', json={'cmd':'on','tm':85,'stock':'0'})
+            requests.post('http://172.16.238.19/backend/venti', json={'cmd':'on','tm':87,'stock':'0'})
             pyautogui.hotkey('f5')
             print(f"Button Ein")
         if str(buttonEvent.name) == "ButtonName.F2" and buttonEvent.value == 1:
-            requests.post('http://172.16.238.19/backend/venti', json={'cmd':'off','tm':81,'stock':'0'})
+            requests.post('http://172.16.238.19/backend/venti', json={'cmd':'off','tm':87,'stock':'0'})
             pyautogui.hotkey('f5')
             print(f"Button Aus")
         if str(buttonEvent.name) == "ButtonName.F3" and buttonEvent.value == 1:
