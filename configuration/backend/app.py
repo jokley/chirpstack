@@ -250,8 +250,8 @@ def get_outdoor_values():
 
     query = '''from(bucket: "jokley_bucket")
                 |> range(start: -1h)
-                |> filter(fn: (r) => r["device_name"] == "outdoor")
-                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_TempC_SHT" or r["_measurement"] == "device_frmpayload_data_Hum_SHT" or r["_measurement"] == "device_frmpayload_data_TS_SHT" or r["_measurement"] == "device_frmpayload_data_SDef_SHT")
+                |> filter(fn: (r) => r["device_name"] == "outdoor00")
+                |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
                 |> last()
             '''
     result = client.query_api().query(query=query)
@@ -262,7 +262,7 @@ def get_outdoor_values():
             results.append(( record.get_value()))
     
     results2 = []
-    names = ['humidityOut','sDefOut','trockenMasseOut','temperatureOut']
+    names = ['humidityOut','sDefOut','temperatureOut','trockenMasseOut']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
