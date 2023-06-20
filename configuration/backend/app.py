@@ -109,6 +109,7 @@ def venti_control():
     # Überhitzungsschutz
     if tempMax >= 35:
         venti_cmd('on')
+        app.logger.info('****************************************')
         app.logger.info('Mode: {}'.format(mode))
         app.logger.info('Überhitzungsschutz aktiv!')
         app.logger.info('Temperatur: {}'.format(tempMax))
@@ -119,6 +120,7 @@ def venti_control():
         # Stockaufbau
         if  remainingTimeStock <= stock and stock > 0:
             venti_cmd('on')
+            app.logger.info('****************************************')
             app.logger.info('Mode: {}'.format(mode))
             app.logger.info('Stockaufbau')
             app.logger.info('Restzeit: {}'.format(stock-remainingTimeStock))
@@ -126,6 +128,7 @@ def venti_control():
         # Trockenmasse Automatik
         elif sDefOut >= sDefMin+2 and sDefOut >= 2 and tsMin <= tsSoll:
             venti_cmd('on')
+            app.logger.info('****************************************')
             app.logger.info('Mode: {}'.format(mode))
             app.logger.info('Lüfter ein')
             app.logger.info('SDef min: {} | SDef out: {}'.format(sDefMin,sDefOut))
@@ -137,6 +140,7 @@ def venti_control():
         # Intervall Belüftung rel. 95%  und 12h last on und Interval von 12min und zwischen 13:00 und 14:00  
         elif humMax > 95 and (timeNowIso >= '13:00' and timeNowIso <= '14:00') and (remainingTimeInterval >= 86400 or remainingTimeInterval <= 720):
                 venti_cmd('on')
+                app.logger.info('****************************************')
                 app.logger.info('Mode: {}'.format(mode))
                 app.logger.info('Intervall Belüftung')
                 app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
@@ -144,6 +148,7 @@ def venti_control():
         elif remainingTimeStock > stock and (sDefOut < sDefMin+1 or tsMin > tsSoll or sDefOut < 2):
         # Belüftung aus
             venti_cmd('off')
+            app.logger.info('****************************************')
             app.logger.info('Mode: {}'.format(mode))
             app.logger.info('Lüfter aus')
             app.logger.info('SDef min: {} | SDef out: {}'.format(sDefMin,sDefOut))
@@ -155,11 +160,13 @@ def venti_control():
             if remainingTimeInterval >= 7200 and tsSoll-tsMin <= 0.5:
             # Automaitk aus
                 venti_auto('off',tsSoll,'0')
+                app.logger.info('****************************************')
                 app.logger.info('Automatik aus')
                 app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
 
         else:
          # Automaik ein nur Loggoger Info
+            app.logger.info('****************************************')
             app.logger.info('Mode: {}'.format(mode))
             app.logger.info('Lüfter aus')
             app.logger.info('SDef min: {} | SDef out: {}'.format(sDefMin,sDefOut))
@@ -428,11 +435,13 @@ def switch():
         if CMD == 'on':
             venti_cmd(CMD)
             venti_auto(CMD,TM,'0')
+            app.logger.info('****************************************')
             app.logger.info('Lüfter Hand ein')
             return jsonify('Venti on')
         elif CMD == 'off':
             venti_cmd(CMD)
             venti_auto(CMD,TM,'0')
+            app.logger.info('****************************************')
             app.logger.info('Lüfter Hand aus')
             return jsonify('Venti off')
         elif CMD == 'auto':
