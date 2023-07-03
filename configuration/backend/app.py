@@ -283,7 +283,7 @@ def get_venti_control_param_values():
             results.append((record.get_time(), record.get_value()))
     
     results2 = []
-    names = ['sdef_on', 'sdef_hys','uschutz_on','uschutz_hys']
+    names = ['sdef_on', 'sdef_hys','uschutz_hys','uschutz_on']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
@@ -526,7 +526,7 @@ def switch():
     #         return jsonify('Venti on')
     #     elif CMD == 'off':
     #         venti_cmd(CMD)
-    #         return jsonify('Venti off')
+    #         return jsonify('Venti off')venti_auto_param
     #     else:
     #         return jsonify('No command send!')
         
