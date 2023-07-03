@@ -478,8 +478,8 @@ def controlValues():
 def controlParamValues():
    
     pramsVenti = get_venti_control_param_values()
-    startTime = pramsVenti[0]['mode'][0]
-    sdef_on = pramsVenti[0]['mode'][1]
+    startTime = pramsVenti[0]['sdef_on'][0]
+    sdef_on = pramsVenti[0]['sdef_on'][1]
     sdef_hys = pramsVenti[0]['sdef_hys'][1]
     uschutz_on = pramsVenti[0]['uschutz_on'][1]
     uschutz_hys = pramsVenti[0]['uschutz_hys'][1]
