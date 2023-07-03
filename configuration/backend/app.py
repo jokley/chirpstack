@@ -478,11 +478,11 @@ def controlValues():
 def controlParamValues():
    
     pramsVenti = get_venti_control_param_values()
-    startTime = pramsVenti[0]['sdef_on'][0]
-    sdef_on = pramsVenti[0]['sdef_on'][1]
-    sdef_hys = pramsVenti[0]['sdef_hys'][1]
-    uschutz_on = pramsVenti[0]['uschutz_on'][1]
-    uschutz_hys = pramsVenti[0]['uschutz_hys'][1]
+    startTime = pramsVenti[0]['sdef_on'][0]/10
+    sdef_on = pramsVenti[0]['sdef_on'][1]/10
+    sdef_hys = pramsVenti[0]['sdef_hys'][1]/10
+    uschutz_on = pramsVenti[0]['uschutz_on'][1]/10
+    uschutz_hys = pramsVenti[0]['uschutz_hys'][1]/10
 
     iniDict = {'sdef_on':sdef_on, 'sdef_hys':sdef_hys , 'uschutz_on':uschutz_on,  'uschutz_hys':uschutz_hys} 
     return (iniDict)
@@ -535,10 +535,10 @@ def switch():
 def ventiParams():
     if request.method == 'POST':
         data = request.get_json()
-        sdef_on = data['sdef_on']
-        sdef_hys = data['sdef_hys']
-        uschutz_on = data['uschutz_on']
-        uschutz_hys = data['uschutz_hys']
+        sdef_on = data['sdef_on']*10
+        sdef_hys = data['sdef_hys']*10
+        uschutz_on = data['uschutz_on']*10
+        uschutz_hys = data['uschutz_hys']*10
 
         venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys)
         app.logger.info('****************************************')
