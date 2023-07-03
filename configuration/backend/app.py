@@ -198,6 +198,21 @@ def venti_auto(cmd, trockenMasse,stockAufbau):
     write_api.write(bucket="jokley_bucket", org=ORG, record=record)
     client.close()
 
+def venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys):
+    
+    ORG = os.getenv("DOCKER_INFLUXDB_INIT_ORG")
+
+    client = get_influxdb_client()
+
+    write_api = client.write_api(write_options=SYNCHRONOUS)
+
+    record = [
+	Point("venti_param").field("sdef_on", sdef_on).field("sdef_hys", sdef_hys).field("uschutz_on", uschutz_on).field("uschutz_hys", uschutz_hys),
+    ]      
+
+    write_api.write(bucket="jokley_bucket", org=ORG, record=record)
+    client.close()
+
 def get_venti_lastTimeOn():
     client = get_influxdb_client()
 
@@ -243,6 +258,32 @@ def get_venti_control_values():
     
     results2 = []
     names = ['mode','stockaufbau','trockenMasseSoll']
+    results2.append(dict(zip(names,results)))
+    dicti={}
+    dicti = results2
+
+    client.close()
+
+    return (dicti)
+
+def get_venti_control_param_values():
+    client = get_influxdb_client()
+
+    query = ''' from(bucket: "jokley_bucket")
+                    |> range(start: -30d)
+                    |> filter(fn: (r) => r["_measurement"] == "venti_param")
+		            |> last()
+                '''
+
+    result = client.query_api().query(query=query)
+
+    results = []
+    for table in result:
+        for record in table.records:
+            results.append((record.get_time(), record.get_value()))
+    
+    results2 = []
+    names = ['sdef_on', 'sdef_hys','uschutz_on','uschutz_hys']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
@@ -421,6 +462,31 @@ def influx():
     #return jsonify(dataVenti[0]['mode'][0])
     #return jsonify('{},{},{},{},{},{},{},{},{},{},{},{},{}'.format(humMin, humMax,tempMin,tempMax,tsMin,tsMax,humOut,tempOut,tsOut,startTimeStock,mode,tsSoll,stock))
 
+@app.route('/controlValues')
+def controlValues():
+
+    dataVenti = get_venti_control_values()
+    startTime = dataVenti[0]['mode'][0]
+    mode = dataVenti[0]['mode'][1]
+    tsSoll =dataVenti[0]['trockenMasseSoll'][1]
+    stockini = dataVenti[0]['stockaufbau'][1]
+
+    iniDict = {'cmd':mode, 'stock':stockini , 'tm':tsSoll} 
+    return (iniDict)
+
+@app.route('/controlParamValues')
+def controlParamValues():
+   
+    pramsVenti = get_venti_control_param_values()
+    startTime = pramsVenti[0]['mode'][0]
+    sdef_on = pramsVenti[0]['mode'][1]
+    sdef_hys = pramsVenti[0]['sdef_hys'][1]
+    uschutz_on = pramsVenti[0]['uschutz_on'][1]
+    uschutz_hys = pramsVenti[0]['uschutz_hys'][1]
+
+    iniDict = {'sdef_on':sdef_on, 'sdef_hys':sdef_hys , 'uschutz_on':uschutz_on,  'uschutz_hys':uschutz_hys} 
+    return (iniDict)
+
 @app.route('/venti',methods = ['POST', 'GET'])
 def switch():
     if request.method == 'POST':
@@ -452,17 +518,37 @@ def switch():
         else:
             return jsonify('No command send!')
             
-    if request.method == 'GET':
-        CMD = request.args.get('cmd', default = 'auto', type = str)
+    # if request.method == 'GET':
+    #     CMD = request.args.get('cmd', default = 'auto', type = str)
 
-        if CMD == 'on':
-            venti_cmd(CMD)
-            return jsonify('Venti on')
-        elif CMD == 'off':
-            venti_cmd(CMD)
-            return jsonify('Venti off')
-        else:
-            return jsonify('No command send!')
+    #     if CMD == 'on':
+    #         venti_cmd(CMD)
+    #         return jsonify('Venti on')
+    #     elif CMD == 'off':
+    #         venti_cmd(CMD)
+    #         return jsonify('Venti off')
+    #     else:
+    #         return jsonify('No command send!')
+        
+
+@app.route('/ventiParams',methods = ['POST','GET'])
+def ventiParams():
+    if request.method == 'POST':
+        data = request.get_json()
+        sdef_on = data['sdef_on']
+        sdef_hys = data['sdef_hys']
+        uschutz_on = data['uschutz_on']
+        uschutz_hys = data['uschutz_hys']
+
+        venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys)
+        app.logger.info('****************************************')
+        app.logger.info('Regelparameter geändert:')
+        app.logger.info('SDef on: {}'.format(sdef_on))
+        app.logger.info('SDef hys: {}'.format(sdef_hys))
+        app.logger.info('ÜSchutz on: {}'.format(uschutz_on))
+        app.logger.info('ÜSchutz hys: {}'.format(uschutz_hys))
+
+        return jsonify('Regelparameter geändert')
 
 
 
