@@ -202,6 +202,11 @@ def venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys):
     
     ORG = os.getenv("DOCKER_INFLUXDB_INIT_ORG")
 
+    sdef_on = int(sdef_on*10)
+    sdef_hys = int(sdef_hys*10)
+    uschutz_on = int(uschutz_on*10)
+    uschutz_hys = int(uschutz_hys*10)
+
     client = get_influxdb_client()
 
     write_api = client.write_api(write_options=SYNCHRONOUS)
@@ -535,10 +540,10 @@ def switch():
 def ventiParams():
     if request.method == 'POST':
         data = request.get_json()
-        sdef_on = data['sdef_on']*10
-        sdef_hys = data['sdef_hys']*10
-        uschutz_on = data['uschutz_on']*10
-        uschutz_hys = data['uschutz_hys']*10
+        sdef_on = data['sdef_on']
+        sdef_hys = data['sdef_hys']
+        uschutz_on = data['uschutz_on']
+        uschutz_hys = data['uschutz_hys']
 
         venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys)
         app.logger.info('****************************************')
