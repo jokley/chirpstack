@@ -106,8 +106,15 @@ def venti_control():
     remainingTimeStock =     int(timeNow - startTimeStock)
     remainingTimeInterval =  int(timeNow - lastTimeOn)
 
+    pramsVenti = get_venti_control_param_values()
+    startTime = pramsVenti[0]['sdef_on'][0]
+    sdef_on = pramsVenti[0]['sdef_on'][1]/10
+    sdef_hys = pramsVenti[0]['sdef_hys'][1]/10
+    uschutz_on = pramsVenti[0]['uschutz_on'][1]/10
+    uschutz_hys = pramsVenti[0]['uschutz_hys'][1]/10
+
     # Überhitzungsschutz
-    if tempMax >= 35:
+    if tempMax >= uschutz_on:
         venti_cmd('on')
         app.logger.info('****************************************')
         app.logger.info('Mode: {}'.format(mode))
@@ -115,7 +122,7 @@ def venti_control():
         app.logger.info('Temperatur: {}'.format(tempMax))
 
     # Temp Ok und Automatik
-    elif tempMax+2 < 35 and mode == 'auto':
+    elif tempMax+uschutz_hys < 35 and mode == 'auto':
        
         # Stockaufbau
         if  remainingTimeStock <= stock and stock > 0:
@@ -126,7 +133,7 @@ def venti_control():
             app.logger.info('Restzeit: {}'.format(stock-remainingTimeStock))
 
         # Trockenmasse Automatik
-        elif sDefOut >= sDefMin+2 and sDefOut >= 2 and tsMin <= tsSoll:
+        elif sDefOut >= sDefMin+sdef_hys and sDefOut >= sdef_on and tsMin <= tsSoll:
             venti_cmd('on')
             app.logger.info('****************************************')
             app.logger.info('Mode: {}'.format(mode))
@@ -145,7 +152,7 @@ def venti_control():
                 app.logger.info('Intervall Belüftung')
                 app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
         
-        elif remainingTimeStock > stock and (sDefOut < sDefMin+1 or tsMin > tsSoll or sDefOut < 2):
+        elif remainingTimeStock > stock and (sDefOut < sDefMin+sdef_hys-1 or tsMin > tsSoll or sDefOut < sdef_on):
         # Belüftung aus
             venti_cmd('off')
             app.logger.info('****************************************')
@@ -176,7 +183,7 @@ def venti_control():
             app.logger.info('Dauer aus: {}'.format(remainingTimeInterval))
 
     
-    elif tempMax+2 < 35 and mode == 'off':
+    elif tempMax+uschutz_hys < 35 and mode == 'off':
         venti_cmd('off')
 
    
