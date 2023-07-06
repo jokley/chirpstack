@@ -122,7 +122,7 @@ def venti_control():
         app.logger.info('Temperatur: {}'.format(tempMax))
 
     # Temp Ok und Automatik
-    elif tempMax+uschutz_hys < 35 and mode == 'auto':
+    elif tempMax+uschutz_hys < uschutz_on and mode == 'auto':
        
         # Stockaufbau
         if  remainingTimeStock <= stock and stock > 0:
@@ -183,7 +183,7 @@ def venti_control():
             app.logger.info('Dauer aus: {}'.format(remainingTimeInterval))
 
     
-    elif tempMax+uschutz_hys < 35 and mode == 'off':
+    elif tempMax+uschutz_hys < uschutz_on and mode == 'off':
         venti_cmd('off')
 
    
