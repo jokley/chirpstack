@@ -1073,7 +1073,7 @@
           "highlight": false,
           "highlightColor": "red",
           "method": "GET",
-          "url": "backend/controlParamValues"
+          "url": "/backend/controlParamValues"
         },
         "layout": {
           "sections": [],
@@ -1099,7 +1099,7 @@
           "contentType": "application/json",
           "method": "POST",
           "updatedOnly": false,
-          "url": "backend/ventiParams"
+          "url": "/backend/ventiParams"
         }
       },
       "title": "Regel Parameter",
