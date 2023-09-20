@@ -5,4 +5,4 @@
 # data folder
 /data
 /lorawan-devices
-influxv2.env
+venti.env
