@@ -734,31 +734,6 @@
                 "value": "right"
               }
             ]
-          },
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "Trockenmasse_01",
-                  "Trockenmasse_02"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
           }
         ]
       },
@@ -892,11 +867,9 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-RdYlGr"
           },
           "mappings": [],
-          "max": 5,
-          "min": 3,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -906,19 +879,19 @@
               },
               {
                 "color": "light-red",
-                "value": 3.2
-              },
-              {
-                "color": "super-light-orange",
-                "value": 3.4
-              },
-              {
-                "color": "super-light-yellow",
                 "value": 3.6
               },
               {
-                "color": "#00f8ff",
+                "color": "super-light-orange",
+                "value": 3.7
+              },
+              {
+                "color": "super-light-yellow",
                 "value": 3.8
+              },
+              {
+                "color": "#00f8ff",
+                "value": 3.9
               }
             ]
           },
@@ -1027,7 +1000,7 @@
             "tooltip": "",
             "type": "slider",
             "unit": "",
-            "value": 4,
+            "value": 9,
             "width": 0
           },
           {
@@ -1133,7 +1106,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1219,7 +1193,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1283,6 +1258,6 @@
   "timezone": "",
   "title": "LoraWan",
   "uid": "TilQz124z",
-  "version": 37,
+  "version": 2,
   "weekStart": ""
 }

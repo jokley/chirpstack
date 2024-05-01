@@ -18,7 +18,7 @@ load_dotenv()
 rfh = logging.handlers.RotatingFileHandler(
     filename='debug.log', 
     mode='a',
-    maxBytes=10000,
+    maxBytes=1000,
     backupCount=0,
     encoding=None,
     delay=0
@@ -152,7 +152,7 @@ def venti_control():
                 app.logger.info('Intervall Belüftung')
                 app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
         
-        elif remainingTimeStock > stock and (sDefOut < sDefMin+sdef_hys-1 or tsMin > tsSoll or sDefOut < sdef_on):
+        elif remainingTimeStock > stock and (sDefOut < sDefMin+sdef_hys-1 or tsMin > tsSoll or sDefOut+0.5 < sdef_on):
         # Belüftung aus
             venti_cmd('off')
             app.logger.info('****************************************')
