@@ -112,6 +112,9 @@ def venti_control():
     sdef_hys = pramsVenti[0]['sdef_hys'][1]/10
     uschutz_on = pramsVenti[0]['uschutz_on'][1]/10
     uschutz_hys = pramsVenti[0]['uschutz_hys'][1]/10
+    intervall_on =  pramsVenti[0]['intervall_on'][1]/10
+    intervall_time =  pramsVenti[0]['intervall_time'][1]/10
+    intervall_enable = pramsVenti[0]['intervall_enable'][1]
 
     # Überhitzungsschutz
     if tempMax >= uschutz_on:
@@ -205,7 +208,7 @@ def venti_auto(cmd, trockenMasse,stockAufbau):
     write_api.write(bucket="jokley_bucket", org=ORG, record=record)
     client.close()
 
-def venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys):
+def venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys,intervall_on,intervall_time,intervall_enable):
     
     ORG = os.getenv("DOCKER_INFLUXDB_INIT_ORG")
 
@@ -213,13 +216,17 @@ def venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys):
     sdef_hys = int(sdef_hys*10)
     uschutz_on = int(uschutz_on*10)
     uschutz_hys = int(uschutz_hys*10)
+    intervall_on = int(intervall_on*10)
+    intervall_time = int(intervall_time*10)
+    intervall_enable = intervall_enable
+
 
     client = get_influxdb_client()
 
     write_api = client.write_api(write_options=SYNCHRONOUS)
 
     record = [
-	Point("venti_param").field("sdef_on", sdef_on).field("sdef_hys", sdef_hys).field("uschutz_on", uschutz_on).field("uschutz_hys", uschutz_hys),
+	Point("venti_param").field("sdef_on", sdef_on).field("sdef_hys", sdef_hys).field("uschutz_on", uschutz_on).field("uschutz_hys", uschutz_hys).field("intervall_on", intervall_on).field("intervall_time", intervall_time).field("intervall_enable", intervall_enable),
     ]      
 
     write_api.write(bucket="jokley_bucket", org=ORG, record=record)
@@ -495,8 +502,12 @@ def controlParamValues():
     sdef_hys = pramsVenti[0]['sdef_hys'][1]/10
     uschutz_on = pramsVenti[0]['uschutz_on'][1]/10
     uschutz_hys = pramsVenti[0]['uschutz_hys'][1]/10
+    intervall_on =  pramsVenti[0]['intervall_on'][1]/10
+    intervall_time =  pramsVenti[0]['intervall_time'][1]/10
+    intervall_enable = pramsVenti[0]['intervall_enable'][1]
 
-    iniDict = {'sdef_on':sdef_on, 'sdef_hys':sdef_hys , 'uschutz_on':uschutz_on,  'uschutz_hys':uschutz_hys} 
+
+    iniDict = {'sdef_on':sdef_on, 'sdef_hys':sdef_hys , 'uschutz_on':uschutz_on,  'uschutz_hys':uschutz_hys,'intervall_on':intervall_on,'intervall_time':intervall_time,'intervall_enable':intervall_enable} 
     return (iniDict)
 
 @app.route('/venti',methods = ['POST', 'GET'])
