@@ -569,7 +569,7 @@ def ventiParams():
 
         
 
-        venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys)
+        venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys,intervall_on,intervall_time,intervall_enable)
         app.logger.info('****************************************')
         app.logger.info('Regelparameter geändert:')
         app.logger.info('SDef on: {}'.format(sdef_on))
