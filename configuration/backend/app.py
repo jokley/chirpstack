@@ -302,7 +302,7 @@ def get_venti_control_param_values():
             results.append((record.get_time(), record.get_value()))
     
     results2 = []
-    names = ['intervall_on','intervall_time','intervall_enable','sdef_hys', 'sdef_on','uschutz_hys','uschutz_on']
+    names = ['intervall_enable','intervall_on','intervall_time','sdef_hys', 'sdef_on','uschutz_hys','uschutz_on']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
