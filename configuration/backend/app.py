@@ -562,6 +562,12 @@ def ventiParams():
         sdef_hys = data['sdef_hys']
         uschutz_on = data['uschutz_on']
         uschutz_hys = data['uschutz_hys']
+        intervall_on =  data['intervall_on']
+        intervall_time =  data['intervall_time']
+        intervall_enable = data['intervall_enable']
+
+
+        
 
         venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys)
         app.logger.info('****************************************')
@@ -570,6 +576,10 @@ def ventiParams():
         app.logger.info('SDef hys: {}'.format(sdef_hys))
         app.logger.info('ÜSchutz on: {}'.format(uschutz_on))
         app.logger.info('ÜSchutz hys: {}'.format(uschutz_hys))
+        app.logger.info('Intervall on: {}'.format(intervall_on))
+        app.logger.info('Intervall time: {}'.format(intervall_time))
+        app.logger.info('Intervall enable: {}'.format(intervall_enable))
+        
 
         return jsonify('Regelparameter geändert')
 
