@@ -155,6 +155,8 @@ def venti_control():
                 app.logger.info('****************************************')
                 app.logger.info('Mode: {}'.format(mode))
                 app.logger.info('Intervall Belüftung')
+                app.logger.info('Interall Schwelle: {}'.format(intervall_on))
+                app.logger.info('Intervall: {}'.format(intervall_time/3600))
                 app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
         
         elif remainingTimeStock > stock and (sDefOut < sDefMin+sdef_hys-1 or tsMin > tsSoll or sDefOut+0.5 < sdef_on):
