@@ -96,6 +96,7 @@ def venti_control():
 
     dataLastTime = get_venti_lastTimeOn()
     lastOn = dataLastTime[0]['lastTimeOn']
+    lastOff = dataLastTime[0]['lastTimeOff']
     
     DST =  get_timestamp_now_offset()
     timeNow = get_timestamp_now_epoche()
@@ -103,8 +104,9 @@ def venti_control():
 
     startTimeStock = (startTime + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     lastTimeOn = (lastOn + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
+    lastTimeOff = (lastOff + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     remainingTimeStock =     int(timeNow - startTimeStock)
-    remainingTimeInterval =  int(timeNow - lastTimeOn)
+    remainingTimeInterval =  int(timeNow - lastTimeOff)
 
     pramsVenti = get_venti_control_param_values()
     #startTime = pramsVenti[0]['sdef_on'][0]
@@ -235,23 +237,33 @@ def venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys,intervall_on,inter
 def get_venti_lastTimeOn():
     client = get_influxdb_client()
 
-    query = '''from(bucket: "jokley_bucket")
+    query = '''on = from(bucket: "jokley_bucket")
                 |> range(start: -2d)
                 |> filter(fn: (r) => r["device_name"] == "fan")
                 |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_RO1_status")
                 |> filter(fn: (r) => r["_value"] == "ON")
                 |> last()
+
+                off = from(bucket: "jokley_bucket")
+                                |> range(start: -2d)
+                                |> filter(fn: (r) => r["device_name"] == "fan")
+                                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_RO1_status")
+                                |> filter(fn: (r) => r["_value"] == "OFF")
+                                |> last()
+
+                union(tables: [on, off])
+                |> sort(columns: ["_measurement", "_value"])
             '''
-
+    
     result = client.query_api().query(query=query)
-
+   
     results = []
     for table in result:
         for record in table.records:
-            results.append((record.get_time()))
+            results.append((  record.get_time()))
     
     results2 = []
-    names = ['lastTimeOn']
+    names = ['lastTimeOn','lastTimeOff']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
@@ -259,6 +271,8 @@ def get_venti_lastTimeOn():
     client.close()
 
     return (dicti)
+
+
 def get_venti_control_values():
     client = get_influxdb_client()
 
