@@ -107,8 +107,8 @@ def venti_control():
     lastTimeOff = (lastOff + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     remainingTimeStock =     int(timeNow - startTimeStock)
     remainingTimeInterval =  int(timeNow - lastTimeOn)
-    lastTimeDiffOff =  int(timeNow - lastTimeOff)
-    lastTimeDiffOn =  int(timeNow - lastTimeOn)
+    timeDiff =  abs(int(lastTimeOn - lastTimeOff))
+ 
 
     pramsVenti = get_venti_control_param_values()
     #startTime = pramsVenti[0]['sdef_on'][0]
@@ -152,13 +152,13 @@ def venti_control():
             app.logger.info('Dauer aus: {}'.format(remainingTimeInterval))
     
         # Intervall Belüftung rel. 95%  und 12h last on und Interval von 12min und zwischen 08:00 und 22:00 // and (timeNowIso >= '08:00' and timeNowIso <= '22:00')
-        elif humMax > intervall_on and (lastTimeDiffOff >= intervall_time or lastTimeDiffOff <= 720):
+        elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or remainingTimeInterval <= 720):
                 venti_cmd('on')
                 app.logger.info('****************************************')
                 app.logger.info('Mode: {}'.format(mode))
                 app.logger.info('Intervall Belüftung')
-                app.logger.info('Interall lastTimeOn: {}'.format(lastOn))
-                app.logger.info('Interall lastTimeOff: {}'.format(lastOff))
+                app.logger.info('Interall timeDiff {}'.format(timeDiff))
+                app.logger.info('Interall lastTimeOff: {}'.format(lastTimeOff))
                 app.logger.info('Interall Schwelle: {}'.format(intervall_on))
                 app.logger.info('Intervall: {}'.format(intervall_time))
                 app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
