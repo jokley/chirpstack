@@ -582,7 +582,7 @@ def ventiParams():
         intervall_time =  data['intervall_time']
         intervall_enable = data['intervall_enable']
 
-
+         
         
 
         venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys,intervall_on,intervall_time,intervall_enable)
@@ -596,6 +596,7 @@ def ventiParams():
         app.logger.info('Intervall time: {}'.format(intervall_time))
         app.logger.info('Intervall enable: {}'.format(intervall_enable))
         
+        venti_control()
 
         return jsonify('Regelparameter geändert')
 
