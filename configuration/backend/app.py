@@ -106,7 +106,7 @@ def venti_control():
     lastTimeOn = (lastOn + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     lastTimeOff = (lastOff + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     remainingTimeStock =     int(timeNow - startTimeStock)
-    remainingTimeInterval =  int(timeNow - lastTimeOff)
+    remainingTimeInterval =  int(lastTimeOff - timeNow)
 
     pramsVenti = get_venti_control_param_values()
     #startTime = pramsVenti[0]['sdef_on'][0]
