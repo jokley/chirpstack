@@ -108,7 +108,7 @@ def venti_control():
     remainingTimeStock =     int(timeNow - startTimeStock)
     remainingTimeInterval =  int(timeNow - lastTimeOn)
     lastTimeOiffOff =  int(timeNow - lastTimeOff)
-    lastTimeDiffOn =  int(timeNow - lastTimeOff)
+    lastTimeDiffOn =  int(timeNow - lastTimeOn)
 
     pramsVenti = get_venti_control_param_values()
     #startTime = pramsVenti[0]['sdef_on'][0]
