@@ -106,7 +106,9 @@ def venti_control():
     lastTimeOn = (lastOn + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     lastTimeOff = (lastOff + timedelta(seconds=DST)).replace(tzinfo=timezone.utc).timestamp() 
     remainingTimeStock =     int(timeNow - startTimeStock)
-    remainingTimeInterval =  int(lastTimeOff - lastTimeOn)
+    remainingTimeInterval =  int(timeNow - lastTimeOn)
+    lastTimeOiffOff =  int(timeNow - lastTimeOff)
+    lastTimeDiffOn =  int(timeNow - lastTimeOff)
 
     pramsVenti = get_venti_control_param_values()
     #startTime = pramsVenti[0]['sdef_on'][0]
@@ -155,8 +157,8 @@ def venti_control():
                 app.logger.info('****************************************')
                 app.logger.info('Mode: {}'.format(mode))
                 app.logger.info('Intervall Belüftung')
-                app.logger.info('Interall lastTimeOn: {}'.format(lastTimeOn))
-                app.logger.info('Interall lastTimeOff: {}'.format(lastTimeOff))
+                app.logger.info('Interall lastTimeOn: {}'.format(lastTimeDiffOn))
+                app.logger.info('Interall lastTimeOff: {}'.format(lastTimeOiffOff))
                 app.logger.info('Interall Schwelle: {}'.format(intervall_on))
                 app.logger.info('Intervall: {}'.format(intervall_time))
                 app.logger.info('Restzeit: {}'.format(720-remainingTimeInterval))
