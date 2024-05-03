@@ -240,18 +240,18 @@ def get_venti_lastTimeOn():
     client = get_influxdb_client()
 
     query = '''on = from(bucket: "jokley_bucket")
-                |> range(start: -2d)
-                |> filter(fn: (r) => r["device_name"] == "fan")
-                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_RO1_status")
-                |> filter(fn: (r) => r["_value"] == "ON")
-                |> last()
+                        |> range(start: -2d)
+                        |> filter(fn: (r) => r["device_name"] == "fan")
+                        |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_RO1_status")
+                        |> filter(fn: (r) => r["_value"] == "ON")
+                        |> last()
 
                 off = from(bucket: "jokley_bucket")
-                                |> range(start: -2d)
-                                |> filter(fn: (r) => r["device_name"] == "fan")
-                                |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_RO1_status")
-                                |> filter(fn: (r) => r["_value"] == "OFF")
-                                |> last()
+                        |> range(start: -2d)
+                        |> filter(fn: (r) => r["device_name"] == "fan")
+                        |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_RO1_status")
+                        |> filter(fn: (r) => r["_value"] == "OFF")
+                        |> last()
 
                 union(tables: [on, off])
                 |> sort(columns: ["_measurement", "_value"])
@@ -265,7 +265,7 @@ def get_venti_lastTimeOn():
             results.append((  record.get_time()))
     
     results2 = []
-    names = ['lastTimeOn','lastTimeOff']
+    names = ['lastTimeOff','lastTimeOn']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
