@@ -151,7 +151,7 @@ def venti_control():
             app.logger.info('Dauer aus: {}'.format(remainingTimeInterval))
     
         # Intervall Belüftung relLuft > intervall on and intervall Zeit agbelaufen und remainingTimeIntervalOn > 0 und kleiner 720 s  --> // and (timeNowIso >= '08:00' and timeNowIso <= '22:00')
-        elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or (remainingTimeIntervalOn <= 540 and  remainingTimeIntervalOn > 0) ):
+        elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or (remainingTimeIntervalOn <= 720 and  remainingTimeIntervalOn > 0) ):
                 venti_cmd('on')
                 app.logger.info('****************************************')
                 app.logger.info('Mode: {}'.format(mode))
@@ -404,7 +404,7 @@ CORS(app)
 
 with app.app_context():
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Berlin'})
-    scheduler.add_job(venti_control, 'interval', minutes=5,  replace_existing=True, id='venti_control')
+    scheduler.add_job(venti_control, 'interval', minutes=4,  replace_existing=True, id='venti_control')
     scheduler.start()
     
 
