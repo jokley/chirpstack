@@ -152,7 +152,8 @@ def venti_control():
             app.logger.info('Dauer aus: {}'.format(remainingTimeInterval))
     
         # Intervall Belüftung relLuft > intervall on and intervall Zeit agbelaufen und remainingTimeIntervalOn > 0 und kleiner 720 s  --> // and (timeNowIso >= '08:00' and timeNowIso <= '22:00')
-        elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or (remainingTimeIntervalOn <= 720 and  remainingTimeIntervalOn > 0) ):
+	#elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or (remainingTimeIntervalOn <= 720 and  remainingTimeIntervalOn > 0) ):    
+        elif humMax > intervall_on and remainingTimeInterval >= intervall_time and remainingTimeIntervalOn <= 720:
                 venti_cmd('on')
                 app.logger.info('****************************************')
                 app.logger.info('Mode: {}'.format(mode))
