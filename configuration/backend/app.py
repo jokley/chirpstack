@@ -108,7 +108,7 @@ def venti_control():
     remainingTimeStock =     int(timeNow - startTimeStock)
     remainingTimeInterval =  int(timeNow - lastTimeOn)
     remainingTimeIntervalOn =  int(timeNow - lastTimeOff)
-    #remainingTimeIntervalOn =  int(lastTimeOn - lastTimeOff)
+    remainingTimeIntervalDiff =  int(lastTimeOn - lastTimeOff)
 
     pramsVenti = get_venti_control_param_values()
     #startTime = pramsVenti[0]['sdef_on'][0]
@@ -153,7 +153,7 @@ def venti_control():
     
         # Intervall Belüftung relLuft > intervall on and intervall Zeit agbelaufen und remainingTimeIntervalOn > 0 und kleiner 720 s  --> // and (timeNowIso >= '08:00' and timeNowIso <= '22:00')
 	#elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or (remainingTimeIntervalOn <= 720 and  remainingTimeIntervalOn > 0) ):    
-        elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or remainingTimeIntervalOn <= 720):
+        elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or (remainingTimeIntervalOn <= 720 and remainingTimeIntervalDiff >0)):
                 venti_cmd('on')
                 app.logger.info('****************************************')
                 app.logger.info('Mode: {}'.format(mode))
