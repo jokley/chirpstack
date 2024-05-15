@@ -62,10 +62,15 @@ def get_timestamp_now_epoche():
     return TIMESTAMP_NOW_EPOCHE 
 
 def venti_cmd(cmd):
+    application_id = os.getenv("APPLICATION_ID")
+    device_id = os.getenv("DEVICE_ID")
     if cmd == 'on':
-        mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
+        #mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
+	    mqtt.publish( f"application/{application_id}/device/{device_id}/command/down",  "{\"devEui\":\"" + device_id + "\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
+
     elif cmd == 'off':
-        mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
+        #mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
+	    mqtt.publish( f"application/{application_id}/device/{device_id}/command/down",  "{\"devEui\":\"" + device_id + "\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
 
 
 
