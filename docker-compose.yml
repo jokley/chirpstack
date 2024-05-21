@@ -145,8 +145,12 @@ services:
       - venti.env
     ports:
       - "5000:5000"
+    privileged: true
     volumes:
-      - ./reboot_pi.py:/app/reboot_pi.py
+      - /sys/fs/cgroup:/sys/fs/cgroup
+      - /bin/systemctl:/bin/systemctl
+      - /run/systemd/system:/run/systemd/system
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
     networks:
       example-network:
         ipv4_address: 172.16.238.20
