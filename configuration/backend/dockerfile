@@ -1,11 +1,11 @@
 FROM arm64v8/python:3.11.2-alpine3.17
 
-# Install sudo and other necessary packages
+# Install necessary packages
 RUN apk update && \
-    apk add --no-cache nano sudo
+    apk add --no-cache nano sudo shadow
 
 # Add a user for running the app
-RUN useradd -ms /bin/bash flaskuser
+RUN adduser -D -s /bin/bash flaskuser
 
 # Add flaskuser to sudoers
 RUN echo 'flaskuser ALL=(ALL) NOPASSWD: /sbin/reboot' >> /etc/sudoers
