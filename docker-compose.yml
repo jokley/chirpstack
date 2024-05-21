@@ -149,9 +149,9 @@ services:
     volumes:
       - "/run/dbus:/run/dbus"
       - "/run/systemd:/run/systemd"
-     networks:
-       example-network:
-         ipv4_address: 172.16.238.20
+    networks:
+      example-network:
+        ipv4_address: 172.16.238.20
       
 networks:
   example-network:
