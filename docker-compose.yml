@@ -148,6 +148,7 @@ services:
     networks:
       example-network:
         ipv4_address: 172.16.238.20
+    privileged: true
       
 networks:
   example-network:
