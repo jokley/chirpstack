@@ -1,26 +1,15 @@
 FROM arm64v8/python:3.11.2-alpine3.17
 
-# Install necessary packages
-RUN apk update && apk add --no-cache nano sudo
+RUN apk update
+RUN apk add nano
 
-# Create a non-root user and allow it to use sudo without a password
-RUN adduser -D appuser && echo "appuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+COPY requirements.txt /
+RUN pip install -r requirements.txt
 
-# Set the working directory
+COPY . app
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+ENV FLASK_APP /app.py
+CMD gunicorn --bind 0.0.0.0:5000 wsgi:app
 
-# Copy the application code
-COPY . /app
-
-# Set environment variables
-ENV FLASK_APP=/app/app.py
-
-# Expose the port
 EXPOSE 5000
-
-# Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "wsgi:app"]
