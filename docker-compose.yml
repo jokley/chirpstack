@@ -147,10 +147,10 @@ services:
       - "5000:5000"
     privileged: true
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup
-      - /bin/systemctl:/bin/systemctl
-      - /run/systemd/system:/run/systemd/system
-      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+      - "/run/dbus:/run/dbus"
+      - "/run/systemd:/run/systemd"
+    pid: "host"
+    network_mode: "host"
     networks:
       example-network:
         ipv4_address: 172.16.238.20
