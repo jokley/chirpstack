@@ -1,26 +1,26 @@
-#FROM python:3.7-alpine
-#FROM arm32v7/alpine:3.12
-#FROM arm32v6/python:3.7.9-alpine3.12
 FROM arm64v8/python:3.11.2-alpine3.17
-
 
 # Install sudo and other necessary packages
 RUN apk update && \
     apk add --no-cache nano sudo
 
-# Set the working directory
+# Add a user for running the app
+RUN useradd -ms /bin/bash flaskuser
+
+# Add flaskuser to sudoers
+RUN echo 'flaskuser ALL=(ALL) NOPASSWD: /sbin/reboot' >> /etc/sudoers
+
+USER flaskuser
+
+# Copy application files
+COPY . /app
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+# Install dependencies
+RUN pip install -r requirements.txt
 
-# Copy the application code
-COPY . /app
-
-# Set environment variables
-ENV FLASK_APP=/app/app.py
-
-CMD gunicorn --bind 0.0.0.0:5000 wsgi:app
-
+# Expose the application port
 EXPOSE 5000
+
+# Run the Flask application
+CMD gunicorn --bind 0.0.0.0:5000 wsgi:app
