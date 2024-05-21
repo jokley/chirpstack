@@ -18,7 +18,7 @@ load_dotenv()
 rfh = logging.handlers.RotatingFileHandler(
     filename='debug.log', 
     mode='a',
-    maxBytes=1000,
+    maxBytes=100,
     backupCount=0,
     encoding=None,
     delay=0
@@ -606,6 +606,33 @@ def ventiParams():
         venti_control()
 
         return jsonify('Regelparameter geändert')
+    
+@app.route('/ventiSystem', methods=['POST', 'GET'])
+def ventiSystem():
+    if request.method == 'POST':
+        data = request.get_json()
+        OSCMD = data['oscmd']
+
+        if OSCMD == 'reboot':
+            # Raspberry Pi Reboot
+            app.logger.info('****************************************')
+            app.logger.info('System Reboot')
+            os.system('sudo reboot')
+            return jsonify('System Reboot')
+        elif OSCMD == 'shutdown':
+            # Raspberry Pi Shutdown
+            app.logger.info('****************************************')
+            app.logger.info('System Shutdown')
+            os.system('sudo shutdown -h now')
+            return jsonify('System Shutdown')
+        elif OSCMD == 'refresh':
+            # Raspberry Pi Site refresh F5
+            app.logger.info('****************************************')
+            app.logger.info('Site Refresh')
+            # Refresh site logic is in grafna Frontend on sucsess 200 
+            return jsonify('Site Refresh')
+
+    return jsonify('System commonad executed')
 
 
 
