@@ -6,7 +6,6 @@ import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 import sys
 import os
-import subprocess
 from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point, Dialect
 from influxdb_client.client.write_api import SYNCHRONOUS
@@ -617,13 +616,13 @@ def ventiSystem():
             # Raspberry Pi Reboot
             app.logger.info('****************************************')
             app.logger.info('System Reboot')
-            subprocess.run(['sudo', 'systemctl', 'reboot'], check=True)
+            os.system('sudo reboot')
             return jsonify('System Reboot')
         elif OSCMD == 'shutdown':
             # Raspberry Pi Shutdown
             app.logger.info('****************************************')
             app.logger.info('System Shutdown')
-            subprocess.run(['sudo', 'shutdown', '-h', 'now'], check=True)
+            os.system('sudo shutdown -h now')
             return jsonify('System Shutdown')
         elif OSCMD == 'refresh':
             # Raspberry Pi Site refresh F5
