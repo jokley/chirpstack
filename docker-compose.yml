@@ -145,6 +145,8 @@ services:
       - venti.env
     ports:
       - "5000:5000"
+    volumes:
+      - ./reboot_pi.py:/app/reboot_pi.py
     networks:
       example-network:
         ipv4_address: 172.16.238.20
