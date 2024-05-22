@@ -4,4 +4,4 @@
 sleep 5
 
 # Power off the system
-poweroff
+poweroff -f
