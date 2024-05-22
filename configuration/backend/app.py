@@ -616,7 +616,7 @@ def ventiSystem():
             # Raspberry Pi Reboot
             app.logger.info('****************************************')
             app.logger.info('System Reboot')
-            os.system('reboot -f')
+            os.system('reboot -d 5 -f')
             return jsonify('System Reboot')
         elif OSCMD == 'shutdown':
             # Raspberry Pi Shutdown
