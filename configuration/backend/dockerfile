@@ -1,7 +1,8 @@
 FROM arm64v8/python:3.11.2-alpine3.17
 
-RUN apk update
-RUN apk add nano sudo
+#RUN apk update
+#RUN apk add nano sudo
+RUN apk update && apk add --no-cache nano sudo dbus
 
 COPY requirements.txt /
 RUN pip install -r requirements.txt
