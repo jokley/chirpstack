@@ -646,11 +646,11 @@ def ventiSystem():
         elif OSCMD == 'refresh':
             # Raspberry Pi Site refresh F5
             app.logger.info('****************************************')
-            app.logger.info('Site Refresh')
+            app.logger.info('Page Refresh')
             
             # No need for asynchronous call for site refresh
             
-            return jsonify('Site Refresh')
+            return jsonify('Page Refresh')
 
     return jsonify('System command executed')
 
