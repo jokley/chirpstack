@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point, Dialect
 from influxdb_client.client.write_api import SYNCHRONOUS
 import logging
+import threading
 
 
 load_dotenv()
@@ -616,22 +617,42 @@ def ventiSystem():
             # Raspberry Pi Reboot
             app.logger.info('****************************************')
             app.logger.info('System Reboot')
-            os.system('/bin/sh /app/reboot_with_delay.sh')
-            return jsonify('System Reboot')
+
+            # Define the function to reboot system asynchronously
+            def reboot_system():
+                import os
+                os.system('/bin/sh /app/reboot_with_delay.sh')
+
+            # Trigger system reboot in a separate thread
+            threading.Thread(target=reboot_system).start()
+
+            return jsonify('System Reboot initiated')
+        
         elif OSCMD == 'shutdown':
             # Raspberry Pi Shutdown
             app.logger.info('****************************************')
             app.logger.info('System Shutdown')
-            os.system('/bin/sh /app/poweroff_with_delay.sh')
-            return jsonify('System Shutdown')
+
+            # Define the function to shutdown system asynchronously
+            def shutdown_system():
+                import os
+                os.system('/bin/sh /app/poweroff_with_delay.sh')
+
+            # Trigger system shutdown in a separate thread
+            threading.Thread(target=shutdown_system).start()
+
+            return jsonify('System Shutdown initiated')
+        
         elif OSCMD == 'refresh':
             # Raspberry Pi Site refresh F5
             app.logger.info('****************************************')
             app.logger.info('Site Refresh')
-            # Refresh site logic is in grafna Frontend on sucsess 200 
+            
+            # No need for asynchronous call for site refresh
+            
             return jsonify('Site Refresh')
 
-    return jsonify('System commonad executed')
+    return jsonify('System command executed')
 
 
 
