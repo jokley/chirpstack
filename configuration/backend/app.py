@@ -636,7 +636,7 @@ def ventiSystem():
             # Define the function to shutdown system asynchronously
             def shutdown_system():
                 import os
-                os.system('/bin/sh /app/poweroff_with_delay.sh')
+                os.system('poweroff -d 5 -f')
 
             # Trigger system shutdown in a separate thread
             threading.Thread(target=shutdown_system).start()
