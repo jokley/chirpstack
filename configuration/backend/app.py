@@ -621,7 +621,7 @@ def ventiSystem():
             # Define the function to reboot system asynchronously
             def reboot_system():
                 import os
-                os.system('/bin/sh /app/reboot_with_delay.sh')
+                os.system('reboot -d 5 -f')
 
             # Trigger system reboot in a separate thread
             threading.Thread(target=reboot_system).start()
