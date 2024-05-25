@@ -247,14 +247,14 @@ def get_venti_lastTimeOn():
     client = get_influxdb_client()
 
     query = '''on = from(bucket: "jokley_bucket")
-                        |> range(start: -2d)
+                        |> range(start: -1y)
                         |> filter(fn: (r) => r["device_name"] == "fan")
                         |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_RO1_status")
                         |> filter(fn: (r) => r["_value"] == "ON")
                         |> last()
 
                 off = from(bucket: "jokley_bucket")
-                        |> range(start: -2d)
+                        |> range(start: -1y)
                         |> filter(fn: (r) => r["device_name"] == "fan")
                         |> filter(fn: (r) => r["_measurement"] == "device_frmpayload_data_RO1_status")
                         |> filter(fn: (r) => r["_value"] == "OFF")
@@ -286,7 +286,7 @@ def get_venti_control_values():
     client = get_influxdb_client()
 
     query = ''' from(bucket: "jokley_bucket")
-                    |> range(start: -30d)
+                    |> range(start: -1y)
                     |> filter(fn: (r) => r["_measurement"] == "venti")
 		            |> last()
                 '''
@@ -312,7 +312,7 @@ def get_venti_control_param_values():
     client = get_influxdb_client()
 
     query = ''' from(bucket: "jokley_bucket")
-                    |> range(start: -30d)
+                    |> range(start: 1970-01-01T00:00:00Z)
                     |> filter(fn: (r) => r["_measurement"] == "venti_param")
 		            |> last()
                 '''
