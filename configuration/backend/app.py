@@ -18,7 +18,7 @@ load_dotenv()
 rfh = logging.handlers.RotatingFileHandler(
     filename='debug.log', 
     mode='a',
-    maxBytes=100,
+    maxBytes=1000,
     backupCount=0,
     encoding=None,
     delay=0
