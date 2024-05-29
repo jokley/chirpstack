@@ -1,0 +1,19 @@
+apiVersion: 1
+
+roles:
+  - name: "viewer"
+    uid: "role-viewer"
+    description: "Viewer role with read-only access"
+    global: true
+    permissions:
+      - action: dashboards.view
+        scope: "*"
+      - action: dashboards.view_folders
+        scope: "*"
+
+users:
+  - name: "viewer.user"
+    email: "viewer.user@example.com"
+    login: "viewer.user"
+    password: "password123"
+    role: "role-viewer"
