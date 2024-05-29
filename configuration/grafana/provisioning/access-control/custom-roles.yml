@@ -1,7 +1,30 @@
-users:
-  - name: "viewer_user"
-    email: "viewer.user@example.com"
-    login: "viewer_user"
-    password: "password123"
-    is_admin: false
-    org_role: "Viewer"
+apiVersion: 1
+
+# List of custom roles
+roles:
+  - name: Editor
+    description: Can view and edit dashboards, but cannot manage users or datasources
+    permissions:
+      - datasources:read
+      - datasources:edit
+      - dashboards:read
+      - dashboards:edit
+
+  - name: Viewer
+    description: Can view dashboards but cannot edit or manage anything
+    permissions:
+      - dashboards:read
+
+  - name: Admin
+    description: Can perform all actions, including managing users and datasources
+    permissions:
+      - datasources:*
+      - org:*
+      - users:*
+
+# Assign roles to specific users or groups
+# This section is optional and is used to assign roles to users/groups
+roleAssignments:
+  - role: Viewer
+    users:
+      - john.doe@example.com
