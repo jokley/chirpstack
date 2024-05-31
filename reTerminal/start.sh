@@ -1,8 +1,14 @@
 #!/bin/bash
 export DISPLAY=:0
 
-GRAFANA_USERNAME="zotta"
-GRAFANA_PASSWORD="zotta76@vent"
+# Load environment variables from .env file
+source ../venti.env
+
+# Ensure that the environment variables are set
+if [ -z "$GRAFANA_USERNAME" ] || [ -z "$GRAFANA_PASSWORD" ]; then
+  echo "Grafana username or password is not set in the .env file"
+  exit 1
+fi
 
 # Encode username and password in Base64
 AUTH=$(echo -n "$GRAFANA_USERNAME:$GRAFANA_PASSWORD" | base64)
