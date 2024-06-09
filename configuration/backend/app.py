@@ -342,6 +342,7 @@ def get_outdoor_values():
                 |> range(start: -1h)
                 |> filter(fn: (r) => r["device_name"] == "outdoor00")
                 |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
+                |> filter(fn: (r) => r._value <= 100 and r._value >= -100)
                 |> last()
             '''
     result = client.query_api().query(query=query)
@@ -370,6 +371,7 @@ def get_min_max_values():
                 |> range(start: -1h)
                 |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
                 |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
+                |> filter(fn: (r) => r._value <= 100 and r._value >= -100)
                 |> last()
                 |> group(columns: ["_measurement"])
                 |> min()
@@ -378,6 +380,7 @@ def get_min_max_values():
                 |> range(start: -1h)
                 |> filter(fn: (r) => r["device_name"] == "probe01" or r["device_name"] == "probe02")
                 |> filter(fn: (r) =>  r["_measurement"] == "device_frmpayload_data_temperature" or r["_measurement"] == "device_frmpayload_data_humidity"  or r["_measurement"] == "device_frmpayload_data_trockenmasse" or r["_measurement"] == "device_frmpayload_data_sdef" )
+                |> filter(fn: (r) => r._value <= 100 and r._value >= -100)
                 |> last()
                 |> group(columns: ["_measurement"])
                 |> max()
