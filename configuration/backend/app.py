@@ -123,7 +123,7 @@ def venti_control():
     uschutz_hys = pramsVenti[0]['uschutz_hys'][1]/10
     intervall_on =  pramsVenti[0]['intervall_on'][1]/10
     intervall_time =  (pramsVenti[0]['intervall_time'][1]/10)*3600
-    intervall_duration =  pramsVenti[0]['intervall_duration'][1]/10
+    intervall_duration =  (pramsVenti[0]['intervall_duration'][1]/10)*60
     intervall_enable = pramsVenti[0]['intervall_enable'][1]
 
     # Überhitzungsschutz
