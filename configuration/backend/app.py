@@ -220,7 +220,7 @@ def venti_auto(cmd, trockenMasse,stockAufbau):
     write_api.write(bucket="jokley_bucket", org=ORG, record=record)
     client.close()
 
-def venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys,intervall_on,intervall_time,intervall_enable):
+def venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys,intervall_on,intervall_time,intervall_duration,intervall_enable):
     
     ORG = os.getenv("DOCKER_INFLUXDB_INIT_ORG")
 
@@ -230,6 +230,7 @@ def venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys,intervall_on,inter
     uschutz_hys = int(uschutz_hys*10)
     intervall_on = int(intervall_on*10)
     intervall_time = int(intervall_time*10)
+    intervall_duration = int(intervall_duration*10)
     intervall_enable = intervall_enable
 
 
@@ -238,7 +239,7 @@ def venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys,intervall_on,inter
     write_api = client.write_api(write_options=SYNCHRONOUS)
 
     record = [
-	Point("venti_param").field("sdef_on", sdef_on).field("sdef_hys", sdef_hys).field("uschutz_on", uschutz_on).field("uschutz_hys", uschutz_hys).field("intervall_on", intervall_on).field("intervall_time", intervall_time).field("intervall_enable", intervall_enable),
+	Point("venti_param").field("sdef_on", sdef_on).field("sdef_hys", sdef_hys).field("uschutz_on", uschutz_on).field("uschutz_hys", uschutz_hys).field("intervall_on", intervall_on).field("intervall_time", intervall_time).field("intervall_duration", intervall_duration).field("intervall_enable", intervall_enable),
     ]      
 
     write_api.write(bucket="jokley_bucket", org=ORG, record=record)
