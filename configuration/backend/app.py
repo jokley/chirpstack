@@ -123,6 +123,7 @@ def venti_control():
     uschutz_hys = pramsVenti[0]['uschutz_hys'][1]/10
     intervall_on =  pramsVenti[0]['intervall_on'][1]/10
     intervall_time =  (pramsVenti[0]['intervall_time'][1]/10)*3600
+    intervall_duration =  pramsVenti[0]['intervall_duration'][1]/10
     intervall_enable = pramsVenti[0]['intervall_enable'][1]
 
     # Überhitzungsschutz
@@ -158,7 +159,7 @@ def venti_control():
     
         # Intervall Belüftung relLuft > intervall on and intervall Zeit agbelaufen und remainingTimeIntervalOn > 0 und kleiner 720 s  --> // and (timeNowIso >= '08:00' and timeNowIso <= '22:00')
 	#elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or (remainingTimeIntervalOn <= 720 and  remainingTimeIntervalOn > 0) ):    
-        elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or (remainingTimeIntervalOn <= 720 and remainingTimeIntervalDiff >0)):
+        elif humMax > intervall_on and (remainingTimeInterval >= intervall_time or (remainingTimeIntervalOn <= intervall_duration and remainingTimeIntervalDiff >0)):
                 venti_cmd('on')
                 app.logger.info('****************************************')
                 app.logger.info('Mode: {}'.format(mode))
@@ -325,7 +326,7 @@ def get_venti_control_param_values():
             results.append((record.get_time(), record.get_value()))
     
     results2 = []
-    names = ['intervall_enable','intervall_on','intervall_time','sdef_hys', 'sdef_on','uschutz_hys','uschutz_on']
+    names = ['intervall_duration','intervall_enable','intervall_on','intervall_time','sdef_hys', 'sdef_on','uschutz_hys','uschutz_on']
     results2.append(dict(zip(names,results)))
     dicti={}
     dicti = results2
@@ -530,10 +531,11 @@ def controlParamValues():
     uschutz_hys = pramsVenti[0]['uschutz_hys'][1]/10
     intervall_on =  pramsVenti[0]['intervall_on'][1]/10
     intervall_time =  pramsVenti[0]['intervall_time'][1]/10
+    intervall_duration = pramsVenti[0]['intervall_duration'][1]/10
     intervall_enable = pramsVenti[0]['intervall_enable'][1]
 
 
-    iniDict = {'sdef_on':sdef_on, 'sdef_hys':sdef_hys , 'uschutz_on':uschutz_on,  'uschutz_hys':uschutz_hys,'intervall_on':intervall_on,'intervall_time':intervall_time,'intervall_enable':intervall_enable} 
+    iniDict = {'sdef_on':sdef_on, 'sdef_hys':sdef_hys , 'uschutz_on':uschutz_on,  'uschutz_hys':uschutz_hys,'intervall_on':intervall_on,'intervall_time':intervall_time,'intervall_duration':intervall_duration,'intervall_enable':intervall_enable} 
     return (iniDict)
 
 @app.route('/venti',methods = ['POST', 'GET'])
@@ -590,12 +592,13 @@ def ventiParams():
         uschutz_hys = data['uschutz_hys']
         intervall_on =  data['intervall_on']
         intervall_time =  data['intervall_time']
+        intervall_duration = data['intervall_duration']
         intervall_enable = data['intervall_enable']
 
          
         
 
-        venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys,intervall_on,intervall_time,intervall_enable)
+        venti_auto_param(sdef_on, sdef_hys,uschutz_on,uschutz_hys,intervall_on,intervall_time,intervall_duration,intervall_enable)
         app.logger.info('****************************************')
         app.logger.info('Regelparameter geändert:')
         app.logger.info('SDef on: {}'.format(sdef_on))
@@ -604,6 +607,7 @@ def ventiParams():
         app.logger.info('ÜSchutz hys: {}'.format(uschutz_hys))
         app.logger.info('Intervall on: {}'.format(intervall_on))
         app.logger.info('Intervall time: {}'.format(intervall_time))
+        app.logger.info('Intervall duration: {}'.format(intervall_duration))
         app.logger.info('Intervall enable: {}'.format(intervall_enable))
         
         venti_control()
