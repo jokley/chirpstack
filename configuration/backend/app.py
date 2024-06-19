@@ -146,7 +146,7 @@ def venti_control():
             app.logger.info('Restzeit: {}'.format(stock-remainingTimeStock))
 
         # Trockenmasse Automatik
-        elif sDefOut >= sDefMin+sdef_hys and sDefOut >= sdef_on and tsMin <= tsSoll:
+        elif sDefOut >= sDefMin+sdef_hys and sDefOut >= sdef_on and tsMin+0.2 <= tsSoll:
             venti_cmd('on')
             app.logger.info('****************************************')
             app.logger.info('Mode: {}'.format(mode))
@@ -167,7 +167,7 @@ def venti_control():
                 app.logger.info('Interall Schwelle: {}'.format(intervall_on))
                 app.logger.info('Restzeit: {}'.format(720-remainingTimeIntervalOn))
         
-        elif remainingTimeStock > stock and (sDefOut < sDefMin+sdef_hys-1 or tsMin > tsSoll or sDefOut+0.5 < sdef_on):
+        elif remainingTimeStock > stock and (sDefOut < sDefMin+sdef_hys-1 or tsMin-0.2 > tsSoll or sDefOut+0.5 < sdef_on):
         # Belüftung aus
             venti_cmd('off')
             app.logger.info('****************************************')
