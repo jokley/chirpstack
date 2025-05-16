@@ -2,7 +2,7 @@ import os
 import paho.mqtt.client as mqtt
 import json
 from influx import write_to_influx
-from relay import set_relay  # Importing the relay control function
+from i2c_IO import set_relay  # Importing the relay control function
 
 # MQTT Configuration
 MQTT_BROKER = os.getenv("MQTT_BROKER")
