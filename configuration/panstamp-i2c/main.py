@@ -11,7 +11,7 @@ from influx import write_to_influx
 from mqtt_handler import setup_mqtt
 
 # Configure logging
-LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
+LOG_LEVEL ="INFO"
 logging.basicConfig(level=LOG_LEVEL,
                     format='%(asctime)s %(levelname)s [%(name)s] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
@@ -38,7 +38,7 @@ def main():
 
                 timestamp_s = int(time.time())  # seconds
                 parsed = parse_line(line)
-                logger.debug(f"Parsed line: {parsed}")
+                logger.info(f"Parsed line: {parsed}")
                 if not parsed:
                     continue
 
