@@ -4,12 +4,12 @@ import json
 from influx import write_to_influx
 from i2c_IO import set_relay  # Importing the relay control function
 
-# MQTT Configuration
-MQTT_BROKER = os.getenv("MQTT_BROKER")
-MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
-MQTT_TOPIC_COMMAND = os.getenv("MQTT_TOPIC_COMMAND", "relay/control")
-MQTT_TOPIC_STATE = os.getenv("MQTT_TOPIC_STATE", "relay/state")
-MQTT_CLIENT_ID = os.getenv("MQTT_CLIENT_ID", "relay_controller")
+# MQTT Configuration (hardcoded)
+MQTT_BROKER = "172.16.238.15"
+MQTT_PORT = 1883
+MQTT_TOPIC_COMMAND = "relay/control"
+MQTT_TOPIC_STATE = "relay/state"
+MQTT_CLIENT_ID = "relay_controller"
 
 # Callback when a message is received
 def on_message(client, userdata, message):
