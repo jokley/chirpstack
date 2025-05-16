@@ -1,6 +1,7 @@
 import os
 import time
 import serial
+import math
 from datetime import datetime
 from sensor_parser import parse_line
 from influx import write_to_influx
