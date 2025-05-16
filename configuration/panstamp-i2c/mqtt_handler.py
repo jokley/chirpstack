@@ -56,7 +56,7 @@ def on_disconnect(client, userdata, rc):
 
 def setup_mqtt():
     # Set up MQTT client
-    client = mqtt.Client(client_id=MQTT_CLIENT_ID, protocol=mqtt.MQTTv5)
+    client = mqtt.Client(client_id="your_client_id", protocol=mqtt.MQTTv311)
     client.on_connect = on_connect
     client.on_disconnect = on_disconnect
     client.on_message = on_message
