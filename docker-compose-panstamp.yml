@@ -77,7 +77,9 @@ services:
         ipv4_address: 172.16.238.20
 
   panstamp-i2c:
-    build: .
+    build:
+      context: ./configuration/panstamp-i2c
+    restart: unless-stopped
     container_name: panstamp-i2c
     env_file:
       - venti.env
