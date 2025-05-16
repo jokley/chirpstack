@@ -11,7 +11,7 @@ def get_influxdb_client():
     INFLUXDB_URL = "http://172.16.238.16:8086"
     INFLUXDB_TOKEN = os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN")
     INFLUXDB_ORG = os.getenv("DOCKER_INFLUXDB_INIT_ORG")
-    logger.debug(f"Connecting to InfluxDB at {INFLUXDB_URL}, org={INFLUXDB_ORG}")
+    logger.info(f"Connecting to InfluxDB at {INFLUXDB_URL}, org={INFLUXDB_ORG}")
     return InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN, org=INFLUXDB_ORG)
 
 def write_to_influx(line_protocol: str):
@@ -23,7 +23,7 @@ def write_to_influx(line_protocol: str):
     write_api = client.write_api(write_options=WriteOptions(batch_size=1))
     
     try:
-        logger.debug(f"InfluxDB line protocol to write:\n{line_protocol}")
+        logger.info(f"InfluxDB line protocol to write:\n{line_protocol}")
         write_api.write(bucket=BUCKET, org=client.org, record=line_protocol)
         logger.info("✅ Data written to InfluxDB")
     except Exception as e:
