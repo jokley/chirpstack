@@ -2,9 +2,9 @@ import os
 from influxdb_client import InfluxDBClient, WriteOptions
 
 def get_influxdb_client():
-    INFLUXDB_URL = os.getenv("INFLUXDB_URL")
-    INFLUXDB_TOKEN = os.getenv("INFLUXDB_TOKEN")
-    INFLUXDB_ORG = os.getenv("INFLUXDB_ORG")
+    INFLUXDB_URL = "http://172.16.238.16:8086"
+    INFLUXDB_TOKEN = os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN")
+    INFLUXDB_ORG = os.getenv("DOCKER_INFLUXDB_INIT_ORG")
 
     return InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN, org=INFLUXDB_ORG)
 
