@@ -1,36 +1,29 @@
 import os
 import logging
-from influxdb_client import InfluxDBClient, WriteOptions
+from influxdb_client import InfluxDBClient, WritePrecision
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("influx")
 
-def get_influxdb_client():
-    """
-    Create and return an InfluxDB client instance.
-    """
-    INFLUXDB_URL = "http://172.16.238.16:8086"
-    INFLUXDB_TOKEN = os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN")
-    INFLUXDB_ORG = os.getenv("DOCKER_INFLUXDB_INIT_ORG")
-    logger.info(f"Connecting to InfluxDB at {INFLUXDB_URL}, org={INFLUXDB_ORG}")
-    return InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN, org=INFLUXDB_ORG)
+# Load environment variables using the same names as in your .env file
+url = "http://172.16.238.16:8086"
+token = os.getenv("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN")
+org = os.getenv("DOCKER_INFLUXDB_INIT_ORG")
+bucket = os.getenv("DOCKER_INFLUXDB_INIT_BUCKET")
 
 def write_to_influx(line_protocol: str):
-    """
-    Write a raw InfluxDB line protocol string to the specified bucket.
-    """
-    BUCKET = os.getenv("DOCKER_INFLUXDB_INIT_BUCKET")
-    client = get_influxdb_client()
-    write_api = client.write_api(write_options=WriteOptions(batch_size=1))
-    
+    logger.info(f"[influx] Connecting to InfluxDB at {url}, org={org}")
+    logger.info("[influx] InfluxDB line protocol to write:\n%s", line_protocol)
+
     try:
-        logger.info(f"InfluxDB line protocol to write:\n{line_protocol}")
-        write_api.write(bucket=BUCKET, org=client.org, record=line_protocol)
-        logger.info("✅ Data written to InfluxDB")
+        with InfluxDBClient(url=url, token=token, org=org) as client:
+            write_api = client.write_api()
+            write_api.write(
+                bucket=bucket,
+                org=org,
+                record=line_protocol,
+                write_precision=WritePrecision.S,
+            )
+        logger.info("[influx] ✅ Data written to InfluxDB")
     except Exception as e:
-        logger.error(f"❌ Error writing to InfluxDB: {e}")
-    finally:
-        try:
-            write_api.__del__()
-            client.__del__()
-        except Exception:
-            pass
+        logger.error(f"[influx] ❌ Failed to write to InfluxDB: {e}")
+        
