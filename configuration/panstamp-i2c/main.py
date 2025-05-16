@@ -5,7 +5,7 @@ from datetime import datetime
 from sensor_parser import parse_line
 from influx import write_to_influx
 from collections import defaultdict
-from mqtt_control import setup_mqtt
+from mqtt_handler import setup_mqtt
 
 def main():
     port = "/dev/ttyUSB0"
