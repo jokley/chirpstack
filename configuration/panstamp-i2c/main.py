@@ -29,7 +29,19 @@ def main():
             if not parsed:
                 continue
 
+            # Mapping from node number to name
+            NODE_NAME_MAP = {
+                3: "outdoor00",
+                19: "probe01",
+                21: "probe02"
+            }
+            
+            # Get node number from parsed data
             node = parsed["node"]
+            
+            # Use mapping to get the name, fallback to original node if not found
+            node_name = NODE_NAME_MAP.get(node, f"node{node}")
+            
             register = parsed["register"]
 
             # Always keep latest RSSI and LQI
@@ -58,12 +70,12 @@ def main():
                 cache[node]["sdef"] = round(sdef, 3)
 
                 line_protocol = (
-                    f"device_frmpayload_data_temperature,device_name={node} value={tmp} {timestamp_s}\n"
-                    f"device_frmpayload_data_humidity,device_name={node} value={hum} {timestamp_s}\n"
-                    f"device_frmpayload_data_trockenmasse,device_name={node} value={cache[node]['trockenmasse']} {timestamp_s}\n"
-                    f"device_frmpayload_data_sdef,device_name={node} value={cache[node]['sdef']} {timestamp_s}\n"
-                    f"device_frmpayload_data_battery,device_name={node} value={cache[node]['battery_v']} {timestamp_s}\n"
-                    f"device_frmpayload_data_rssi,device_name={node} rssi={cache[node]['rssi_dbm']} {timestamp_s}"
+                    f"device_frmpayload_data_temperature,device_name={node_name} value={tmp} {timestamp_s}\n"
+                    f"device_frmpayload_data_humidity,device_name={node_name} value={hum} {timestamp_s}\n"
+                    f"device_frmpayload_data_trockenmasse,device_name={node_name} value={cache[node]['trockenmasse']} {timestamp_s}\n"
+                    f"device_frmpayload_data_sdef,device_name={node_name} value={cache[node]['sdef']} {timestamp_s}\n"
+                    f"device_frmpayload_data_battery,device_name={node_name} value={cache[node]['battery_v']} {timestamp_s}\n"
+                    f"device_frmpayload_data_rssi,device_name={node_name} rssi={cache[node]['rssi_dbm']} {timestamp_s}"
                 )
                 write_to_influx(line_protocol)  # Write to InfluxDB
                 cache.pop(node)
