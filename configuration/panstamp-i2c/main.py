@@ -27,6 +27,7 @@ def main():
 
             timestamp_s = int(time.time())  # seconds
             parsed = parse_line(line)
+            print(f"Parsed line: {parsed}")
             if not parsed:
                 continue
 
