@@ -2,15 +2,7 @@ import os
 import logging
 from influxdb_client import InfluxDBClient, WriteOptions
 
-# Configure logging
-LOG_LEVEL = "DEBUG"  # Show all logs including debug
-numeric_level = getattr(logging, LOG_LEVEL.upper(), logging.DEBUG)
-
-logging.basicConfig(level=numeric_level,
-                    format='%(asctime)s %(levelname)s [%(name)s] %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
-
-logger = logging.getLogger("influx_writer")
+logger = logging.getLogger(__name__)
 
 def get_influxdb_client():
     """
