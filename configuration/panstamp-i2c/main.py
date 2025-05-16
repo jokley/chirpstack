@@ -46,7 +46,7 @@ def main():
                 NODE_NAME_MAP = {
                     3: "outdoor00",
                     19: "probe01",
-                    21: "probe02"
+                    25: "probe02"
                 }
                 
                 node = parsed["node"]
