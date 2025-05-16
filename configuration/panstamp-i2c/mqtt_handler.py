@@ -1,5 +1,6 @@
 import os
 import paho.mqtt.client as mqtt
+from paho.mqtt.client import CallbackAPIVersion
 import json
 from influx import write_to_influx
 from i2c_IO import set_relay  # Importing the relay control function
@@ -56,7 +57,7 @@ def on_disconnect(client, userdata, rc):
 
 def setup_mqtt():
     # Set up MQTT client
-    client = mqtt.Client(client_id=MQTT_CLIENT_ID, callback_api_version=5)
+    client = mqtt.Client(client_id=MQTT_CLIENT_ID, callback_api_version=CallbackAPIVersion.V5)
     client.on_connect = on_connect
     client.on_disconnect = on_disconnect
     client.on_message = on_message
