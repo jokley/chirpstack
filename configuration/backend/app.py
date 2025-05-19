@@ -73,10 +73,10 @@ def venti_cmd(cmd: str):
         topic = "relay/control"
         payload = json.dumps({"relay": cmd, "id": 1})
         mqtt.publish(topic, payload)
-        logger.info(f"I2C MQTT → {topic}: {payload}")
+        app.logger.info(f"I2C MQTT → {topic}: {payload}")
     else:
         if not APPLICATION_ID or not DEVICE_ID:
-            logger.error("Missing APPLICATION_ID or DEVICE_ID")
+            app.logger.error("Missing APPLICATION_ID or DEVICE_ID")
             return
         data = "AwEA" if cmd == "on" else "AwAA"
         topic = f"application/{APPLICATION_ID}/device/{DEVICE_ID}/command/down"
@@ -87,7 +87,7 @@ def venti_cmd(cmd: str):
             "data":      data
         })
         mqtt.publish(topic, payload)
-        logger.info(f"LoRaWAN MQTT → {topic}: {payload}")
+        app.logger.info(f"LoRaWAN MQTT → {topic}: {payload}")
 
 
 def venti_control():
