@@ -22,17 +22,13 @@ def on_message(client, userdata, message):
         payload = message.payload.decode("utf-8")
         logger.info(f"Received message on topic {message.topic}: {payload}")
         
-        # Parse JSON payload, expect {"relay": "on/off", "id": <relay_id>}
         data = json.loads(payload)
         relay_id = data.get("id")
         state = data.get("relay")
 
         if relay_id is not None and state is not None:
             logger.info(f"Control Relay {relay_id}: {state}")
-            if state.lower() == 'on':
-                set_relay(True)
-            elif state.lower() == 'off':
-                set_relay(False)
+            set_relay(relay_id, state.lower() == 'on')  # ✅ fixed
             write_relay_state_to_influx(relay_id, state)
         else:
             logger.warning("Invalid message format, expected 'id' and 'relay'.")
