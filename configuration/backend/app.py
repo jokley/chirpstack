@@ -10,12 +10,13 @@ from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point, Dialect
 from influxdb_client.client.write_api import SYNCHRONOUS
 import logging
+from logging.handlers import RotatingFileHandler
 import threading
 
 
 load_dotenv()
 
-rfh = logging.handlers.RotatingFileHandler(
+rfh = RotatingFileHandler(
     filename='debug.log', 
     mode='a',
     maxBytes=1000,
@@ -28,13 +29,8 @@ logging.Formatter.converter = lambda *args: datetime.now(pytz.timezone("Europe/B
 
 logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        rfh
-        #logging.FileHandler("debug.log"), 
-    ]
+    handlers=[rfh]
 )
-
-#logging.getLogger('apscheduler').setLevel(logging.DEBUG)
 
 
 def get_influxdb_client():
