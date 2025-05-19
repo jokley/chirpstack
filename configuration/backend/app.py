@@ -61,17 +61,37 @@ def get_timestamp_now_epoche():
     TIMESTAMP_NOW_EPOCHE = int(datetime.now().timestamp()+get_timestamp_now_offset())
     return TIMESTAMP_NOW_EPOCHE 
 
-def venti_cmd(cmd):
-    application_id = os.getenv("APPLICATION_ID")
-    device_id = os.getenv("DEVICE_ID")
-    if cmd == 'on':
-        #mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
-	    mqtt.publish( f"application/{application_id}/device/{device_id}/command/down",  "{\"devEui\":\"" + device_id + "\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwEA\" }")
 
-    elif cmd == 'off':
-        #mqtt.publish("application/9b558903-28f2-4508-b219-7ddd180dbc90/device/a840418c51868361/command/down" , "{\"devEui\":\"a840418c51868361\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
-	    mqtt.publish( f"application/{application_id}/device/{device_id}/command/down",  "{\"devEui\":\"" + device_id + "\", \"confirmed\": true, \"fPort\": 10, \"data\": \"AwAA\" }")
-
+def venti_cmd(cmd: str):
+    """
+    Send 'on'/'off' command.
+    - If PANSTAMP=True: publish {"relay": cmd, "id": 1} → topic "relay/control"
+    - Else: publish LoRaWAN downlink JSON → ChirpStack topic
+    """
+    PANSTAMP = os.getenv("PANSTAMP", "false").lower() == "true"
+    APPLICATION_ID = os.getenv("APPLICATION_ID")
+    DEVICE_ID      = os.getenv("DEVICE_ID")	
+    
+    cmd = cmd.lower()
+    if PANSTAMP:
+        topic = "relay/control"
+        payload = json.dumps({"relay": cmd, "id": 1})
+        mqtt_client.publish(topic, payload)
+        logger.info(f"I2C MQTT → {topic}: {payload}")
+    else:
+        if not APPLICATION_ID or not DEVICE_ID:
+            logger.error("Missing APPLICATION_ID or DEVICE_ID")
+            return
+        data = "AwEA" if cmd == "on" else "AwAA"
+        topic = f"application/{APPLICATION_ID}/device/{DEVICE_ID}/command/down"
+        payload = json.dumps({
+            "devEui":    DEVICE_ID,
+            "confirmed": True,
+            "fPort":     10,
+            "data":      data
+        })
+        mqtt_client.publish(topic, payload)
+        logger.info(f"LoRaWAN MQTT → {topic}: {payload}")
 
 
 def venti_control():
