@@ -72,7 +72,7 @@ def venti_cmd(cmd: str):
     if PANSTAMP:
         topic = "relay/control"
         payload = json.dumps({"relay": cmd, "id": 1})
-        mqtt_client.publish(topic, payload)
+        mqtt.publish(topic, payload)
         logger.info(f"I2C MQTT → {topic}: {payload}")
     else:
         if not APPLICATION_ID or not DEVICE_ID:
@@ -86,7 +86,7 @@ def venti_cmd(cmd: str):
             "fPort":     10,
             "data":      data
         })
-        mqtt_client.publish(topic, payload)
+        mqtt.publish(topic, payload)
         logger.info(f"LoRaWAN MQTT → {topic}: {payload}")
 
 
