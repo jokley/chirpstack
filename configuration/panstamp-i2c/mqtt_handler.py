@@ -30,27 +30,23 @@ def on_message(client, userdata, message):
             logger.info(f"Control Relay {relay_id}: {state}")
             set_relay(relay_id, state.lower() == 'on')
 
-            # Prepare Influx line protocol inline
+            # Build measurement name
             measurement = f"device_frmpayload_data_RO{relay_id}_status"
             value = "ON" if state.lower() == "on" else "OFF"
-            line = f'{measurement},device_name=fan _value="{value}" {int(time.time())}'
 
-            # Inline write
-            with InfluxDBClient(url=url, token=token, org=org) as client:
-                write_api = client.write_api()
-                write_api.write(
-                    bucket=bucket,
-                    org=org,
-                    record=line,
-                    write_precision=WritePrecision.S,
-                )
-            logger.info("[influx] ✅ Data written to InfluxDB")
+            # Format line protocol
+            timestamp = int(time.time())  # seconds precision
+            line_protocol = f'{measurement},device_name=fan _value="{value}" {timestamp}'
+
+            # Write to InfluxDB using your wrapper
+            write_to_influx(line_protocol)
 
         else:
             logger.warning("Invalid message format, expected 'id' and 'relay'.")
 
     except Exception as e:
         logger.error(f"Error processing message: {e}", exc_info=True)
+
 
 
 # Write relay state to InfluxDB
