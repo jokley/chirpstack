@@ -1,12 +1,26 @@
 import smbus2
 
-bus = smbus2.SMBus(1)  # This assumes you're using the Raspberry Pi I2C bus 1
-PCF8574_ADDR = 0x20  # Address of the PCF8574 I/O expander
+bus = smbus2.SMBus(1)
+PCF8574_ADDR = 0x20
 
-def set_relay(state: bool):
+# Cached relay state so we can modify individual bits
+current_state = 0xFF  # start with all OFF (all bits high)
+
+def set_relay(relay_id: int, state: bool):
     """
-    Control the relay state via the PCF8574 I/O expander.
-    :param state: True to turn on, False to turn off.
+    Set individual relay state on PCF8574.
+    relay_id: 1–8 (maps to bit 0–7)
+    state: True to turn ON, False to turn OFF
     """
-    value = 0x00 if state else 0xFF  # 0x00 turns the relay on, 0xFF turns it off
-    bus.write_byte(PCF8574_ADDR, value)  # Write to the I2C bus
+    global current_state
+
+    bit = 1 << (relay_id - 1)
+
+    if state:
+        # Turn ON relay => set bit LOW (clear)
+        current_state &= ~bit
+    else:
+        # Turn OFF relay => set bit HIGH (set)
+        current_state |= bit
+
+    bus.write_byte(PCF8574_ADDR, current_state)
