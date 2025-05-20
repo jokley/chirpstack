@@ -68,7 +68,7 @@
             "tooltip": "",
             "type": "radio",
             "unit": " ",
-            "value": "on"
+            "value": "auto"
           },
           {
             "id": "tm",
@@ -81,7 +81,7 @@
             "tooltip": "",
             "type": "slider",
             "unit": "%",
-            "value": 85
+            "value": 87
           },
           {
             "id": "stock",
@@ -999,12 +999,204 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "P5697886F9CA74929"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-YlBl"
+          },
+          "mappings": [],
+          "max": -30,
+          "min": -105,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "light-red",
+                "value": 3600
+              },
+              {
+                "color": "super-light-orange",
+                "value": 3700
+              },
+              {
+                "color": "super-light-yellow",
+                "value": 3800
+              },
+              {
+                "color": "blue",
+                "value": 3900
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "value {application_name=\"jokley\", dev_eui=\"2ee80bb8e850d8e4\", device_name=\"probe01\", f_port=\"2\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Sonde 1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "value {application_name=\"jokley\", dev_eui=\"d69427807699892a\", device_name=\"probe02\", f_port=\"2\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Sonde 2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "value {application_name=\"jokley\", dev_eui=\"f27efd1eb2adcb93\", device_name=\"outdoor00\", f_port=\"2\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Outdoor"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 17
+      },
+      "id": 23,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P5697886F9CA74929"
+          },
+          "query": "from(bucket: \"jokley_bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"device_name\"] == \"outdoor00\" or r[\"device_name\"] == \"fan\" or r[\"device_name\"] == \"probe01\" or r[\"device_name\"] == \"probe02\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rssi\")\r\n  |> group(columns: [\"device_name\", \"_measurement\", \"_field\"])\r\n  |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "refId": "Probe_01"
+        }
+      ],
+      "title": "Empfang RSSI",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 21
+      },
+      "id": 22,
+      "options": {
+        "buttonGroup": {
+          "orientation": "center",
+          "size": "md"
+        },
+        "elements": [
+          {
+            "id": "oscmd",
+            "labelWidth": 10,
+            "options": [
+              {
+                "label": "Reboot",
+                "value": "reboot"
+              },
+              {
+                "label": "Shutdown",
+                "value": "shutdown"
+              },
+              {
+                "label": "Refresh",
+                "value": "refresh"
+              }
+            ],
+            "section": "",
+            "title": "System",
+            "tooltip": "",
+            "type": "radio",
+            "value": "shutdown"
+          }
+        ],
+        "initial": {
+          "code": "console.log(data, response, initial, elements)",
+          "contentType": "application/json",
+          "highlight": false,
+          "highlightColor": "red",
+          "method": "-"
+        },
+        "layout": {
+          "variant": "single"
+        },
+        "reset": {
+          "backgroundColor": "purple",
+          "foregroundColor": "yellow",
+          "icon": "process",
+          "text": "Reset",
+          "variant": "hidden"
+        },
+        "submit": {
+          "backgroundColor": "purple",
+          "foregroundColor": "yellow",
+          "icon": "check",
+          "text": "Ok",
+          "variant": "destructive"
+        },
+        "update": {
+          "code": "if (response && response.ok) {\n  response.text().then(text => {\n    const data = JSON.parse(text);\n    notifySuccess([data]);\n    if (data === \"Page Refresh\")\n   { const currentUrlWithoutQueryParams = window.location.origin + window.location.pathname;\n    window.location.href = currentUrlWithoutQueryParams;}\n  });\n \n\n} else {\n  notifyError(['Update', 'An error occured updating values.']);\n}",
+          "confirm": false,
+          "contentType": "application/json",
+          "method": "POST",
+          "updatedOnly": false,
+          "url": "/backend/ventiSystem"
+        }
+      },
+      "title": "System Befehle",
+      "type": "volkovlabs-form-panel"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 26
       },
       "id": 17,
       "panels": [],
@@ -1017,10 +1209,10 @@
         "uid": "grafana"
       },
       "gridPos": {
-        "h": 10,
-        "w": 19,
+        "h": 11,
+        "w": 18,
         "x": 0,
-        "y": 22
+        "y": 27
       },
       "id": 20,
       "options": {
@@ -1040,7 +1232,7 @@
             "tooltip": "",
             "type": "slider",
             "unit": "  ",
-            "value": 7.5,
+            "value": 7,
             "width": 0
           },
           {
@@ -1054,7 +1246,7 @@
             "tooltip": "",
             "type": "slider",
             "unit": " ",
-            "value": 2
+            "value": 5.5
           },
           {
             "id": "uschutz_on",
@@ -1086,14 +1278,14 @@
             "id": "intervall_on",
             "labelWidth": 20,
             "max": 100,
-            "min": 90,
+            "min": 50,
             "section": "",
             "step": 1,
             "title": "Intervall on",
             "tooltip": "",
             "type": "slider",
             "unit": " %",
-            "value": 91
+            "value": 50
           },
           {
             "id": "intervall_time",
@@ -1105,8 +1297,22 @@
             "title": "Intervall Time",
             "tooltip": "",
             "type": "slider",
-            "unit": " ",
-            "value": 6
+            "unit": "h",
+            "value": 1
+          },
+          {
+            "id": "intervall_duration",
+            "labelWidth": 20,
+            "max": 20,
+            "min": 4,
+            "section": "",
+            "step": 4,
+            "title": "Intervall Duration",
+            "tooltip": "",
+            "type": "slider",
+            "unit": "min",
+            "value": 12,
+            "width": 0
           },
           {
             "id": "intervall_enable",
@@ -1115,7 +1321,7 @@
             "title": "Intervall enable",
             "tooltip": "",
             "type": "boolean",
-            "value": true,
+            "value": false,
             "width": 20
           }
         ],
@@ -1211,10 +1417,10 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 11,
         "w": 2,
-        "x": 19,
-        "y": 22
+        "x": 18,
+        "y": 27
       },
       "id": 13,
       "options": {
@@ -1238,11 +1444,11 @@
             "type": "influxdb",
             "uid": "P5697886F9CA74929"
           },
-          "query": "from(bucket: \"jokley_bucket\")\r\n  |> range(start: -10h)\r\n  |> filter(fn: (r) => r[\"device_name\"] == \"outdoor00\")\r\n  |> filter(fn: (r) =>  r[\"_measurement\"] == \"device_frmpayload_data_temperature\" or r[\"_measurement\"] == \"device_frmpayload_data_humidity\"  or r[\"_measurement\"] == \"device_frmpayload_data_trockenmasse\" or r[\"_measurement\"] == \"device_frmpayload_data_sdef\" )\r\n  |> last()\r\n\r\n  \r\n    \r\n",
+          "query": "from(bucket: \"jokley_bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"device_name\"] == \"outdoor00\")\r\n  |> filter(fn: (r) =>  r[\"_measurement\"] == \"device_frmpayload_data_temperature\" or r[\"_measurement\"] == \"device_frmpayload_data_humidity\"  or r[\"_measurement\"] == \"device_frmpayload_data_trockenmasse\" or r[\"_measurement\"] == \"device_frmpayload_data_sdef\" )\r\n  |> filter(fn: (r) => r._value <= 100 and r._value >= -100)\r\n  |> last()\r\n\r\n  \r\n    \r\n",
           "refId": "A"
         }
       ],
-      "title": "Outdoor Temp/Humi",
+      "title": "Outdoor Values",
       "type": "stat"
     },
     {
@@ -1253,7 +1459,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "#2e88c3e6",
+            "fixedColor": "#5f9bc3e6",
             "mode": "fixed"
           },
           "mappings": [],
@@ -1274,17 +1480,17 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 3,
-        "x": 21,
-        "y": 22
+        "h": 11,
+        "w": 2,
+        "x": 20,
+        "y": 27
       },
       "id": 10,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -1303,11 +1509,76 @@
             "uid": "P5697886F9CA74929"
           },
           "hide": false,
-          "query": "tmin = from(bucket: \"jokley_bucket\")\r\n                |> range(start: -10m)\r\n                |> filter(fn: (r) => r[\"device_name\"] == \"probe01\" or r[\"device_name\"] == \"probe02\")\r\n                |> filter(fn: (r) =>  r[\"_measurement\"] == \"device_frmpayload_data_temperature\" or r[\"_measurement\"] == \"device_frmpayload_data_humidity\"  or r[\"_measurement\"] == \"device_frmpayload_data_trockenmasse\" or r[\"_measurement\"] == \"device_frmpayload_data_sdef\" )\r\n                |> last()\r\n                |> group(columns: [\"_measurement\"])\r\n                |> min()\r\n\r\ntmax = from(bucket: \"jokley_bucket\")\r\n                |> range(start: -10m)\r\n                |> filter(fn: (r) => r[\"device_name\"] == \"probe01\" or r[\"device_name\"] == \"probe02\")\r\n                |> filter(fn: (r) =>  r[\"_measurement\"] == \"device_frmpayload_data_temperature\" or r[\"_measurement\"] == \"device_frmpayload_data_humidity\"  or r[\"_measurement\"] == \"device_frmpayload_data_trockenmasse\" or r[\"_measurement\"] == \"device_frmpayload_data_sdef\" )\r\n                |> last()\r\n                |> group(columns: [\"_measurement\"])\r\n                |> max()\r\n\r\nunion(tables: [tmin, tmax])\r\n  |> sort(columns: [\"_measurement\", \"_value\"])",
+          "query": "                from(bucket: \"jokley_bucket\")\r\n                |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n                |> filter(fn: (r) => r[\"device_name\"] == \"probe01\" or r[\"device_name\"] == \"probe02\")\r\n                |> filter(fn: (r) =>  r[\"_measurement\"] == \"device_frmpayload_data_temperature\" or r[\"_measurement\"] == \"device_frmpayload_data_humidity\"  or r[\"_measurement\"] == \"device_frmpayload_data_trockenmasse\" or r[\"_measurement\"] == \"device_frmpayload_data_sdef\" )\r\n                |> filter(fn: (r) => r._value <= 100 and r._value >= -100)\r\n                |> last()\r\n                |> group(columns: [\"_measurement\"])\r\n                |> min()",
           "refId": "A"
         }
       ],
-      "title": "Probe min/max  Humidity - Temperature - Trockenmasse",
+      "title": "Probe min  Values",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "P5697886F9CA74929"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#d5cddbe6",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 2,
+        "x": 22,
+        "y": 27
+      },
+      "id": 24,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "9.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P5697886F9CA74929"
+          },
+          "hide": false,
+          "query": "                from(bucket: \"jokley_bucket\")\r\n                |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n                |> filter(fn: (r) => r[\"device_name\"] == \"probe01\" or r[\"device_name\"] == \"probe02\")\r\n                |> filter(fn: (r) =>  r[\"_measurement\"] == \"device_frmpayload_data_temperature\" or r[\"_measurement\"] == \"device_frmpayload_data_humidity\"  or r[\"_measurement\"] == \"device_frmpayload_data_trockenmasse\" or r[\"_measurement\"] == \"device_frmpayload_data_sdef\" )\r\n                |> filter(fn: (r) => r._value <= 100 and r._value >= -100)\r\n                |> last()\r\n                |> group(columns: [\"_measurement\"])\r\n                |> max()",
+          "refId": "A"
+        }
+      ],
+      "title": "Probe max Values",
       "type": "stat"
     }
   ],
@@ -1326,6 +1597,6 @@
   "timezone": "",
   "title": "LoraWan",
   "uid": "TilQz124z",
-  "version": 20,
+  "version": 15,
   "weekStart": ""
 }
