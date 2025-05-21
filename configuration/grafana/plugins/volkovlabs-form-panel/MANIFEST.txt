@@ -8,32 +8,31 @@ Hash: SHA512
   "signedByOrg": "volkovlabs",
   "signedByOrgName": "Volkov Labs",
   "plugin": "volkovlabs-form-panel",
-  "version": "2.7.0",
-  "time": 1668108683325,
+  "version": "5.1.0",
+  "time": 1740620830229,
   "keyId": "7e4d0c6a708866e7",
   "files": {
-    "module.js.LICENSE.txt": "4948f3da122c8c70d0615398ee92b27e029d525eea90cdf9a1ab1ed543e5d2a4",
-    "module.js.map": "203e65f0996d6db4cab245e69b6ab05cb06b374ca8ae18d9f14736b3b49f2cff",
-    "LICENSE": "eab40c95a247a65cd1bd40aa9b7c908d0a95259b30255924c401d159fd21b4d4",
-    "README.md": "e4b75789b97f4fa38c1c08947d4eb043bc07a3f07de3c3279180a052e7646274",
-    "plugin.json": "fee71bc9ffc416f1f3a51da337d6e699eefbc782a27e997a45f76831b80f3588",
-    "module.js": "53f429084a0ecaa09a9790cde8a53d35ecb66110508a8ffa53c9d8242ad3ef6c",
-    "CHANGELOG.md": "2f8a359ba51ae557d00cca431e93e8f23a935757736bd89b1c515eecdc8295c5",
-    "img/elements.png": "4824c9e3665125a193545e65eb8bcad9e9554ef63f91763b95ae06a38c407817",
-    "img/request.png": "db9b30ae6c205e23395cf94b95c0e7475adf370129fc701c5960dc4134934193",
+    "module.js.LICENSE.txt": "97a7c32f22ff541e709de013bb044e5dbb0f735f0e8dcc8aef2d7292caabd6e9",
+    "LICENSE": "b4bb06da8f623abf922c6df7144017450de98db91f5c59945860d37d67876bd5",
+    "CHANGELOG.md": "97f16c2a5562f81d7c605684b2bc5f7cb5c3324b9456a3c4e6d2fd8e5257595b",
+    "img/request.png": "6a5bd6750b9914c8ee327107ccb1cfe68ea717f1655e23e556e8ebb4abd268b7",
     "img/logo.svg": "a4a44b2d994ab911e499a1ee150b254cf34c13829254bd399a3d4bfc742e2415",
-    "img/panel.png": "d95704dd6c1a52be6addd455a62aebd3fc66e86f625ee7c813b7ad942594f3bc",
-    "img/visual.png": "6811e4553facd234b03732b43eb4c8928f0693bf757247e3de7fc1e34e6bb409"
+    "img/panel.png": "7966ac485cf7b6179023aec7569e64cdf2e03b0e1409c9257cdb64eae7869b9c",
+    "img/elements.png": "89271ee1e246c51e88fb030cf4a90090bf97585536aeef4e6d99e453ce8ccf3e",
+    "README.md": "adff25f08dda0545274e4b06f7bbfeb289fa5fdf4455f8a374890506d9b701ae",
+    "module.js.map": "e2fff1987267854dca443898e343cb75430b52bf38599c1a5365f3eea6ffaaac",
+    "plugin.json": "ce32fcf0d08424e4662f21d2f4bf2561f2910c0a9ff25893e2cd54a1f47fabba",
+    "module.js": "25da78a1baef956127f703c50d3080af810b9ce306960d4a804b0e62fd5195e7"
   }
 }
 -----BEGIN PGP SIGNATURE-----
-Version: OpenPGP.js v4.10.10
+Version: OpenPGP.js v4.10.11
 Comment: https://openpgpjs.org
 
-wrkEARMKAAYFAmNtUYsAIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
-cIhm57cLAgkBpxAF9lGERRh9ZrtGSdVj78SCV8a7suhCjsbhRAjsKOAgPjGh
-QFYR+lwQx/wkuMhP9MFewEAAbs0ip1g/UG9D3lkCCQGgsDIACuYnYUH3rdhM
-/U/vqNkte9j+SM6RJpw23MEKC0ZYuV1OX5Hc+U8Fpg5bHdkxj7kwTRdak5Xi
-vwnGyK29lg==
-=NZ/k
+wrkEARMKAAYFAme/xB4AIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
+cIhm5yESAgkAuen5FX+I4eRHTF4rzte37+0LAkOOAs2E+Uz5yyTXw/oQGSRO
+DW3UKC+6VoV5zWQjbCu2MQKWkB1HvAaVwYWYfA0CCQDG7ePBFDpc1cZmZaHZ
+PfMRjUuuFBPqgr4oxTfgiw6rzLt5hoayoKOLEFJ4XncGAkc4pMMfI1d0vLbn
+AsTxaZ8wDA==
+=ys+A
 -----END PGP SIGNATURE-----

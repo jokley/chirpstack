@@ -1,322 +1,85 @@
-# Data Manipulation Panel for Grafana
+# Business Forms for Grafana
 
-![Form Panel](https://raw.githubusercontent.com/volkovlabs/volkovlabs-form-panel/main/src/img/panel.png)
+![Forms](https://raw.githubusercontent.com/volkovlabs/business-forms/main/src/img/panel.png)
 
-[![Grafana](https://img.shields.io/badge/Grafana-9.2.2-orange)](https://www.grafana.com)
+![Grafana](https://img.shields.io/badge/Grafana-11.5-orange)
 [![YouTube](https://img.shields.io/badge/YouTube-Playlist-red)](https://www.youtube.com/playlist?list=PLPow72ygztmRXSNBxyw0sFnnvNRY_CsSA)
-![CI](https://github.com/volkovlabs/volkovlabs-form-panel/workflows/CI/badge.svg)
-[![codecov](https://codecov.io/gh/VolkovLabs/volkovlabs-form-panel/branch/main/graph/badge.svg?token=0m6f0ktUar)](https://codecov.io/gh/VolkovLabs/volkovlabs-form-panel)
+![CI](https://github.com/volkovlabs/business-forms/workflows/CI/badge.svg)
+![E2E](https://github.com/volkovlabs/business-forms/workflows/E2E/badge.svg)
+[![codecov](https://codecov.io/gh/VolkovLabs/business-forms/branch/main/graph/badge.svg)](https://codecov.io/gh/VolkovLabs/business-forms)
+[![CodeQL](https://github.com/VolkovLabs/business-forms/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/VolkovLabs/business-forms/actions/workflows/codeql-analysis.yml)
 
 ## Introduction
 
-The Data Manipulation Form Panel is a plugin for Grafana that can be used to insert, update application data, and modify configuration directly from your Grafana dashboard.
+The Business Forms panel is a conceptually new plugin for Grafana. It is the first plugin that allows inserting and updating application data, as well as modifying configuration directly from your Grafana dashboard.
 
-[![Data Manipulation Plugin for Grafana | Manual data entering and User input into Dashboard](https://raw.githubusercontent.com/volkovlabs/volkovlabs-form-panel/main/img/video.png)](https://youtu.be/DXALVG8GijM)
+[![Use REST API, Data Source and Queries to manipulate your data](https://raw.githubusercontent.com/volkovlabs/business-forms/main/img/business-forms.png)](https://youtu.be/ulbe8U8-IFA)
 
-### Requirements
+## Requirements
 
-- **Grafana 8.5+**, **Grafana 9.0+** is required for version 2.X.
-- **Grafana 8.0+** is required for version 1.X.
+- Business Forms panel 4.X requires **Grafana 10.3** or **Grafana 11**.
+- Data Manipulation panel 3.X requires **Grafana 9** or **Grafana 10**.
+- Data Manipulation panel 2.X requires **Grafana 9** or **Grafana 8.5**.
+- Data Manipulation panel 1.X requires **Grafana 8**.
 
 ## Getting Started
 
-Data Manipulation panel can be installed from the [Grafana Catalog](https://grafana.com/grafana/plugins/volkovlabs-form-panel/) or use the `grafana-cli` tool to install from the command line:
+You can install the Business Forms panel from the [Grafana Plugins catalog](https://grafana.com/grafana/plugins/volkovlabs-form-panel/) or use the Grafana command line tool.
+
+For the latter, please use the following command:
 
 ```bash
-grafana-cli plugins install volkovlabs-form-panel
+grafana cli plugins install volkovlabs-form-panel
 ```
 
-## Features
+[![Install Business Suite plugins in Cloud, OSS, Enterprise | Open source community plugins](https://raw.githubusercontent.com/volkovlabs/.github/main/started.png)](https://youtu.be/1qYzHfPXJF8)
 
-- Provides functionality to create customizable forms with elements:
-  - Code Editor
-  - Date and Time
-  - Read-only (Disabled)
-  - Number Input
-  - Number Slider
-  - Password Input
-  - Radio Group with Boolean options
-  - Radio Group with Custom options
-  - Select with Custom options
-  - String Input
-  - Text Area
-- Supports the Custom Code for Initial and Update requests.
-- Allows to specify GET request to get initial values and POST, PUT, PATCH request to send values updated in the form.
-- Allows to add Header fields to Initial and Update requests.
-- Allows to customize Submit, Reset buttons and form layout.
-- Allows to split form elements into sections.
-- Allows to request confirmation before update request.
-- Allows to send all or only updated elements in the Payload.
-- Allows to display Success and Error notifications from the Custom Code.
-- Supports Code Editor suggestions for Available Parameters.
+## Highlights
 
-## Architecture
+- Provides functionality to create customizable forms.
+- Supports custom code for initial and update requests.
+- Supports API requests, including the `GET` request to get initial values and the `DELETE`, `PATCH`, `POST`, and `PUT` requests to send values updated in the form.
+- Allows adding request headers to initial and update requests.
+- Supports customization of the Submit and Reset buttons as well as the form layout.
+- Allows splitting form elements into sections.
+- Allows requesting the user's confirmation before running an update request.
+- Allows sending all or only updated elements in the request payload.
+- Allows displaying success and error notifications through custom code.
+- Supports suggestions for available parameters when writing program code in the code editor.
 
-[![How to Manipulate Data using Grafana dashboard | API Node.js Server and Deno Deploy Project](https://raw.githubusercontent.com/volkovlabs/volkovlabs-form-panel/main/img/server.png)](https://youtu.be/SHN2S-dRIEM)
+## Documentation
 
-### Diagram
+| Section                                                                      | Description                                                                                |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [Data Flow](https://volkovlabs.io/plugins/business-forms/data-flow/)         | Explains the data flow and its specifics.                                                  |
+| [Form Elements](https://volkovlabs.io/plugins/business-forms/form-elements/) | Explains the specifics of form elements.                                                   |
+| [REST API](https://volkovlabs.io/plugins/business-forms/architecture/)       | Explains the REST API architecture and how to use NGINX.                                   |
+| [Custom Code](https://volkovlabs.io/plugins/business-forms/code/)            | Explains how to access plugin options, API responses, form elements, and Grafana services. |
+| [Features](https://volkovlabs.io/plugins/business-forms/features/)           | Explains the plugin features.                                                              |
+| [Servers](https://volkovlabs.io/plugins/business-forms/servers/)             | Provides examples of API server implementations.                                           |
+| [Tutorials](https://volkovlabs.io/plugins/business-forms/tutorials/)         | Easy to follow tutorials                                                                   |
+| [Release Notes](https://volkovlabs.io/plugins/business-forms/release/)       | Stay up to date with the latest features and updates.                                      |
 
-![API](https://raw.githubusercontent.com/volkovlabs/volkovlabs-form-panel/main/img/form-api.png)
+## Business Suite for Grafana
 
-## Custom Code
+The Business Suite is a collection of open source plugins created and actively maintained by Volkov Labs.
 
-The custom code has access to the Panel options, the response from the REST API call, form elements, various Grafana services and will be executed after the Initial and Update requests.
+The collection aims to solve the most frequent business tasks by providing an intuitive interface with detailed written documentation, examples, and video tutorials.
 
-### Available Parameters
+[![Business Suite for Grafana](https://raw.githubusercontent.com/VolkovLabs/.github/main/business.png)](https://volkovlabs.io/plugins/)
 
-- `options` - Panels' options.
-- `data` - Result set of panel queries.
-- `response` - Request's response.
-- `initial` - Parsed values from the Initial Request.
-- `elements` - Form Elements.
-- `locationService` - Grafana's `locationService` to work with browser location and history.
-- `templateService` - Grafana's `templateService` provides access to variables and allows to update Time Range.
-- `onOptionsChange()` - Change handler to refresh panel.
-- `initialRequest()` - Perform the Initial Request to reload panel.
-- `setInitial({})` - Allows to specify the initial values for Custom Initial Requests to `Highlight changed values` and `Require Confirmation`.
-- `notifySuccess(['Header', 'Message'])` - Display successful notification.
-- `notifyError(['Header', 'Error Message'])` - Display error notification.
+### Enterprise Support
 
-![Panel](https://raw.githubusercontent.com/volkovlabs/volkovlabs-form-panel/main/src/img/request.png)
+With the [Business Suite Enterprise](https://volkovlabs.io/pricing/), you're not just getting a product, you're getting a complete support system. You'll have a designated support team ready to tackle any issues.
 
-To learn more about parameters you can log them in the Browser Console:
+You can contact us via Zendesk, receive priority in feature requests and bug fixes, meet with us for in-person consultation, and get access to the Business Intelligence. It's a package that's designed to make your life easier.
 
-```javascript
-console.log(options, data, response, elements, locationService, templateService);
-```
+## Always happy to hear from you
 
-### Refresh Dashboard after update request or show error
-
-```javascript
-if (response && response.ok) {
-  notifySuccess(['Update', 'Values updated successfully.']);
-  locationService.reload();
-} else {
-  notifyError(['Update', `An error occured updating values: ${response.status}`]);
-}
-```
-
-### Update variable after update request to interact with other panels
-
-```javascript
-if (response && response.ok) {
-  response.json().then((resp) => {
-    locationService.partial({ 'var-name': resp['name'] }, true);
-  });
-}
-```
-
-### Perform Initial Request after update request or show error
-
-```javascript
-if (response && response.ok) {
-  notifySuccess(['Update', 'Values updated successfully.']);
-  initialRequest();
-} else {
-  notifyError(['Update', `An error occured updating values: ${response.status}`]);
-}
-```
-
-### Clear elements' values after Submit or on Reset button click
-
-```javascript
-elements.map((element) => {
-  if (element.id === 'name') {
-    element.value = '';
-  }
-});
-
-onOptionsChange(options);
-```
-
-`onOptionsChange` handler is required to update the panel.
-
-## Dashboard Variables
-
-Dashboard and Global variables will be replaced automatically in:
-
-- URL for Initial and Update requests
-- Header Parameters' values
-- Request body, which contains elements' values
-
-You can find [global built-in variables](https://grafana.com/docs/grafana/latest/variables/variable-types/global-variables/) in the Grafana documentation.
-
-## Dynamic form elements
-
-Using the custom code you can update elements or element's value and options from any data source.
-
-[![Static and dynamic interface elements of Data Manipulation plugin | DML using data source in Grafana](https://raw.githubusercontent.com/volkovlabs/volkovlabs-form-panel/main/img/elements.png)](https://youtu.be/RSVH1bSBNl8)
-
-### Fill options of the `icon` element from series `icons` with `icon_id` and `title` columns
-
-```javascript
-const icons = data.series.find((serie) => serie.refId === 'icons');
-const iconSelect = elements.find((element) => element.id === 'icon');
-
-if (icons?.fields.length) {
-  const ids = icons.fields.find((f) => f.name === 'icon_id').values.buffer;
-  const titles = icons.fields.find((f) => f.name === 'title').values.buffer;
-
-  iconSelect.options = titles.map((value, index) => {
-    return { label: value, value: ids[index] };
-  });
-}
-
-onOptionsChange(options);
-```
-
-### Update all form elements from data sources
-
-```javascript
-const feedback = data.series.find((serie) => serie.refId === 'Feedback');
-const typeOptions = data.series.find((serie) => serie.refId === 'Types');
-
-if (feedback?.fields.length) {
-  const ids = feedback.fields.find((f) => f.name === 'id').values.buffer;
-  const titles = feedback.fields.find((f) => f.name === 'title').values.buffer;
-  const types = feedback.fields.find((f) => f.name === 'type').values.buffer;
-
-  /**
-   * Set Elements
-   */
-  elements = ids.map((id, index) => {
-    return { id, title: titles[index], type: types[index] };
-  });
-
-  /**
-   * Find Type element
-   */
-  const typeSelect = elements.find((element) => element.id === 'type');
-  if (typeSelect && typeOptions?.fields.length) {
-    const labels = typeOptions.fields.find((f) => f.name === 'label').values.buffer;
-    const values = typeOptions.fields.find((f) => f.name === 'value').values.buffer;
-
-    /**
-     * Update Types
-     */
-    typeSelect.options = labels.map((label, index) => {
-      return { label, value: values[index] };
-    });
-  }
-
-  /**
-   * Update Panel Options
-   */
-  onOptionsChange({ ...options, elements });
-}
-```
-
-## Custom Requests
-
-Data Manipulation panel allows to create your own Initial and Update requests using Custom Code.
-
-### Initial Request
-
-Select Initial Request as `-` and set Custom Code:
-
-```javascript
-const bucketsSelect = elements.find((element) => element.id === 'buckets');
-
-/**
- * Set URL
- */
-const url = `http://localhost:3001/test`;
-
-/**
- * Fetch
- */
-const resp = fetch(url, {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-    'PRIVATE-TOKEN': '$token',
-  },
-})
-  .catch((error) => {
-    console.error(error);
-  })
-  .then(async (resp) => {
-    const body = await resp.json();
-
-    bucketsSelect.options = body.buckets.map((value) => {
-      return { label: value, value };
-    });
-
-    onOptionsChange(options);
-  });
-```
-
-To support `Highlight changed values` and `Require Confirmation` the Custom Code should use `setInitial({})` function to update `initial` values:
-
-```
-  setInitial({value: 99, name: 'Test'})
-```
-
-### Update Request
-
-Select Update Request as `-` and set Custom Code. Depends on the selected Payload options it will add all or only updated values.
-
-```javascript
-/**
- * Set body
- */
-const body = {};
-options.elements.forEach((element) => {
-  if (!options.update.updatedOnly) {
-    body[element.id] = element.value;
-    return;
-  }
-
-  /**
-   * Skip not updated elements
-   */
-  if (element.value === initial[element.id]) {
-    return;
-  }
-
-  body[element.id] = element.value;
-});
-
-/**
- * Set URL
- */
-const url = `http://localhost:3001/${body['name']}`;
-
-/**
- * Fetch
- */
-const resp = fetch(url, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'PRIVATE-TOKEN': '$token',
-  },
-  body: JSON.stringify(body),
-})
-  .catch((error) => {
-    console.error(error);
-  })
-  .then((resp) => {
-    console.log(resp);
-  });
-```
-
-## NGINX
-
-We recommend running Grafana behind NGINX reverse proxy for an additional security layer. The reverse proxy also allows us to expose additional API endpoints and static files in the same domain, which makes it CORS-ready.
-
-![NGINX](https://raw.githubusercontent.com/volkovlabs/volkovlabs-form-panel/main/img/form-nginx-api.png)
-
-Read more in [How to connect the Data Manipulation plugin for Grafana to API Server](https://volkovlabs.com/how-to-connect-the-data-manipulation-plugin-for-grafana-to-api-server-1abe5f60c904).
-
-## Feedback
-
-We love to hear from users, developers, and the whole community interested in this plugin. These are various ways to get in touch with us:
-
-- Ask a question, request a new feature, and file a bug with [GitHub issues](https://github.com/volkovlabs/volkovlabs-form-panel/issues/new/choose).
-- Sponsor our open-source plugins for Grafana with [GitHub Sponsor](https://github.com/sponsors/VolkovLabs).
-- Star the repository to show your support.
+- Ask a question, request a new feature, or report an issue at [GitHub issues](https://github.com/volkovlabs/business-forms/issues).
+- Subscribe to our [YouTube Channel](https://youtube.com/@volkovlabs) and leave your comments.
+- Become a [Business Suite sponsor](https://github.com/sponsors/VolkovLabs).
 
 ## License
 
-- Apache License Version 2.0, see [LICENSE](https://github.com/volkovlabs/volkovlabs-form-panel/blob/main/LICENSE).
+Apache License Version 2.0, see [LICENSE](https://github.com/volkovlabs/business-forms/blob/main/LICENSE).
