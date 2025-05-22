@@ -37,8 +37,9 @@ def parse_line(buf):
 
         elif register == 0x0B and len(data) >= 18:
             batt_raw = int(data[14:18], 16)
-            batt = batt_raw / 1000.0
-            result["battery_v"] = round(batt, 3)
+            # batt = batt_raw / 1000.0
+            batt = batt_raw
+            result["battery_v"] = round(batt, 1)
 
         elif register == 0x0A and len(data) >= 18:
             interval = int(data[14:18], 16)
