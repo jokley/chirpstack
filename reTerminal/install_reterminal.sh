@@ -1,42 +1,56 @@
 #!/bin/bash
 
-# Set working directory
+set -e
+
 PROJECT_DIR="/home/pi/Projects/chirpstack/reTerminal"
+AUTOSTART_DIR="/home/pi/.config/lxsession/LXDE-pi"
+AUTOSTART_FILE="$AUTOSTART_DIR/autostart"
+DESKTOP_FILE="/home/pi/Desktop/venti.desktop"
+START_SCRIPT="$PROJECT_DIR/start.sh"
+ICON_FILE="$PROJECT_DIR/venti.png"
 
-# Ensure the project directory exists
-mkdir -p "$PROJECT_DIR"
+echo "==== STARTING INSTALLATION ===="
 
-# 1. Setup autostart
-echo "Setting up autostart..."
-AUTOSTART_FILE="/home/pi/.config/lxsession/LXDE-pi/autostart"
-mkdir -p "$(dirname "$AUTOSTART_FILE")"
+# Check necessary files exist
+if [[ ! -f "$START_SCRIPT" ]]; then
+    echo "❌ ERROR: $START_SCRIPT not found"
+    exit 1
+fi
 
-# Write or overwrite the autostart file
+if [[ ! -f "$ICON_FILE" ]]; then
+    echo "❌ ERROR: $ICON_FILE not found"
+    exit 1
+fi
+
+# Ensure the autostart directory exists
+echo "📁 Creating autostart directory if needed..."
+mkdir -p "$AUTOSTART_DIR"
+
+# Write autostart file
+echo "📝 Writing autostart file to $AUTOSTART_FILE"
 cat <<EOF > "$AUTOSTART_FILE"
 @lxpanel --profile LXDE-pi
 @pcmanfm --desktop --profile LXDE-pi
 xscreensaver -no-splash
-@bash $PROJECT_DIR/start.sh &
+@bash $START_SCRIPT &
 EOF
 
-# 2. Add desktop shortcut
-echo "Creating desktop shortcut..."
-DESKTOP_FILE="/home/pi/Desktop/venti.desktop"
+# Create Desktop shortcut
+echo "🖥️ Creating desktop shortcut at $DESKTOP_FILE"
 mkdir -p "/home/pi/Desktop"
-
 cat <<EOF > "$DESKTOP_FILE"
 [Desktop Entry]
 Type=Link
 Name=Heulüfter
 Comment=Heulüfter Steuerung
-Icon=$PROJECT_DIR/venti.png
+Icon=$ICON_FILE
 URL=http://172.16.238.19
 EOF
 
 chmod +x "$DESKTOP_FILE"
 
-# 3. Ensure start.sh is executable
-echo "Making start.sh executable..."
-chmod +x "$PROJECT_DIR/start.sh"
+# Make start script executable
+echo "🚀 Making start.sh executable"
+chmod +x "$START_SCRIPT"
 
-echo "Setup complete. Reboot to apply changes."
+echo "✅ Setup complete. Please reboot the Raspberry Pi to apply changes."
