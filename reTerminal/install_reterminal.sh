@@ -8,7 +8,6 @@ LXDE_AUTOSTART_FILE="$LXDE_AUTOSTART_DIR/autostart"
 DESKTOP_FILE="/home/pi/Desktop/venti.desktop"
 START_SCRIPT="$PROJECT_DIR/start.sh"
 ICON_FILE="$PROJECT_DIR/venti.png"
-BACKGROUND_FILE="$PROJECT_DIR/logo.jpg"
 XDG_AUTOSTART_DIR="/home/pi/.config/autostart"
 XDG_DESKTOP_FILE="$XDG_AUTOSTART_DIR/start-my-app.desktop"
 
@@ -25,11 +24,6 @@ if [[ ! -f "$ICON_FILE" ]]; then
     exit 1
 fi
 
-if [[ ! -f "$BACKGROUND_FILE" ]]; then
-    echo "❌ ERROR: $BACKGROUND_FILE not found"
-    exit 1
-fi
-
 # Ensure the autostart directories exist
 echo "📁 Creating autostart directories if needed..."
 mkdir -p "$LXDE_AUTOSTART_DIR"
@@ -40,7 +34,6 @@ echo "📝 Writing LXDE autostart file to $LXDE_AUTOSTART_FILE"
 cat <<EOF > "$LXDE_AUTOSTART_FILE"
 @lxpanel --profile LXDE-pi
 @pcmanfm --desktop --profile LXDE-pi
-xscreensaver -no-splash
 @bash $START_SCRIPT &
 EOF
 
@@ -70,10 +63,6 @@ URL=http://172.16.238.19
 EOF
 
 chmod +x "$DESKTOP_FILE"
-
-# Set background image
-echo "🖼️ Setting background image to $BACKGROUND_FILE"
-pcmanfm --set-wallpaper="$BACKGROUND_FILE"
 
 # Make start script executable
 echo "🚀 Making start.sh executable"
