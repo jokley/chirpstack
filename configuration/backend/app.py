@@ -20,7 +20,7 @@ rfh = RotatingFileHandler(
     filename='debug.log', 
     mode='a',
     maxBytes=1000,
-    backupCount=0,
+    backupCount=1,
     encoding=None,
     delay=0
 )
@@ -91,6 +91,18 @@ def venti_cmd(cmd: str):
 
 
 def venti_control():
+    
+    dataVenti = get_venti_control_values()
+    startTime = dataVenti[0]['mode'][0]
+    mode = dataVenti[0]['mode'][1]
+    tsSoll =dataVenti[0]['trockenMasseSoll'][1]
+    stock = int(dataVenti[0]['stockaufbau'][1])
+    stock *= 3600
+
+    if mode == "on":
+        venti_cmd('on')
+        return
+	
     data = get_min_max_values()
     humMin = data[0]['humidityMin']
     humMax = data[0]['humidityMax']
@@ -106,14 +118,6 @@ def venti_control():
     sDefOut = dataOut[0]['sDefOut']
     tempOut = dataOut[0]['temperatureOut']
     tsOut = dataOut[0]['trockenMasseOut']
-
-
-    dataVenti = get_venti_control_values()
-    startTime = dataVenti[0]['mode'][0]
-    mode = dataVenti[0]['mode'][1]
-    tsSoll =dataVenti[0]['trockenMasseSoll'][1]
-    stock = int(dataVenti[0]['stockaufbau'][1])
-    stock *= 3600
 
     dataLastTime = get_venti_lastTimeOn()
     lastOn = dataLastTime[0]['lastTimeOn']
