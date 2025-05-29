@@ -34,8 +34,10 @@ echo "📝 Writing LXDE autostart file to $LXDE_AUTOSTART_FILE"
 cat <<EOF > "$LXDE_AUTOSTART_FILE"
 @lxpanel --profile LXDE-pi
 @pcmanfm --desktop --profile LXDE-pi
+@xscreensaver -no-splash
 @bash $START_SCRIPT &
 EOF
+
 
 # Write XDG autostart desktop entry
 echo "📝 Writing XDG autostart desktop file to $XDG_DESKTOP_FILE"
