@@ -48,7 +48,7 @@ Type=Link
 Name=Heulüfter
 Comment=Heulüfter Steuerung
 Icon=$ICON_FILE
-URL=http://172.16.238.19
+URL=http://172.16.238.19?kiosk=1
 EOF
 
 chmod +x "$DESKTOP_FILE"
