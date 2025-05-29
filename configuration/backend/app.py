@@ -19,7 +19,7 @@ load_dotenv()
 rfh = RotatingFileHandler(
     filename='debug.log', 
     mode='a',
-    maxBytes=1000,
+    maxBytes=1 * 1024 * 1024,  # 1 MB
     backupCount=1,
     encoding=None,
     delay=0
