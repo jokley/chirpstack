@@ -26,8 +26,8 @@ QUEUE_MAXSIZE = 1000
 
 NODE_NAME_MAP = {
     3: "outdoor00",
-    11: "probe01",
-    19: "probe02"
+    17: "probe01",
+    25: "probe02"
 }
 
 def read_serial(serial_port, baudrate, data_queue):
