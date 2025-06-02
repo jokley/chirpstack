@@ -24,6 +24,8 @@ SERIAL_PORT = "/dev/ttyUSB0"
 BAUDRATE = 38400
 QUEUE_MAXSIZE = 1000
 
+CACHE_TTL_SECONDS = 300  # 5 minutes
+
 NODE_NAME_MAP = {
     3: "outdoor00",
     17: "probe01",
@@ -38,13 +40,25 @@ def read_serial(serial_port, baudrate, data_queue):
                 try:
                     line = ser.readline().decode(errors='ignore').strip()
                     if line:
-                        data_queue.put(line, timeout=1)
-                except Full:
-                    logger.warning("⚠️ Serial data queue full, dropping incoming line.")
+                        try:
+                            data_queue.put(line, timeout=1)
+                        except Full:
+                            logger.warning("⚠️ Serial data queue full, dropping incoming line.")
+                            time.sleep(0.1)  # small delay to reduce busy loop when full
+                except Exception as e:
+                    logger.warning(f"Error reading line or enqueueing: {e}")
     except serial.SerialException as e:
         logger.error(f"Serial port error: {e}")
     except Exception as e:
         logger.exception("Unexpected error in serial reader thread.")
+
+def cleanup_cache(cache):
+    now = time.time()
+    to_delete = [node for node, data in cache.items()
+                 if 'timestamp_s' in data and now - data['timestamp_s'] > CACHE_TTL_SECONDS]
+    for node in to_delete:
+        logger.warning(f"Cleaning up stale cache for node {node}")
+        cache.pop(node)
 
 def main():
     logger.info(f"Started logging from {SERIAL_PORT} at {BAUDRATE} baud...")
@@ -60,7 +74,9 @@ def main():
     serial_thread = threading.Thread(target=read_serial, args=(SERIAL_PORT, BAUDRATE, data_queue), daemon=True)
     serial_thread.start()
 
+    iteration = 0
     while True:
+        iteration += 1
         try:
             line = data_queue.get(timeout=5)
         except Empty:
@@ -112,6 +128,10 @@ def main():
             cache.pop(node)
         else:
             logger.debug(f"Incomplete data for node {node}, skipping Influx write.")
+
+        # Periodic cache cleanup
+        if iteration % 100 == 0:
+            cleanup_cache(cache)
 
 if __name__ == "__main__":
     main()
