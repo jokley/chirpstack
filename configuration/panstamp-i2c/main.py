@@ -4,19 +4,39 @@ import serial
 import math
 import logging
 import threading
+import pytz
 from datetime import datetime
 from queue import Queue, Full, Empty
 from collections import defaultdict
+from logging.handlers import RotatingFileHandler
+
 
 from sensor_parser import parse_line
 from influx import write_to_influx
 from mqtt_handler import setup_mqtt
 
-# Configure logging
-LOG_LEVEL = "WARNING"
-logging.basicConfig(level=LOG_LEVEL,
-                    format='%(asctime)s %(levelname)s [%(name)s] %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+
+# Set timezone for timestamps
+logging.Formatter.converter = lambda *args: datetime.now(pytz.timezone("Europe/Berlin")).timetuple()
+
+# Set up rotating file handler
+rfh = RotatingFileHandler(
+    filename='debug.log', 
+    mode='a',
+    maxBytes=1 * 1024 * 1024,  # 1 MB
+    backupCount=1,
+    encoding=None,
+    delay=0
+)
+
+# Set formatter for the handler
+formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
+rfh.setFormatter(formatter)
+
+# Get the root logger and set handler/level
+logging.getLogger().handlers = [rfh]
+logging.getLogger().setLevel(logging.INFO)  # or use logging.WARNING for less verbosity
+
 logger = logging.getLogger("panstamp_i2c")
 
 # Global constants
