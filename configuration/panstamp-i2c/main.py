@@ -4,47 +4,27 @@ import serial
 import math
 import logging
 import threading
-import pytz
 from datetime import datetime
 from queue import Queue, Full, Empty
 from collections import defaultdict
-from logging.handlers import RotatingFileHandler
-
 
 from sensor_parser import parse_line
 from influx import write_to_influx
 from mqtt_handler import setup_mqtt
 
-
-# Set timezone for timestamps
-logging.Formatter.converter = lambda *args: datetime.now(pytz.timezone("Europe/Berlin")).timetuple()
-
-# Set up rotating file handler
-rfh = RotatingFileHandler(
-    filename='debug.log', 
-    mode='a',
-    maxBytes=1 * 1024 * 1024,  # 1 MB
-    backupCount=1,
-    encoding=None,
-    delay=0
-)
-
-# Set formatter for the handler
-formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
-rfh.setFormatter(formatter)
-
-# Get the root logger and set handler/level
-logging.getLogger().handlers = [rfh]
-logging.getLogger().setLevel(logging.INFO)  # or use logging.WARNING for less verbosity
-
+# Configure logging
+LOG_LEVEL = "INFO"
+logging.basicConfig(level=LOG_LEVEL,
+                    format='%(asctime)s %(levelname)s [%(name)s] %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger("panstamp_i2c")
 
 # Global constants
 SERIAL_PORT = "/dev/ttyUSB0"
 BAUDRATE = 38400
 QUEUE_MAXSIZE = 1000
-
 CACHE_TTL_SECONDS = 300  # 5 minutes
+CACHE_CLEAN_INTERVAL = 60  # seconds
 
 NODE_NAME_MAP = {
     3: "outdoor00",
@@ -53,10 +33,9 @@ NODE_NAME_MAP = {
 }
 
 def read_serial(serial_port, baudrate, data_queue):
-    """ Continuously read lines from serial and enqueue them. Retries on errors. """
+    """ Continuously read lines from serial and enqueue them. Reconnect if port fails. """
     while True:
         try:
-            logger.info(f"Trying to open serial port {serial_port} at {baudrate} baud.")
             with serial.Serial(serial_port, baudrate, timeout=1) as ser:
                 logger.info(f"Serial port {serial_port} opened successfully.")
                 while True:
@@ -66,17 +45,15 @@ def read_serial(serial_port, baudrate, data_queue):
                             try:
                                 data_queue.put(line, timeout=1)
                             except Full:
-                                logger.warning("⚠️ Serial data queue full, dropping incoming line.")
-                                time.sleep(0.1)  # Reduce busy-waiting when queue is full
+                                logger.warning("⚠️ Serial data queue full, dropping line.")
                     except Exception as e:
-                        logger.warning(f"Error reading line or enqueueing: {e}")
-                        time.sleep(0.2)  # Small delay before retrying
+                        logger.warning(f"Read error: {e}")
         except serial.SerialException as e:
-            logger.error(f"Serial port error: {e}. Retrying in 5 seconds...")
-            time.sleep(5)
+            logger.error(f"Serial port error: {e}")
+            time.sleep(10)
         except Exception as e:
-            logger.exception("Unexpected error in serial reader thread. Retrying in 5 seconds...")
-            time.sleep(5)
+            logger.exception("Unexpected error in serial reader.")
+            time.sleep(10)
 
 def cleanup_cache(cache):
     now = time.time()
@@ -92,23 +69,19 @@ def main():
     cache = defaultdict(dict)
     data_queue = Queue(maxsize=QUEUE_MAXSIZE)
 
-    # Setup MQTT client
     mqtt_client = setup_mqtt()
     mqtt_client.loop_start()
 
-    # Start the serial reader thread
     serial_thread = threading.Thread(target=read_serial, args=(SERIAL_PORT, BAUDRATE, data_queue), daemon=True)
     serial_thread.start()
 
-    iteration = 0
-    
+    last_cleanup = time.time()
+
     while True:
-        iteration += 1
         try:
             line = data_queue.get(timeout=5)
         except Empty:
             logger.debug("No serial data received in last 5 seconds.")
-            time.sleep(0.5)  # Add this line
             continue
 
         timestamp_s = int(time.time())
@@ -157,9 +130,11 @@ def main():
         else:
             logger.debug(f"Incomplete data for node {node}, skipping Influx write.")
 
-        # Periodic cache cleanup
-        if iteration % 50 == 0:
+        # Time-based cache cleanup
+        now = time.time()
+        if now - last_cleanup > CACHE_CLEAN_INTERVAL:
             cleanup_cache(cache)
-        
+            last_cleanup = now
+
 if __name__ == "__main__":
     main()
