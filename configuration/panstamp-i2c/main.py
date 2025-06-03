@@ -13,7 +13,7 @@ from influx import write_to_influx
 from mqtt_handler import setup_mqtt
 
 # Configure logging
-LOG_LEVEL = "INFO"
+LOG_LEVEL = "WARNING"
 logging.basicConfig(level=LOG_LEVEL,
                     format='%(asctime)s %(levelname)s [%(name)s] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
@@ -33,24 +33,30 @@ NODE_NAME_MAP = {
 }
 
 def read_serial(serial_port, baudrate, data_queue):
-    """ Continuously read lines from serial and enqueue them. """
-    try:
-        with serial.Serial(serial_port, baudrate, timeout=1) as ser:
-            while True:
-                try:
-                    line = ser.readline().decode(errors='ignore').strip()
-                    if line:
-                        try:
-                            data_queue.put(line, timeout=1)
-                        except Full:
-                            logger.warning("⚠️ Serial data queue full, dropping incoming line.")
-                            time.sleep(0.1)  # small delay to reduce busy loop when full
-                except Exception as e:
-                    logger.warning(f"Error reading line or enqueueing: {e}")
-    except serial.SerialException as e:
-        logger.error(f"Serial port error: {e}")
-    except Exception as e:
-        logger.exception("Unexpected error in serial reader thread.")
+    """ Continuously read lines from serial and enqueue them. Retries on errors. """
+    while True:
+        try:
+            logger.info(f"Trying to open serial port {serial_port} at {baudrate} baud.")
+            with serial.Serial(serial_port, baudrate, timeout=1) as ser:
+                logger.info(f"Serial port {serial_port} opened successfully.")
+                while True:
+                    try:
+                        line = ser.readline().decode(errors='ignore').strip()
+                        if line:
+                            try:
+                                data_queue.put(line, timeout=1)
+                            except Full:
+                                logger.warning("⚠️ Serial data queue full, dropping incoming line.")
+                                time.sleep(0.1)  # Reduce busy-waiting when queue is full
+                    except Exception as e:
+                        logger.warning(f"Error reading line or enqueueing: {e}")
+                        time.sleep(0.2)  # Small delay before retrying
+        except serial.SerialException as e:
+            logger.error(f"Serial port error: {e}. Retrying in 5 seconds...")
+            time.sleep(5)
+        except Exception as e:
+            logger.exception("Unexpected error in serial reader thread. Retrying in 5 seconds...")
+            time.sleep(5)
 
 def cleanup_cache(cache):
     now = time.time()
@@ -82,6 +88,7 @@ def main():
             line = data_queue.get(timeout=5)
         except Empty:
             logger.debug("No serial data received in last 5 seconds.")
+            time.sleep(0.5)  # Add this line
             continue
 
         timestamp_s = int(time.time())
@@ -131,7 +138,7 @@ def main():
             logger.debug(f"Incomplete data for node {node}, skipping Influx write.")
 
         # Periodic cache cleanup
-        if iteration % 100 == 0:
+        if iteration % 50 == 0:
             cleanup_cache(cache)
         
 if __name__ == "__main__":
