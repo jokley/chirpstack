@@ -209,6 +209,7 @@ def venti_control():
 
         else:
          # Automaik ein nur Loggoger Info
+	    venti_cmd('off')	
             app.logger.info('****************************************')
             app.logger.info('Mode: {}'.format(mode))
             app.logger.info('Lüfter aus')
