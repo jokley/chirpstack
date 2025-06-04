@@ -1,21 +1,28 @@
-import asyncio
-import serial_asyncio
-import logging
-import math
+import os
 import time
+import serial
+import math
+import logging
+import threading
+from datetime import datetime
+from queue import Queue, Full, Empty
 from collections import defaultdict
+
 from sensor_parser import parse_line
 from influx import write_to_influx
 from mqtt_handler import setup_mqtt
 
+# Configure logging
 LOG_LEVEL = "INFO"
 logging.basicConfig(level=LOG_LEVEL,
                     format='%(asctime)s %(levelname)s [%(name)s] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger("panstamp_i2c")
 
+# Global constants
 SERIAL_PORT = "/dev/ttyUSB0"
 BAUDRATE = 38400
+QUEUE_MAXSIZE = 1000
 
 NODE_NAME_MAP = {
     3: "outdoor00",
@@ -23,34 +30,40 @@ NODE_NAME_MAP = {
     25: "probe02"
 }
 
-CACHE_TTL_SECONDS = 300  # 5 minutes
-
-class SerialProtocol(asyncio.Protocol):
-    def __init__(self, data_queue):
-        self.data_queue = data_queue
-        self.buffer = bytearray()
-
-    def data_received(self, data):
-        self.buffer.extend(data)
-        while b'\n' in self.buffer:
-            line, _, self.buffer = self.buffer.partition(b'\n')
-            line_str = line.decode(errors='ignore').strip()
-            if line_str:
+def read_serial(serial_port, baudrate, data_queue):
+    """ Continuously read lines from serial and enqueue them. """
+    try:
+        with serial.Serial(serial_port, baudrate, timeout=1) as ser:
+            while True:
                 try:
-                    self.data_queue.put_nowait(line_str)
-                except asyncio.QueueFull:
+                    line = ser.readline().decode(errors='ignore').strip()
+                    if line:
+                        data_queue.put(line, timeout=1)
+                except Full:
                     logger.warning("⚠️ Serial data queue full, dropping incoming line.")
+    except serial.SerialException as e:
+        logger.error(f"Serial port error: {e}")
+    except Exception as e:
+        logger.exception("Unexpected error in serial reader thread.")
 
-async def process_queue(data_queue):
+def main():
+    logger.info(f"Started logging from {SERIAL_PORT} at {BAUDRATE} baud...")
+
     cache = defaultdict(dict)
+    data_queue = Queue(maxsize=QUEUE_MAXSIZE)
+
+    # Setup MQTT client
     mqtt_client = setup_mqtt()
     mqtt_client.loop_start()
 
-    iteration = 0
+    # Start the serial reader thread
+    serial_thread = threading.Thread(target=read_serial, args=(SERIAL_PORT, BAUDRATE, data_queue), daemon=True)
+    serial_thread.start()
+
     while True:
         try:
-            line = await asyncio.wait_for(data_queue.get(), timeout=5)
-        except asyncio.TimeoutError:
+            line = data_queue.get(timeout=5)
+        except Empty:
             logger.debug("No serial data received in last 5 seconds.")
             continue
 
@@ -100,25 +113,5 @@ async def process_queue(data_queue):
         else:
             logger.debug(f"Incomplete data for node {node}, skipping Influx write.")
 
-        iteration += 1
-        if iteration % 100 == 0:
-            # Cache cleanup
-            now = time.time()
-            to_delete = [node for node, data in cache.items()
-                         if 'timestamp_s' in data and now - data['timestamp_s'] > CACHE_TTL_SECONDS]
-            for node_to_del in to_delete:
-                logger.warning(f"Cleaning up stale cache for node {node_to_del}")
-                cache.pop(node_to_del)
-
-async def main():
-    data_queue = asyncio.Queue(maxsize=1000)
-
-    loop = asyncio.get_running_loop()
-    transport, protocol = await serial_asyncio.create_serial_connection(
-        loop, lambda: SerialProtocol(data_queue), SERIAL_PORT, baudrate=BAUDRATE
-    )
-
-    await process_queue(data_queue)
-
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
