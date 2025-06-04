@@ -89,9 +89,9 @@ services:
       - "/dev/i2c-1:/dev/i2c-1"         # I2C relay control
     tty: true
     stdin_open: true
-    mem_limit: 100m         # Limit memory usage to 100MB
-    cpus: 0.5               # Limit to 50% of one CPU core
-    pids_limit: 100         # Limit to 100 processes/threads to protect from PID/thread leak
+    # mem_limit: 100m         # Limit memory usage to 100MB
+    # cpus: 0.5               # Limit to 50% of one CPU core
+    # pids_limit: 100         # Limit to 100 processes/threads to protect from PID/thread leak
     depends_on:
       - influxdb
     networks:
