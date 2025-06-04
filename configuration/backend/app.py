@@ -189,7 +189,7 @@ def venti_control():
         
         elif remainingTimeStock > stock and (sDefOut < sDefMin+sdef_hys-1 or tsMin-0.2 > tsSoll or sDefOut+0.5 < sdef_on):
         # Belüftung aus
-            venti_cmd('off')
+            # venti_cmd('off')
             app.logger.info('****************************************')
             app.logger.info('Mode: {}'.format(mode))
             app.logger.info('Lüfter aus')
@@ -198,6 +198,12 @@ def venti_control():
             app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
             app.logger.info('TS diff: {}'.format(tsSoll-tsMin))
             app.logger.info('Dauer aus: {}'.format(remainingTimeInterval))
+	    try:
+	    	venti_cmd('off')
+	    except Exception as e:
+	        app.logger.error(f"Failed to turn off fan: {e}")
+
+		
 
             if remainingTimeInterval >= 7200 and tsSoll-tsMin <= 0.5:
             # Automaitk aus
