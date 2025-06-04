@@ -198,10 +198,10 @@ def venti_control():
             app.logger.info('TS ist: {} | TS soll: {}'.format(tsMin,tsSoll))
             app.logger.info('TS diff: {}'.format(tsSoll-tsMin))
             app.logger.info('Dauer aus: {}'.format(remainingTimeInterval))
-	    try:
-	    	venti_cmd('off')
-	    except Exception as e:
-	        app.logger.error(f"Failed to turn off fan: {e}")
+            try:
+                venti_cmd('off')
+            except Exception as e:
+                app.logger.error(f"Failed to turn off fan: {e}")
 
 		
 
