@@ -22,7 +22,7 @@ logger = logging.getLogger("panstamp_i2c")
 # Global constants
 SERIAL_PORT = "/dev/ttyUSB0"
 BAUDRATE = 38400
-QUEUE_MAXSIZE = 10
+QUEUE_MAXSIZE = 100
 
 NODE_NAME_MAP = {
     3: "outdoor00",
