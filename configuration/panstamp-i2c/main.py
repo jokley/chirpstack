@@ -13,7 +13,7 @@ from influx import write_to_influx
 from mqtt_handler import setup_mqtt
 
 # Configure logging
-LOG_LEVEL = "ERROR"
+LOG_LEVEL = "WARNING"
 logging.basicConfig(level=LOG_LEVEL,
                     format='%(asctime)s %(levelname)s [%(name)s] %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
@@ -22,7 +22,7 @@ logger = logging.getLogger("panstamp_i2c")
 # Global constants
 SERIAL_PORT = "/dev/ttyUSB0"
 BAUDRATE = 38400
-QUEUE_MAXSIZE = 1000
+QUEUE_MAXSIZE = 10
 
 NODE_NAME_MAP = {
     3: "outdoor00",
@@ -41,6 +41,7 @@ def read_serial(serial_port, baudrate, data_queue):
                         data_queue.put(line, timeout=1)
                 except Full:
                     logger.warning("⚠️ Serial data queue full, dropping incoming line.")
+                    time.sleep(0.1)
     except serial.SerialException as e:
         logger.error(f"Serial port error: {e}")
     except Exception as e:
