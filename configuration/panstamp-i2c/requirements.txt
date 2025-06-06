@@ -4,4 +4,3 @@ smbus2
 pyserial
 python-dotenv
 pytz
-pyserial-asyncio
