@@ -30,22 +30,68 @@ NODE_NAME_MAP = {
     25: "probe02"
 }
 
-def read_serial(serial_port, baudrate, data_queue):
-    """ Continuously read lines from serial and enqueue them. """
+
+def usb_unbind_bind():
+    """
+    Unbind and bind the USB device at path 1-1.4 (your FTDI adapter).
+    Requires privileged permissions.
+    """
+    usb_path = "1-1.4"
     try:
-        with serial.Serial(serial_port, baudrate, timeout=1) as ser:
-            while True:
-                try:
-                    line = ser.readline().decode(errors='ignore').strip()
-                    if line:
-                        data_queue.put(line, timeout=1)
-                except Full:
-                    logger.warning("⚠️ Serial data queue full, dropping incoming line.")
-                    time.sleep(0.1)
-    except serial.SerialException as e:
-        logger.error(f"Serial port error: {e}")
+        logger.warning(f"Unbinding USB device {usb_path}")
+        subprocess.run(
+            ["tee", "/sys/bus/usb/drivers/usb/unbind"],
+            input=f"{usb_path}\n",
+            text=True,
+            check=True
+        )
+        time.sleep(2)
+        logger.warning(f"Re-binding USB device {usb_path}")
+        subprocess.run(
+            ["tee", "/sys/bus/usb/drivers/usb/bind"],
+            input=f"{usb_path}\n",
+            text=True,
+            check=True
+        )
+        time.sleep(2)
     except Exception as e:
-        logger.exception("Unexpected error in serial reader thread.")
+        logger.error(f"USB unbind/bind failed: {e}")
+
+def read_serial(serial_port, baudrate, data_queue, reconnect_wait=5, max_retries=None):
+    """
+    Continuously read lines from serial and enqueue them; robust to errors.
+    Resets USB device after repeated failures.
+    """
+    retries = 0
+    while True:
+        try:
+            with serial.Serial(serial_port, baudrate, timeout=1) as ser:
+                logger.info(f"Opened serial port {serial_port}")
+                retries = 0  # Reset retry count on successful open
+                while True:
+                    try:
+                        line = ser.readline().decode(errors='ignore').strip()
+                        if line:
+                            data_queue.put(line, timeout=1)
+                    except Full:
+                        logger.warning("⚠️ Serial data queue full, dropping incoming line.")
+                        time.sleep(0.1)
+        except serial.SerialException as e:
+            logger.error(f"Serial port error: {e}")
+            retries += 1
+            if max_retries and retries >= max_retries:
+                logger.error(f"Max retries ({max_retries}) reached, giving up.")
+                break
+            if retries % 3 == 0:
+                usb_unbind_bind()
+            logger.info(f"Attempting to reconnect in {reconnect_wait} seconds...")
+            time.sleep(reconnect_wait)
+        except KeyboardInterrupt:
+            logger.info("Serial reader interrupted by user.")
+            break
+        except Exception as e:
+            logger.exception("Unexpected error in serial reader thread.")
+            time.sleep(reconnect_wait)
 
 def main():
     logger.info(f"Started logging from {SERIAL_PORT} at {BAUDRATE} baud...")
